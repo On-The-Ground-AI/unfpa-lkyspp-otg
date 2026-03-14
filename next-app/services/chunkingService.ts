@@ -214,3 +214,107 @@ function buildChunkContent(documentTitle: string, sectionHeading: string, conten
 export function countWords(text: string): number {
   return text.split(/\s+/).filter(Boolean).length;
 }
+
+/**
+ * Clean raw PDF text extracted by pdf-parse:
+ * - Fix common Unicode ligatures (ﬁ, ﬂ, etc.)
+ * - Rejoin hyphenated line-breaks (e.g. "infor-\nmation" → "information")
+ * - Strip bare page numbers (lines that are only digits)
+ * - Detect and remove running headers/footers (lines repeated 5+ times)
+ * - Normalize whitespace / excessive blank lines
+ */
+function cleanPdfText(raw: string): string {
+  // Fix Unicode ligatures
+  let text = raw
+    .replace(/ﬁ/g, 'fi')
+    .replace(/ﬂ/g, 'fl')
+    .replace(/ﬀ/g, 'ff')
+    .replace(/ﬃ/g, 'ffi')
+    .replace(/ﬄ/g, 'ffl')
+    .replace(/ﬅ/g, 'st')
+    .replace(/ﬆ/g, 'st');
+
+  // Rejoin hyphenated line-breaks
+  text = text.replace(/(\w)-\n(\w)/g, '$1$2');
+
+  // Strip lines that are only page numbers (pure digits, optional whitespace)
+  text = text.replace(/^\s*\d+\s*$/gm, '');
+
+  // Detect running headers/footers: lines repeated 5+ times → remove all occurrences
+  const lines = text.split('\n');
+  const lineFrequency = new Map<string, number>();
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.length > 3 && trimmed.length < 120) {
+      lineFrequency.set(trimmed, (lineFrequency.get(trimmed) ?? 0) + 1);
+    }
+  }
+  const repeatedLines = new Set<string>();
+  for (const [line, count] of lineFrequency) {
+    if (count >= 5) repeatedLines.add(line);
+  }
+  if (repeatedLines.size > 0) {
+    text = lines
+      .filter((line) => !repeatedLines.has(line.trim()))
+      .join('\n');
+  }
+
+  // Normalize excessive blank lines (3+ → 2)
+  text = text.replace(/\n{3,}/g, '\n\n');
+
+  return text.trim();
+}
+
+/**
+ * Chunk plain text extracted from a PDF.
+ * Splits on double-newlines (paragraph boundaries), bypasses heading-based sectioning,
+ * then passes through buildChunkContent + applyOverlap.
+ */
+export function chunkPdfText(
+  text: string,
+  documentTitle: string,
+  options?: ChunkOptions
+): Chunk[] {
+  const opts = { ...DEFAULT_OPTIONS, ...options };
+  const cleaned = cleanPdfText(text);
+  const paragraphs = cleaned.split(/\n\n+/).filter((p) => p.trim());
+
+  const chunks: Chunk[] = [];
+  let chunkIndex = 0;
+  let currentParagraphs: string[] = [];
+  let currentWordCount = 0;
+
+  const flushChunk = () => {
+    if (currentParagraphs.length === 0) return;
+    const paragraphText = currentParagraphs.join('\n\n');
+    const chunkContent = buildChunkContent(documentTitle, '', paragraphText);
+    chunks.push({
+      index: chunkIndex++,
+      content: chunkContent,
+      wordCount: countWords(chunkContent),
+      tokenCount: estimateTokenCount(chunkContent),
+      sectionHeading: '',
+    });
+    currentParagraphs = [];
+    currentWordCount = 0;
+  };
+
+  for (const paragraph of paragraphs) {
+    const paragraphWords = countWords(paragraph);
+
+    if (currentWordCount + paragraphWords > opts.maxWords && currentParagraphs.length > 0) {
+      flushChunk();
+    }
+
+    currentParagraphs.push(paragraph);
+    currentWordCount += paragraphWords;
+
+    if (currentWordCount >= opts.targetWords) {
+      flushChunk();
+    }
+  }
+
+  flushChunk();
+
+  return applyOverlap(chunks, opts.overlapWords);
+}

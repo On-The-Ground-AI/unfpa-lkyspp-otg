@@ -25,6 +25,7 @@ model KnowledgeDocument {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   chunks    KnowledgeChunk[]
+  pdfRecord PdfIngestRecord?
 
   @@index([vertical])
   @@map("knowledge_documents")
@@ -45,4 +46,25 @@ model KnowledgeChunk {
   @@unique([documentId, chunkIndex])
   @@index([documentId])
   @@map("knowledge_chunks")
+}
+
+/// Tracks which PDF files have been ingested — for skip logic and change detection.
+model PdfIngestRecord {
+  id           String    @id @default(cuid())
+  filename     String    @unique                // original filename (with spaces)
+  slug         String    @unique                // normalized slug
+  filePath     String    @map("file_path")
+  sha256       String    @map("sha256")         // SHA-256 of file bytes
+  documentId   String?   @unique @map("document_id")
+  pageCount    Int       @map("page_count")
+  wordCount    Int       @map("word_count")
+  status       String    @default("success")   // success | failed | no-text
+  errorMessage String?   @map("error_message") @db.Text
+  ingestedAt   DateTime  @default(now()) @map("ingested_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  document     KnowledgeDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  @@index([sha256])
+  @@map("pdf_ingest_records")
 }

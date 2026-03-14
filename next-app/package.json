@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "ingest-pdfs": "npx tsx scripts/ingest-pdfs.ts",
+    "ingest-pdfs-status": "npx tsx scripts/ingest-pdfs.ts --status",
+    "ingest-all": "npx tsx scripts/ingest-knowledge.ts --all && npx tsx scripts/ingest-pdfs.ts --all"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
@@ -13,6 +16,7 @@
     "lucide-react": "^0.577.0",
     "marked": "^17.0.4",
     "next": "16.1.6",
+    "pdf-parse": "^2.4.5",
     "pg": "^8.20.0",
     "prisma": "^7.5.0",
     "react": "19.2.3",
@@ -21,6 +25,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pdf-parse": "^1.1.5",
     "@types/pg": "^8.18.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
