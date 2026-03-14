@@ -1,8 +1,27 @@
-# UNFPA Knowledge Base
+# UNFPA Knowledge Base — LKYSPP Policy Innovation Lab
 
-A public knowledge base covering UNFPA's programmes, mandate, evidence, and contested areas — built for the **Lee Kuan Yew School of Public Policy** and made openly available for anyone who works with or studies UNFPA and PMNCH.
+A knowledge base and AI chat interface built to support the **Lee Kuan Yew School of Public Policy Policy Innovation Lab** consulting project for **UNFPA** as the client. Built for the student group's research and made openly available for anyone who works with or studies UNFPA and PMNCH.
 
 **Live site:** [unfpa-lkyspp-otg.vercel.app](https://unfpa-lkyspp-otg.vercel.app) *(after deployment)*
+
+---
+
+## About this project
+
+This is a consulting project run through **Professor Mancini's Policy Innovation Lab** course at the Lee Kuan Yew School of Public Policy, National University of Singapore. The client is **UNFPA** (United Nations Population Fund).
+
+The student group is conducting policy research across UNFPA's mandate, programme areas, evidence base, and contested topics. This repository contains their working knowledge base and the AI-assisted research interface built to support the group.
+
+### The LKYSPP group
+
+| Name | Role |
+|---|---|
+| Rani Opula Rajan | Group member |
+| Prachi Sharma | Group member |
+| Abhishek Tiwari | Group member |
+| Preeti Patil | Group member |
+
+**App built by:** Haojun See (MPP 2021) — designed and built this application to support the group's research and consulting work for UNFPA.
 
 ---
 
@@ -10,37 +29,18 @@ A public knowledge base covering UNFPA's programmes, mandate, evidence, and cont
 
 This repository contains two things:
 
-1. **32 deep-research documents** — a structured knowledge base covering UNFPA's mandate, programme areas, data systems, and politically contested topics. Each document is 3,000–8,000 words, researched and written to be accurate, balanced, and genuinely useful for a sophisticated audience (not marketing copy).
+1. **Deep-research documents** — a structured knowledge base covering UNFPA's mandate, programme areas, data systems, and politically contested topics. Each document is 3,000–8,000 words, researched and written to be accurate, balanced, and genuinely useful for a sophisticated policy audience.
 
 2. **A Next.js web application** — a publicly accessible interface with:
-   - A **chat interface** backed by semantic search (RAG) across all 32 documents
+   - A **chat interface** backed by semantic search (RAG) across all documents
    - A **browsable knowledge base** where each document is a readable, linkable page
    - A **feedback mechanism** so readers can flag errors or suggest improvements
 
 ---
 
-## Who built this
-
-This knowledge base was produced by **[On The Ground](https://ontheground.agency)**, an agency specialising in research, communications, and AI-assisted knowledge work in the public interest.
-
-The research was conducted for the **Lee Kuan Yew School of Public Policy (LKYSPP)** at the National University of Singapore, as part of preparing a policy practitioner audience to engage substantively with UNFPA's work, funding controversies, and evidence base.
-
-**Research methodology:** Each document was produced using **[Claude Code](https://claude.ai/code)** by Anthropic — specifically using Claude's deep research capabilities to synthesise primary sources, UNFPA programme documents, academic literature, and journalistic records into structured, citable briefs. The workflow combined:
-
-- Structured prompt design to ensure each document covered what a policy professional actually needs to know
-- Iterative deep research using Claude's ability to reason across large bodies of source material
-- Careful human review for factual accuracy and balance, particularly on contested topics (China programme, abortion policy, US defunding)
-- Frontmatter tagging (CODE, TIER, AUDIENCE) to make the corpus navigable across different reader types
-
-This is not AI-generated content that was published without review. It is AI-assisted research — the same way a skilled researcher uses a database, except the database reasons.
-
-If you are interested in similar work for your organisation, contact On The Ground at [hello@ontheground.agency](mailto:hello@ontheground.agency).
-
----
-
 ## Knowledge base structure
 
-The 32 documents are organised into five blocks:
+The documents are organised into five blocks:
 
 | Block | Code | Description | Documents |
 |---|---|---|---|
@@ -107,7 +107,10 @@ npx prisma db push
 # 6. Ingest the knowledge base documents
 npx tsx scripts/ingest-knowledge.ts --all
 
-# 7. Start the dev server
+# 7. (Optional) Ingest PDF source documents
+npx tsx scripts/ingest-pdfs.ts --all
+
+# 8. Start the dev server
 npm run dev
 ```
 
@@ -118,17 +121,21 @@ The **knowledge base browsing** (`/knowledge`) works without a database — it r
 ### Ingestion script options
 
 ```bash
-# Dry run — see what would be ingested without touching the database
-npx tsx scripts/ingest-knowledge.ts --all --dry-run
+# Markdown documents
+npx tsx scripts/ingest-knowledge.ts --all           # ingest all
+npx tsx scripts/ingest-knowledge.ts --all --dry-run # preview without writing
+npx tsx scripts/ingest-knowledge.ts --all --force   # force re-ingest
+npx tsx scripts/ingest-knowledge.ts --status        # corpus status
 
-# Force re-ingest (updates existing documents, regenerates embeddings)
-npx tsx scripts/ingest-knowledge.ts --all --force
+# PDF source documents (hash-based change detection)
+npx tsx scripts/ingest-pdfs.ts --all                # ingest all PDFs
+npx tsx scripts/ingest-pdfs.ts --all --dry-run      # preview
+npx tsx scripts/ingest-pdfs.ts --all --force        # force re-ingest
+npx tsx scripts/ingest-pdfs.ts --status             # status + untracked/changed counts
+npx tsx scripts/ingest-pdfs.ts --file "path/to.pdf" # single file
 
-# Check corpus status
-npx tsx scripts/ingest-knowledge.ts --status
-
-# Ingest a single document
-npx tsx scripts/ingest-knowledge.ts --file ../docs/knowledge-base/unfpa/UNFPA-O-01.md
+# Ingest everything at once
+npm run ingest-all
 ```
 
 ### Environment variables
@@ -166,29 +173,22 @@ Note: The knowledge base browsing pages are statically rendered at build time an
 unfpa-lkyspp-otg/
 ├── README.md                        ← You are here
 ├── docs/
-│   └── knowledge-base/
-│       └── unfpa/
-│           ├── INDEX.md             ← Document index
-│           ├── UNFPA-O-01.md        ← Orientation documents
-│           ├── UNFPA-O-02.md
-│           ├── ...
-│           ├── UNFPA-W-01.md        ← Programme Work documents
-│           ├── ...
-│           ├── UNFPA-D-01.md        ← Data & Evidence documents
-│           ├── ...
-│           ├── UNFPA-C-01.md        ← Contested Areas documents
-│           ├── ...
-│           ├── PMNCH-O-01.md        ← PMNCH documents
-│           └── ...
+│   ├── knowledge-base/
+│   │   └── unfpa/
+│   │       ├── INDEX.md             ← Document index
+│   │       ├── UNFPA-O-01.md        ← Orientation documents
+│   │       ├── UNFPA-W-01.md        ← Programme Work documents
+│   │       ├── UNFPA-D-01.md        ← Data & Evidence documents
+│   │       ├── UNFPA-C-01.md        ← Contested Areas documents
+│   │       └── PMNCH-O-01.md        ← PMNCH documents
+│   └── UNFPA key files/             ← PDF source documents (36 reports)
 └── next-app/
     ├── app/
     │   ├── page.tsx                 ← Chat interface (/)
     │   ├── layout.tsx               ← Site-wide layout + nav
-    │   ├── globals.css
     │   ├── knowledge/
     │   │   ├── page.tsx             ← Knowledge base index (/knowledge)
-    │   │   └── [slug]/
-    │   │       └── page.tsx         ← Individual document (/knowledge/unfpa-o-01)
+    │   │   └── [slug]/page.tsx      ← Individual document page
     │   └── api/
     │       ├── chat/route.ts        ← Chat API (POST /api/chat)
     │       └── admin/knowledge/
@@ -196,28 +196,24 @@ unfpa-lkyspp-otg/
     │           └── search/route.ts  ← Test semantic search
     ├── components/
     │   └── knowledge-chat.tsx       ← Chat UI component
-    ├── lib/
-    │   ├── prisma.ts                ← Prisma client singleton
-    │   └── docs.ts                  ← Filesystem doc reader
     ├── services/
     │   ├── embeddingService.ts      ← OpenAI embedding wrapper
-    │   ├── chunkingService.ts       ← Markdown-aware chunker
+    │   ├── chunkingService.ts       ← Markdown + PDF chunker
     │   └── knowledgeDocumentService.ts ← Ingest + semantic search
     ├── scripts/
-    │   └── ingest-knowledge.ts      ← CLI ingestion script
+    │   ├── ingest-knowledge.ts      ← Markdown ingestion CLI
+    │   └── ingest-pdfs.ts           ← PDF ingestion CLI (SHA-256 tracking)
     ├── types/
     │   └── corpus.ts                ← Shared TypeScript types
     └── prisma/
-        └── schema.prisma            ← KnowledgeDocument + KnowledgeChunk models
+        └── schema.prisma            ← KnowledgeDocument, KnowledgeChunk, PdfIngestRecord
 ```
 
 ---
 
 ## Feedback
 
-If you find an error, have context that would improve a document, or want to flag something that seems out of date, email [UNFPA@ontheground.agency](mailto:UNFPA@ontheground.agency). Each document page also has a direct feedback button.
-
-This knowledge base is intentionally versioned in git so corrections can be tracked transparently.
+If you find an error, have context that would improve a document, or want to flag something that seems out of date, use the feedback button on each document page or email [UNFPA@ontheground.agency](mailto:UNFPA@ontheground.agency).
 
 ---
 
@@ -225,8 +221,8 @@ This knowledge base is intentionally versioned in git so corrections can be trac
 
 The **code** (everything in `next-app/`) is released under the MIT licence.
 
-The **documents** (everything in `docs/knowledge-base/`) are released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — you may reproduce, adapt, or build on them for any purpose with attribution to On The Ground / LKYSPP.
+The **documents** (everything in `docs/knowledge-base/`) are released under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) — you may reproduce, adapt, or build on them for any purpose with attribution to the LKYSPP Policy Innovation Lab group.
 
 ---
 
-*Built by [On The Ground](https://ontheground.agency) · Research by Claude Code (Anthropic) · For LKYSPP, National University of Singapore*
+*LKYSPP Policy Innovation Lab · Professor Mancini · Client: UNFPA · App by Haojun See (MPP 2021)*
