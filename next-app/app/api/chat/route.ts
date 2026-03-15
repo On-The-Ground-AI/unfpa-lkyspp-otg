@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchKnowledge } from '@/services/knowledgeDocumentService';
+import { Redis } from '@upstash/redis';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+const DAILY_LIMIT = 20;
 
 export const dynamic = 'force-dynamic';
 
@@ -29,8 +31,50 @@ When evidence is uncertain or contested, say so clearly. Cite document titles wh
 relevant. Do not fabricate statistics or claim certainty where documents express
 uncertainty. Keep responses concise and useful — tailor depth to the question.`;
 
+// ── Global daily rate limiter ─────────────────────────────────────────────
+// Uses Upstash Redis for a server-side counter shared across all users/sessions.
+// If UPSTASH_REDIS_REST_URL / TOKEN are not set, limit is not enforced
+// (safe fallback for local dev).
+
+let redis: Redis | null = null;
+try {
+  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+    redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
+  }
+} catch {
+  // Redis unavailable — proceed without rate limiting
+}
+
+async function checkGlobalLimit(): Promise<{ allowed: boolean; remaining: number; used: number }> {
+  if (!redis) return { allowed: true, remaining: DAILY_LIMIT, used: 0 };
+
+  const today = new Date().toISOString().split('T')[0];
+  const key = `unfpa:queries:${today}`;
+
+  // Increment and set 25-hour expiry on first use each day
+  const used = await redis.incr(key);
+  if (used === 1) await redis.expire(key, 90000); // 25 hours
+
+  const remaining = Math.max(0, DAILY_LIMIT - used);
+  return { allowed: used <= DAILY_LIMIT, remaining, used };
+}
+
+// ── POST /api/chat ────────────────────────────────────────────────────────
+
 export async function POST(request: NextRequest) {
   try {
+    // Check global daily limit before doing any work
+    const quota = await checkGlobalLimit();
+    if (!quota.allowed) {
+      return NextResponse.json(
+        { error: `Daily query limit of ${DAILY_LIMIT} reached. Resets at midnight UTC.`, remaining: 0 },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { message, conversationHistory } = body;
 
@@ -115,7 +159,7 @@ export async function POST(request: NextRequest) {
       slug: r.documentSlug,
     }));
 
-    return NextResponse.json({ response: assistantMessage, sources });
+    return NextResponse.json({ response: assistantMessage, sources, remaining: quota.remaining });
   } catch (error) {
     console.error('[Chat API] Error:', error);
     return NextResponse.json({ error: 'Failed to process request' }, { status: 500 });

@@ -52,27 +52,6 @@ const LOADING_WORDS = [
 ];
 
 const DAILY_LIMIT = 20;
-const STORAGE_KEY = "unfpa_query_usage";
-
-function getUsageToday(): number {
-  if (typeof window === "undefined") return 0;
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return 0;
-    const { date, count } = JSON.parse(stored);
-    const today = new Date().toISOString().split("T")[0];
-    if (date !== today) return 0;
-    return count;
-  } catch {
-    return 0;
-  }
-}
-
-function incrementUsage(): void {
-  const today = new Date().toISOString().split("T")[0];
-  const current = getUsageToday();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({ date: today, count: current + 1 }));
-}
 
 function LoadingPulse() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -110,15 +89,18 @@ export function KnowledgeChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [queriesUsed, setQueriesUsed] = useState(0);
+  const [remaining, setRemaining] = useState<number>(DAILY_LIMIT);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const hasConversation = messages.length > 0;
 
-  // Load usage count from localStorage on mount
+  // Fetch server-side global quota on mount
   useEffect(() => {
-    setQueriesUsed(getUsageToday());
+    fetch("/api/quota")
+      .then((r) => r.json())
+      .then((d) => setRemaining(d.remaining ?? DAILY_LIMIT))
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -132,7 +114,7 @@ export function KnowledgeChat() {
     }
   }, [input, hasConversation]);
 
-  const isAtLimit = queriesUsed >= DAILY_LIMIT;
+  const isAtLimit = remaining <= 0;
 
   const sendMessage = async (text?: string) => {
     const userMessage = (text ?? input).trim();
@@ -141,8 +123,6 @@ export function KnowledgeChat() {
     setInput("");
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
-    incrementUsage();
-    setQueriesUsed(getUsageToday());
 
     try {
       const response = await fetch("/api/chat", {
@@ -159,6 +139,9 @@ export function KnowledgeChat() {
 
       const data = await response.json();
 
+      // Update remaining count from server response
+      if (typeof data.remaining === "number") setRemaining(data.remaining);
+
       if (response.ok) {
         setMessages((prev) => [
           ...prev,
@@ -166,6 +149,15 @@ export function KnowledgeChat() {
             role: "assistant",
             content: data.response,
             sources: data.sources?.length ? data.sources : undefined,
+          },
+        ]);
+      } else if (response.status === 429) {
+        setRemaining(0);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: data.error || `Daily limit of ${DAILY_LIMIT} queries reached. Resets at midnight UTC.`,
           },
         ]);
       } else {
@@ -342,7 +334,7 @@ export function KnowledgeChat() {
                 <p className="text-xs text-slate-400">
                   {isLoading
                     ? "⏳ Searching knowledge base — this takes ~20–30 seconds"
-                    : `${DAILY_LIMIT - queriesUsed} of ${DAILY_LIMIT} queries remaining today`}
+                    : `${remaining} of ${DAILY_LIMIT} queries remaining today`}
                 </p>
               </div>
             </>
