@@ -175,8 +175,21 @@ For funders interested in existential climate adaptation: Pacific SIDS are where
 - New fourth outcome: population dynamics and demographic change
 - Annual financing requirement calculated at **$26 billion** across all outcomes
 - MOPAN 2025 assessment noted: UNFPA lacks a dedicated climate strategy — a gap being addressed
-- New Executive Director: **Ms. Diene Keita** (effective August 2025)
+- New Executive Director: **Ms. Diene Keita** (effective August 2025) — first Guinean to head a UN agency; former Minister for Cooperation of Guinea; doctorate in Law from Sorbonne
+- Despite US cuts, UNFPA achieved **record income of nearly $1.7 billion** through diversified funding (IFIs, foundations, private sector, individual giving)
+- Keita chaired a Global Symposium on Climate Justice (Brasilia, July 2025) ahead of COP30
+- Africa CDC MoU signed (AU Summit 2026) for joint SRHR, adolescent/maternal health, and pooled procurement
 - Humanitarian appeal for 2026: **$1 billion** across 41 countries
+- 2026–2029 budget targets set **16% below** mid-term review targets — deliberately conservative given donor uncertainty
+
+### UN80 Merger Proposal
+
+- UN Secretary-General proposed merging UNFPA and UN Women as part of UN80 reforms (launched March 2025)
+- Assessment phase underway; final decision rests with Member States at 2026 General Assembly
+- Only **20–30%** of the two agencies' work overlaps; proposed savings of only **$2 million**
+- Significant opposition from civil society, Democratic Women's Caucus, and countries including Brazil, Japan, Pakistan
+- Keita: committed to ensuring "the mandate of UNFPA is protected"
+- **For funder conversations**: The merger proposal should not deter investment. UNFPA's mandate — SRHR, maternal health, family planning, GBV — is endorsed by 179 countries and will be maintained regardless of institutional structure. Funders should focus on UNFPA's delivery capacity and results, which are proven and independent of institutional reform discussions.
 
 ---
 
