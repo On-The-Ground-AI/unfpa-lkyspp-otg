@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, BookOpen, Globe, Search, Brain, Pencil } from "lucide-react";
+import { Send, BookOpen, Globe, Search, Brain, Pencil, Download, FileText, FileDown, Presentation, ChevronDown, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 interface Message {
@@ -67,6 +67,124 @@ function StatusIndicator({ status }: { status: StatusUpdate }) {
           {status.message}
         </span>
       </div>
+    </div>
+  );
+}
+
+type ExportFormat = "docx" | "pdf" | "pptx";
+
+const EXPORT_OPTIONS: { format: ExportFormat; label: string; icon: typeof FileText; description: string }[] = [
+  { format: "docx", label: "Word Document", icon: FileText, description: "Editable .docx report" },
+  { format: "pdf", label: "PDF Document", icon: FileDown, description: "Print-ready .pdf report" },
+  { format: "pptx", label: "PowerPoint Slides", icon: Presentation, description: "Slide deck .pptx" },
+];
+
+function ExportDropdown({
+  messages,
+  disabled,
+}: {
+  messages: Message[];
+  disabled: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const [exporting, setExporting] = useState<ExportFormat | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [open]);
+
+  const handleExport = async (format: ExportFormat) => {
+    setExporting(format);
+    setOpen(false);
+
+    try {
+      const response = await fetch("/api/export", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: messages.map((m) => ({
+            role: m.role,
+            content: m.content,
+            sources: m.sources,
+          })),
+          format,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        alert(err.error || "Export failed. Please try again.");
+        return;
+      }
+
+      // Trigger download
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const timestamp = new Date().toISOString().split("T")[0];
+      a.download = `unfpa-report-${timestamp}.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("Export failed. Please check your connection and try again.");
+    } finally {
+      setExporting(null);
+    }
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      <button
+        onClick={() => setOpen(!open)}
+        disabled={disabled || exporting !== null}
+        className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded border transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        style={{
+          color: "#FFFFFF",
+          borderColor: "rgba(255,255,255,0.4)",
+          backgroundColor: open ? "rgba(255,255,255,0.15)" : "transparent",
+        }}
+        title="Export conversation as report"
+      >
+        {exporting ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : (
+          <Download className="h-3.5 w-3.5" />
+        )}
+        {exporting ? "Exporting…" : "Export"}
+        <ChevronDown className={`h-3 w-3 transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-slate-200 rounded-lg shadow-lg z-50 py-1">
+          {EXPORT_OPTIONS.map((opt) => {
+            const Icon = opt.icon;
+            return (
+              <button
+                key={opt.format}
+                onClick={() => handleExport(opt.format)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-slate-50 transition-colors"
+              >
+                <Icon className="h-4 w-4 flex-shrink-0" style={{ color: "#009EDB" }} />
+                <div>
+                  <p className="text-xs font-medium text-slate-800">{opt.label}</p>
+                  <p className="text-[10px] text-slate-400">{opt.description}</p>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -278,13 +396,20 @@ export function KnowledgeChat() {
       <div className="flex flex-col h-[calc(100vh-200px)] min-h-[500px] border border-slate-200 rounded-lg overflow-hidden shadow-sm">
         {/* Header */}
         <div className="px-5 py-4 border-b border-slate-200" style={{ backgroundColor: "#003366" }}>
-          <h2 className="font-semibold text-white flex items-center gap-2">
-            <BookOpen className="h-4 w-4" />
-            UNFPA Partnership Catalyst
-          </h2>
-          <p className="text-xs mt-0.5" style={{ color: "#a8c8e8" }}>
-            Prepare for funding conversations — pitch UNFPA programmes, draft briefings, and match projects to partners
-          </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <h2 className="font-semibold text-white flex items-center gap-2">
+                <BookOpen className="h-4 w-4" />
+                UNFPA Partnership Catalyst
+              </h2>
+              <p className="text-xs mt-0.5" style={{ color: "#a8c8e8" }}>
+                Prepare for funding conversations — pitch UNFPA programmes, draft briefings, and match projects to partners
+              </p>
+            </div>
+            {hasConversation && !isLoading && (
+              <ExportDropdown messages={messages} disabled={messages.length === 0} />
+            )}
+          </div>
         </div>
 
         {/* Messages */}
