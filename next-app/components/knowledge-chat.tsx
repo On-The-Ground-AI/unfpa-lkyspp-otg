@@ -125,8 +125,47 @@ function ExportDropdown({
         return;
       }
 
-      // Trigger download
+      // ── Client-side integrity verification ──
       const blob = await response.blob();
+      const contentLength = response.headers.get("Content-Length");
+      const integrity = response.headers.get("X-File-Integrity");
+
+      // 1. Check server confirmed integrity
+      if (integrity !== "verified") {
+        alert("Export file did not pass server integrity check. Please try again.");
+        return;
+      }
+
+      // 2. Verify received size matches declared Content-Length
+      if (contentLength && blob.size !== Number(contentLength)) {
+        alert(
+          `Download incomplete: received ${blob.size} bytes but expected ${contentLength}. ` +
+          "The file may be corrupted. Please try again."
+        );
+        return;
+      }
+
+      // 3. Verify minimum size (catch empty/stub responses)
+      const MIN_SIZES: Record<string, number> = { docx: 1024, pdf: 256, pptx: 2048 };
+      if (blob.size < (MIN_SIZES[format] || 256)) {
+        alert("Export file appears too small and may be incomplete. Please try again.");
+        return;
+      }
+
+      // 4. Verify magic bytes on the client
+      const header = new Uint8Array(await blob.slice(0, 4).arrayBuffer());
+      const MAGIC: Record<string, number[]> = {
+        docx: [0x50, 0x4b, 0x03, 0x04],
+        pdf: [0x25, 0x50, 0x44, 0x46],
+        pptx: [0x50, 0x4b, 0x03, 0x04],
+      };
+      const expected = MAGIC[format];
+      if (expected && !expected.every((b, i) => header[i] === b)) {
+        alert("Downloaded file has an invalid header and may be corrupted. Please try again.");
+        return;
+      }
+
+      // All checks passed — trigger download
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
