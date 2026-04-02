@@ -17,7 +17,7 @@ export async function GET() {
         method: 'POST',
         headers: {
           'x-api-key': apiKey,
-          'anthropic-version': '2025-04-15',
+          'anthropic-version': '2024-10-22',
           'content-type': 'application/json',
         },
         body: JSON.stringify({
