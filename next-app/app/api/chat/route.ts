@@ -1,9 +1,7 @@
 import { NextRequest } from 'next/server';
 import { searchKnowledge } from '@/services/knowledgeDocumentService';
-import { Redis } from '@upstash/redis';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const DAILY_LIMIT = 20;
 const MAX_TOOL_ROUNDS = 3;      // safety cap on agentic tool-use loops
 const MAX_CONTINUATION_WAVES = 2; // max waves of continued generation on max_tokens cutoff
 
@@ -67,33 +65,6 @@ FORMATTING RULES:
 Answer questions based on the knowledge base context AND web search results. Cite document
 titles and web sources when relevant. Do not fabricate statistics or claim certainty where
 documents express uncertainty. When evidence is uncertain or contested, say so clearly.`;
-
-// ── Global daily rate limiter ─────────────────────────────────────────────
-
-let redis: Redis | null = null;
-try {
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    redis = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
-    });
-  }
-} catch {
-  // Redis unavailable — proceed without rate limiting
-}
-
-async function checkGlobalLimit(): Promise<{ allowed: boolean; remaining: number; used: number }> {
-  if (!redis) return { allowed: true, remaining: DAILY_LIMIT, used: 0 };
-
-  const today = new Date().toISOString().split('T')[0];
-  const key = `unfpa:queries:${today}`;
-
-  const used = await redis.incr(key);
-  if (used === 1) await redis.expire(key, 90000); // 25 hours
-
-  const remaining = Math.max(0, DAILY_LIMIT - used);
-  return { allowed: used <= DAILY_LIMIT, remaining, used };
-}
 
 // ── Tool definitions for Claude ──────────────────────────────────────────
 
@@ -172,18 +143,6 @@ function sseEncode(event: string, data: unknown): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check global daily limit
-    const quota = await checkGlobalLimit();
-    if (!quota.allowed) {
-      return new Response(
-        JSON.stringify({
-          error: `Daily query limit of ${DAILY_LIMIT} reached. Resets at midnight UTC.`,
-          remaining: 0,
-        }),
-        { status: 429, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
     const body = await request.json();
     const { message, conversationHistory } = body;
 
@@ -341,6 +300,11 @@ export async function POST(request: NextRequest) {
 
           // ── Phase 1: Agentic tool-use loop ──────────────────────────
           let lastStopReason = '';
+          let errored = false;
+          // Track text generated during exploration rounds (interleaved thinking
+          // can produce text blocks alongside tool_use). We fall back to this if
+          // the loop exits without Claude completing a final answer.
+          let interimText = '';
 
           while (toolRound < MAX_TOOL_ROUNDS) {
             toolRound++;
@@ -368,6 +332,7 @@ export async function POST(request: NextRequest) {
               }
               console.error('[Chat API] Final error - status:', status, 'detail:', claudeData?.detail);
               send('error', { message: userMessage });
+              errored = true;
               break;
             }
 
@@ -385,6 +350,12 @@ export async function POST(request: NextRequest) {
             if (lastStopReason === 'max_tokens') {
               finalText = responseText;
               break;
+            }
+
+            // Preserve any text Claude produced during this exploration round so we
+            // don't lose it if we end up exhausting MAX_TOOL_ROUNDS below.
+            if (responseText) {
+              interimText += (interimText ? '\n\n' : '') + responseText;
             }
 
             // Execute tool calls
@@ -439,6 +410,52 @@ export async function POST(request: NextRequest) {
             }
           }
 
+          // If the agentic loop exited because we hit MAX_TOOL_ROUNDS while Claude
+          // was still calling tools, finalText is still empty — Claude never got
+          // to the drafting step. Force a synthesis call without tools so the
+          // user always gets an answer rather than a silent empty response.
+          if (!errored && !finalText && lastStopReason === 'tool_use') {
+            console.warn(
+              '[Chat API] Tool round cap reached without final answer — forcing synthesis. toolRound:',
+              toolRound
+            );
+            send('status', {
+              phase: 'writing',
+              message: 'Composing final answer...',
+            });
+
+            const synthesisData = await callClaude(messages, false);
+            if (synthesisData && !synthesisData._error) {
+              const synthesisBlocks = synthesisData.content || [];
+              lastStopReason = synthesisData.stop_reason || '';
+              const { text: synthesisText } = processBlocks(synthesisBlocks);
+              finalText = synthesisText || interimText;
+            } else {
+              finalText = interimText;
+            }
+          }
+
+          // If we still have nothing to show, surface a real error rather than
+          // streaming an empty response that leaves the user staring at a blank
+          // bubble with no feedback.
+          if (!errored && !finalText) {
+            console.error(
+              '[Chat API] Empty finalText after agentic loop. toolRound:',
+              toolRound,
+              'lastStopReason:',
+              lastStopReason
+            );
+            send('error', {
+              message:
+                'I had trouble composing a complete response. Please try rephrasing your question or ask something more specific.',
+            });
+            errored = true;
+          }
+
+          if (errored) {
+            return;
+          }
+
           // ── Phase 2: Wave generation for complete output ─────────────
           // If the response was cut off (stop_reason === 'max_tokens'),
           // continue generating in waves by feeding the partial text back
@@ -491,7 +508,6 @@ export async function POST(request: NextRequest) {
           // ── Done ─────────────────────────────────────────────────────
           send('done', {
             sources: allSources,
-            remaining: quota.remaining,
             fullText: finalText,
           });
         } catch (error) {
