@@ -55,8 +55,6 @@ const PHASE_ICONS: Record<string, typeof Brain> = {
   writing: Pencil,
 };
 
-const DAILY_LIMIT = 20;
-
 function StatusIndicator({ status }: { status: StatusUpdate }) {
   const Icon = PHASE_ICONS[status.phase] || Brain;
   return (
@@ -232,7 +230,6 @@ export function KnowledgeChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [remaining, setRemaining] = useState<number>(DAILY_LIMIT);
   const [currentStatus, setCurrentStatus] = useState<StatusUpdate | null>(null);
   const [streamingText, setStreamingText] = useState<string>("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -240,14 +237,6 @@ export function KnowledgeChat() {
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const hasConversation = messages.length > 0;
-
-  // Fetch server-side global quota on mount
-  useEffect(() => {
-    fetch("/api/quota")
-      .then((r) => r.json())
-      .then((d) => setRemaining(d.remaining ?? DAILY_LIMIT))
-      .catch(() => {});
-  }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -260,12 +249,10 @@ export function KnowledgeChat() {
     }
   }, [input, hasConversation]);
 
-  const isAtLimit = remaining <= 0;
-
   const sendMessage = useCallback(
     async (text?: string) => {
       const userMessage = (text ?? input).trim();
-      if (!userMessage || isLoading || isAtLimit) return;
+      if (!userMessage || isLoading) return;
 
       setInput("");
       setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
@@ -294,26 +281,13 @@ export function KnowledgeChat() {
 
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
-          if (response.status === 429) {
-            setRemaining(0);
-            setMessages((prev) => [
-              ...prev,
-              {
-                role: "assistant",
-                content:
-                  data.error ||
-                  `Daily limit of ${DAILY_LIMIT} queries reached. Resets at midnight UTC.`,
-              },
-            ]);
-          } else {
-            setMessages((prev) => [
-              ...prev,
-              {
-                role: "assistant",
-                content: data.error || "Sorry, something went wrong. Please try again.",
-              },
-            ]);
-          }
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: data.error || "Sorry, something went wrong. Please try again.",
+            },
+          ]);
           return;
         }
 
@@ -355,7 +329,7 @@ export function KnowledgeChat() {
                     break;
 
                   case "done": {
-                    const { sources, remaining: rem, fullText } = data;
+                    const { sources, fullText } = data;
                     // Use fullText if available for accuracy
                     const finalContent = fullText || accumulatedText;
                     setMessages((prev) => [
@@ -367,7 +341,6 @@ export function KnowledgeChat() {
                       },
                     ]);
                     setStreamingText("");
-                    if (typeof rem === "number") setRemaining(rem);
                     break;
                   }
 
@@ -406,7 +379,7 @@ export function KnowledgeChat() {
         abortControllerRef.current = null;
       }
     },
-    [input, isLoading, isAtLimit, messages]
+    [input, isLoading, messages]
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -549,45 +522,37 @@ export function KnowledgeChat() {
 
         {/* Input */}
         <div className="p-4 border-t border-slate-200 bg-white">
-          {isAtLimit ? (
-            <div className="text-center py-3 text-sm text-slate-500 bg-slate-50 rounded border border-slate-200">
-              Daily limit of {DAILY_LIMIT} queries reached. Resets at midnight.
-            </div>
-          ) : (
-            <>
-              <div className="flex gap-2">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Prepare a pitch, draft a briefing, match projects to funders…"
-                  className="flex-1 resize-none border border-slate-300 rounded px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:border-blue-600"
-                  style={{ "--tw-ring-color": "#009EDB" } as React.CSSProperties}
-                  rows={2}
-                  disabled={isLoading}
-                />
-                <button
-                  onClick={() => sendMessage()}
-                  disabled={isLoading || !input.trim()}
-                  className="px-4 text-white rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 text-sm font-medium transition-opacity"
-                  style={{ backgroundColor: "#009EDB" }}
-                >
-                  <Send className="h-4 w-4" />
-                </button>
-              </div>
-              <div className="flex items-center justify-between mt-2">
-                <p className="text-xs text-slate-400">
-                  Press Enter to send · Shift+Enter for new line
-                </p>
-                <p className="text-xs text-slate-400">
-                  {isLoading
-                    ? "Searching knowledge base & web — comprehensive answers may take up to a minute"
-                    : `${remaining} of ${DAILY_LIMIT} queries remaining today`}
-                </p>
-              </div>
-            </>
-          )}
+          <div className="flex gap-2">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Prepare a pitch, draft a briefing, match projects to funders…"
+              className="flex-1 resize-none border border-slate-300 rounded px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:border-blue-600"
+              style={{ "--tw-ring-color": "#009EDB" } as React.CSSProperties}
+              rows={2}
+              disabled={isLoading}
+            />
+            <button
+              onClick={() => sendMessage()}
+              disabled={isLoading || !input.trim()}
+              className="px-4 text-white rounded hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 text-sm font-medium transition-opacity"
+              style={{ backgroundColor: "#009EDB" }}
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-slate-400">
+              Press Enter to send · Shift+Enter for new line
+            </p>
+            {isLoading && (
+              <p className="text-xs text-slate-400">
+                Searching knowledge base & web — comprehensive answers may take up to a minute
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

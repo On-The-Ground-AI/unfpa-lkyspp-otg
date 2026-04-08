@@ -1,9 +1,7 @@
 import { NextRequest } from 'next/server';
 import { searchKnowledge } from '@/services/knowledgeDocumentService';
-import { Redis } from '@upstash/redis';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const DAILY_LIMIT = 20;
 const MAX_TOOL_ROUNDS = 3;      // safety cap on agentic tool-use loops
 const MAX_CONTINUATION_WAVES = 2; // max waves of continued generation on max_tokens cutoff
 
@@ -67,33 +65,6 @@ FORMATTING RULES:
 Answer questions based on the knowledge base context AND web search results. Cite document
 titles and web sources when relevant. Do not fabricate statistics or claim certainty where
 documents express uncertainty. When evidence is uncertain or contested, say so clearly.`;
-
-// ── Global daily rate limiter ─────────────────────────────────────────────
-
-let redis: Redis | null = null;
-try {
-  if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
-    redis = new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN,
-    });
-  }
-} catch {
-  // Redis unavailable — proceed without rate limiting
-}
-
-async function checkGlobalLimit(): Promise<{ allowed: boolean; remaining: number; used: number }> {
-  if (!redis) return { allowed: true, remaining: DAILY_LIMIT, used: 0 };
-
-  const today = new Date().toISOString().split('T')[0];
-  const key = `unfpa:queries:${today}`;
-
-  const used = await redis.incr(key);
-  if (used === 1) await redis.expire(key, 90000); // 25 hours
-
-  const remaining = Math.max(0, DAILY_LIMIT - used);
-  return { allowed: used <= DAILY_LIMIT, remaining, used };
-}
 
 // ── Tool definitions for Claude ──────────────────────────────────────────
 
@@ -172,18 +143,6 @@ function sseEncode(event: string, data: unknown): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check global daily limit
-    const quota = await checkGlobalLimit();
-    if (!quota.allowed) {
-      return new Response(
-        JSON.stringify({
-          error: `Daily query limit of ${DAILY_LIMIT} reached. Resets at midnight UTC.`,
-          remaining: 0,
-        }),
-        { status: 429, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
-
     const body = await request.json();
     const { message, conversationHistory } = body;
 
@@ -549,7 +508,6 @@ export async function POST(request: NextRequest) {
           // ── Done ─────────────────────────────────────────────────────
           send('done', {
             sources: allSources,
-            remaining: quota.remaining,
             fullText: finalText,
           });
         } catch (error) {
