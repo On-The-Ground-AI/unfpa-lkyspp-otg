@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
 import { searchKnowledge } from '@/services/knowledgeDocumentService';
+import { buildSystemPrompt, getSearchVerticals, type AppMode } from '@/lib/prompts';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const MAX_TOOL_ROUNDS = 3;      // safety cap on agentic tool-use loops
@@ -121,25 +122,32 @@ const TOOLS = [
 
 async function executeToolCall(
   toolName: string,
-  toolInput: Record<string, unknown>
+  toolInput: Record<string, unknown>,
+  verticals: string[]
 ): Promise<string> {
   if (toolName === 'knowledge_base_search') {
     const query = toolInput.query as string;
     const limit = Math.min((toolInput.limit as number) || 5, 10);
 
-    const results = await searchKnowledge(query, {
+    // Search across all verticals for this mode; pass vertical filter if single vertical
+    const searchOptions = {
       limit,
       threshold: 0.45,
-    }).catch(() => []);
+      // If multiple verticals, we search all and filter post-hoc (future: multi-vertical support)
+      vertical: verticals.length === 1 ? verticals[0] : undefined,
+    };
+
+    const results = await searchKnowledge(query, searchOptions).catch(() => []);
 
     if (results.length === 0) {
       return 'No relevant results found in the knowledge base for this query.';
     }
 
+    // Include chunkId/slug in output so the LLM can emit [SRC:chunk_id] citation tags
     return results
       .map(
         (r, i) =>
-          `[${i + 1}] From "${r.documentTitle}" (similarity: ${r.similarity.toFixed(2)}):\n${r.chunkContent}`
+          `[${i + 1}] chunk_id="${r.documentSlug}-${r.chunkIndex}" From "${r.documentTitle}" (similarity: ${r.similarity.toFixed(2)}):\n${r.chunkContent}`
       )
       .join('\n\n---\n\n');
   }
@@ -158,7 +166,13 @@ function sseEncode(event: string, data: unknown): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { message, conversationHistory } = body;
+    const {
+      message,
+      conversationHistory,
+      mode = 'partnership',   // 'clinical' | 'community' | 'partnership'
+      country = '',           // e.g. "Myanmar", "Bangladesh"
+      language = 'en',        // BCP 47, e.g. "my", "km", "id"
+    } = body;
 
     if (!message || typeof message !== 'string') {
       return new Response(JSON.stringify({ error: 'Message is required' }), {
@@ -166,6 +180,10 @@ export async function POST(request: NextRequest) {
         headers: { 'Content-Type': 'application/json' },
       });
     }
+
+    // Validate mode
+    const validModes: AppMode[] = ['clinical', 'community', 'partnership'];
+    const appMode: AppMode = validModes.includes(mode) ? mode : 'partnership';
 
     const apiKey: string | undefined = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
@@ -192,6 +210,8 @@ export async function POST(request: NextRequest) {
     }
 
     const todayDate = new Date().toISOString().split('T')[0];
+    const systemPrompt = buildSystemPrompt({ mode: appMode, country, language }, todayDate);
+    const searchVerticals = getSearchVerticals(appMode, country);
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
@@ -217,7 +237,7 @@ export async function POST(request: NextRequest) {
             const body: Record<string, unknown> = {
               model: 'claude-sonnet-4-20250514',
               max_tokens: 8000,
-              system: `${SYSTEM_PROMPT}\n\nToday's date is ${todayDate}.`,
+              system: systemPrompt,
               messages: msgs,
             };
             if (includeTools) {
@@ -402,7 +422,7 @@ export async function POST(request: NextRequest) {
                     : `Using ${toolCall.name}...`,
               });
 
-              const result = await executeToolCall(toolCall.name, toolCall.input);
+              const result = await executeToolCall(toolCall.name, toolCall.input, searchVerticals);
 
               if (toolCall.name === 'knowledge_base_search') {
                 const isEmpty = result.startsWith('No relevant results');
