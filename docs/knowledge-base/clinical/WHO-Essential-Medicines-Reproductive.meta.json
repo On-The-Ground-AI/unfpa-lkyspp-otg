@@ -1,0 +1,24 @@
+{
+  "sourceDocument": "WHO Model List of Essential Medicines 2023",
+  "sourceTitle": "WHO Model List of Essential Medicines: Reproductive Health Subset",
+  "sourceEdition": "23rd edition, 2023",
+  "sourceUrl": "https://www.who.int/teams/health-products-and-policies/essential-medicines-and-health-products/publications/essential-medicines-lists/",
+  "publisher": "World Health Organization",
+  "publicationYear": 2023,
+  "redistributionOk": true,
+  "redistributionNotes": "WHO essential medicines lists are in the public domain and may be used and adapted for health-care purposes without restriction.",
+  "vertical": "CLINICAL",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "clinicalStatus": "UNVERIFIED",
+  "expiryDate": "2028-12-31",
+  "contentType": "Essential medicines reference for reproductive health, maternal care, STI management, contraception, and neonatal care",
+  "sections": [
+    "Maternal Health and Labour Management",
+    "Antenatal Care Essentials",
+    "Management of Reproductive Tract Infections",
+    "Contraception and Family Planning",
+    "Postpartum Care Essentials",
+    "Essential Medicines for Neonatal Care"
+  ]
+}
