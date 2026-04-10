@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22519" systemVersion="13.5" minimumToolsVersion="Xcode 12.0" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="KnowledgeDocEntity" representedClassName="KnowledgeDocEntity" syncable="YES">
+        <attribute name="contentHash" attributeType="String"/>
+        <attribute name="expiryDate" optional="YES" attributeType="String"/>
+        <attribute name="ingestedAt" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="language" attributeType="String" defaultValueString="en"/>
+        <attribute name="slug" attributeType="String"/>
+        <attribute name="sourceUrl" optional="YES" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <attribute name="vertical" attributeType="String"/>
+        <relationship name="chunks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="KnowledgeChunkEntity" inverseName="document" inverseEntity="KnowledgeChunkEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="slug"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="KnowledgeChunkEntity" representedClassName="KnowledgeChunkEntity" syncable="YES">
+        <attribute name="chunkId" attributeType="String"/>
+        <attribute name="chunkIndex" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="content" attributeType="String"/>
+        <attribute name="contentHash" attributeType="String"/>
+        <attribute name="docSlug" attributeType="String"/>
+        <attribute name="embedding" attributeType="Binary"/>
+        <attribute name="expiryDate" optional="YES" attributeType="String"/>
+        <attribute name="ingestedAt" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="language" attributeType="String" defaultValueString="en"/>
+        <attribute name="sourcePage" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="sourceDocument" attributeType="String"/>
+        <attribute name="sourceEdition" attributeType="String"/>
+        <attribute name="sourceSection" attributeType="String"/>
+        <attribute name="sourceUrl" attributeType="String"/>
+        <attribute name="verbatimExcerpt" attributeType="String"/>
+        <relationship name="document" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="KnowledgeDocEntity" inverseName="chunks" inverseEntity="KnowledgeDocEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="chunkId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="FormularyEntryEntity" representedClassName="FormularyEntryEntity" syncable="YES">
+        <attribute name="alternativeDose" optional="YES" attributeType="String"/>
+        <attribute name="clinicalStatus" attributeType="String" defaultValueString="UNVERIFIED-SCAFFOLD"/>
+        <attribute name="contraindicationsJson" attributeType="String"/>
+        <attribute name="dose" attributeType="String"/>
+        <attribute name="drug" attributeType="String"/>
+        <attribute name="expiryDate" optional="YES" attributeType="String"/>
+        <attribute name="genericName" attributeType="String"/>
+        <attribute name="indication" attributeType="String"/>
+        <attribute name="localNamesJson" attributeType="String"/>
+        <attribute name="reviewedAt" optional="YES" attributeType="String"/>
+        <attribute name="reviewedBy" optional="YES" attributeType="String"/>
+        <attribute name="route" attributeType="String"/>
+        <attribute name="source" attributeType="String"/>
+        <attribute name="sourceChunkId" attributeType="String"/>
+        <attribute name="sourceUrl" attributeType="String"/>
+        <attribute name="timing" attributeType="String"/>
+        <attribute name="warningsJson" attributeType="String"/>
+        <attribute name="whoEmlListed" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="drug"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="ClinicalSourceEntity" representedClassName="ClinicalSourceEntity" syncable="YES">
+        <attribute name="expiryDate" optional="YES" attributeType="String"/>
+        <attribute name="ingestedAt" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="language" attributeType="String" defaultValueString="en"/>
+        <attribute name="organization" attributeType="String"/>
+        <attribute name="sourceDocument" attributeType="String"/>
+        <attribute name="sourceEdition" attributeType="String"/>
+        <attribute name="sourceId" attributeType="String"/>
+        <attribute name="sourceUrl" attributeType="String"/>
+        <attribute name="verifiedAt" optional="YES" attributeType="String"/>
+        <attribute name="verifiedBy" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="sourceId"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="AuditLogEntity" representedClassName="AuditLogEntity" syncable="YES">
+        <attribute name="answeredAt" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="chunkIds" attributeType="String"/>
+        <attribute name="clinicalContext" optional="YES" attributeType="String"/>
+        <attribute name="language" attributeType="String" defaultValueString="en"/>
+        <attribute name="mode" attributeType="String"/>
+        <attribute name="query" attributeType="String"/>
+        <attribute name="response" attributeType="String"/>
+        <attribute name="userId" optional="YES" attributeType="String"/>
+    </entity>
+</model>
