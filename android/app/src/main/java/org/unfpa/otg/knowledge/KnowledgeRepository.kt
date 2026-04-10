@@ -178,4 +178,144 @@ class KnowledgeRepository(
     suspend fun getChunk(chunkId: String): KnowledgeChunk? = withContext(Dispatchers.IO) {
         db.knowledgeChunkDao().getById(chunkId)
     }
+
+    /**
+     * Semantic clinical search with embedding-based vector similarity.
+     * Used for general clinical queries, symptom-based searches, and guideline lookups.
+     */
+    suspend fun searchClinical(
+        query: String,
+        topK: Int = 5,
+    ): List<SearchResult> = withContext(Dispatchers.Default) {
+        search(query, topK, verticals = emptyList())
+    }
+
+    /**
+     * Search for clinical guidelines for a specific condition.
+     * Performs semantic search on condition name and returns relevant guideline chunks.
+     */
+    suspend fun getClinicalGuidelines(condition: String): List<SearchResult> =
+        withContext(Dispatchers.Default) {
+            val query = "clinical guidelines for $condition management triage assessment"
+            search(query, topK = 10, verticals = emptyList())
+                .filter { result ->
+                    // Filter for guideline-like content
+                    result.content.lowercase().contains("guideline")
+                        || result.content.lowercase().contains("management")
+                        || result.content.lowercase().contains("protocol")
+                }
+        }
+
+    /**
+     * Look up drug information from the formulary.
+     * Returns the first matching drug entry by exact or partial name match.
+     */
+    suspend fun getDrugInfo(drugName: String): FormularyEntry? = withContext(Dispatchers.IO) {
+        val normalised = drugName.lowercase().trim()
+        db.formularyDao().getAll().firstOrNull { entry ->
+            entry.drug.equals(normalised) ||
+            entry.genericName.lowercase().equals(normalised) ||
+            entry.drug.contains(normalised) ||
+            entry.genericName.lowercase().contains(normalised)
+        }
+    }
+
+    /**
+     * Get all available citations for a specific chunk.
+     * Returns source metadata including document, section, page, URL, and verbatim excerpt.
+     */
+    suspend fun getCitations(chunkId: String): List<Citation> = withContext(Dispatchers.IO) {
+        val chunk = db.knowledgeChunkDao().getById(chunkId) ?: return@withContext emptyList()
+        listOf(
+            Citation(
+                chunkId = chunk.chunkId,
+                sourceDocument = chunk.sourceDocument,
+                sourceEdition = chunk.sourceEdition,
+                sourceSection = chunk.sourceSection,
+                sourcePage = chunk.sourcePage,
+                sourceUrl = chunk.sourceUrl,
+                verbatimExcerpt = chunk.verbatimExcerpt.ifBlank { chunk.content.take(300) },
+                expiryDate = chunk.expiryDate,
+                language = chunk.language,
+            )
+        )
+    }
+
+    data class Citation(
+        val chunkId: String,
+        val sourceDocument: String,
+        val sourceEdition: String,
+        val sourceSection: String,
+        val sourcePage: Int,
+        val sourceUrl: String,
+        val verbatimExcerpt: String,
+        val expiryDate: String?,
+        val language: String,
+    )
+
+    /**
+     * Get all knowledge chunks for offline RAG (Retrieval-Augmented Generation).
+     * Used to build context for clinical queries.
+     */
+    suspend fun getAllChunks(): List<KnowledgeChunk> = withContext(Dispatchers.IO) {
+        db.knowledgeChunkDao().getAll()
+    }
+
+    /**
+     * Search with hybrid approach: semantic + keyword matching.
+     * Combines vector similarity with BM25-style keyword relevance.
+     */
+    suspend fun searchHybrid(
+        query: String,
+        topK: Int = 5,
+        keywordWeight: Float = 0.3f,
+        semanticWeight: Float = 0.7f,
+    ): List<SearchResult> = withContext(Dispatchers.Default) {
+        // Get semantic results
+        val semanticResults = search(query, topK * 2, verticals = emptyList())
+
+        // Apply keyword matching on semantic results
+        val keywords = query.lowercase().split(Regex("\\s+"))
+        val reranked = semanticResults.map { result ->
+            val keywordMatches = keywords.count { keyword ->
+                result.content.lowercase().contains(keyword)
+            }
+            val keywordScore = (keywordMatches.toFloat() / keywords.size) * keywordWeight
+            val semanticScore = result.score * semanticWeight
+            result.copy(score = semanticScore + keywordScore)
+        }
+            .sortedByDescending { it.score }
+            .take(topK)
+
+        reranked
+    }
+
+    /**
+     * Get chunks by vertical (e.g., "MOH_PCPNC", "WHO_MCH").
+     * Useful for scoping searches to specific clinical guidelines.
+     */
+    suspend fun getChunksByVertical(vertical: String): List<SearchResult> =
+        withContext(Dispatchers.IO) {
+            db.knowledgeChunkDao().getAll()
+                .filter { chunk ->
+                    // Match vertical from sourceDocument or other metadata
+                    chunk.sourceDocument.contains(vertical) ||
+                    chunk.docSlug.contains(vertical)
+                }
+                .map { chunk ->
+                    SearchResult(
+                        chunkId = chunk.chunkId,
+                        documentTitle = chunk.sourceDocument.ifBlank { chunk.docSlug },
+                        docSlug = chunk.docSlug,
+                        content = chunk.content,
+                        sourcePage = chunk.sourcePage,
+                        sourceSection = chunk.sourceSection,
+                        sourceDocument = chunk.sourceDocument,
+                        sourceUrl = chunk.sourceUrl,
+                        verbatimExcerpt = chunk.verbatimExcerpt,
+                        expiryDate = chunk.expiryDate,
+                        score = 1.0f, // No scoring for vertical filter
+                    )
+                }
+        }
 }
