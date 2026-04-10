@@ -11,17 +11,17 @@ import prisma from '@/lib/prisma'
  */
 export async function GET() {
   try {
-    const rows = await prisma.$queryRawUnsafe<Array<{
-      version: string
-      manifest: unknown
-      signature: string
-      published_at: string
-    }>>(
+    const rows = await prisma.$queryRawUnsafe(
       `SELECT version, manifest, signature, published_at
        FROM mobile_content_bundles
        ORDER BY published_at DESC
        LIMIT 1`
-    )
+    ) as Array<{
+      version: string
+      manifest: unknown
+      signature: string
+      published_at: string
+    }>
 
     if (!rows || rows.length === 0) {
       return NextResponse.json({ error: 'No bundle available' }, { status: 404 })
