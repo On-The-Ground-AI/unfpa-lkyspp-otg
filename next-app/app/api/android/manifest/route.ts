@@ -1,34 +1,39 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import prisma from '@/lib/prisma'
 
 /**
  * GET /api/android/manifest
  *
  * Returns the latest signed OTA content bundle manifest.
- * Read-only — only Supabase service role can publish new bundles.
+ * Read-only — only the service role can publish new bundles via Supabase migrations.
  *
  * Response: { version, manifest, signature, published_at }
  */
 export async function GET() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  )
+  try {
+    const rows = await prisma.$queryRawUnsafe<Array<{
+      version: string
+      manifest: unknown
+      signature: string
+      published_at: string
+    }>>(
+      `SELECT version, manifest, signature, published_at
+       FROM mobile_content_bundles
+       ORDER BY published_at DESC
+       LIMIT 1`
+    )
 
-  const { data, error } = await supabase
-    .from('mobile_content_bundles')
-    .select('version, manifest, signature, published_at')
-    .order('published_at', { ascending: false })
-    .limit(1)
-    .single()
+    if (!rows || rows.length === 0) {
+      return NextResponse.json({ error: 'No bundle available' }, { status: 404 })
+    }
 
-  if (error || !data) {
+    return NextResponse.json(rows[0], {
+      headers: {
+        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+      },
+    })
+  } catch {
+    // Table may not exist yet (pre-migration) — return 404 gracefully
     return NextResponse.json({ error: 'No bundle available' }, { status: 404 })
   }
-
-  return NextResponse.json(data, {
-    headers: {
-      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
-    },
-  })
 }
