@@ -137,5 +137,119 @@ class VectorSearch {
         return FloatArray(buf.remaining()).also { buf.get(it) }
     }
 
+    /**
+     * Perform fast approximate nearest neighbor search.
+     * Uses simple in-memory linear scan, but in production could use
+     * SQLite FTS5 with custom vector similarity UDF or FAISS indices.
+     */
+    fun searchApproximate(
+        queryEmbedding: FloatArray,
+        topK: Int,
+        nProbes: Int = 10,  // For LSH-like approximate search (not used in linear scan)
+    ): List<RawResult> {
+        // For now, just use full linear scan
+        // In production, implement LSH or HNSW for faster approximate NN search
+        return search(queryEmbedding, topK)
+    }
+
+    /**
+     * Search with early termination if score drops below threshold.
+     * Useful for filtering out low-relevance results.
+     */
+    fun searchWithThreshold(
+        queryEmbedding: FloatArray,
+        topK: Int,
+        minScore: Float,
+    ): List<RawResult> {
+        if (entries.isEmpty()) return emptyList()
+
+        return entries.map { e ->
+            val score = dotProduct(queryEmbedding, e.embedding)
+            e to score
+        }
+            .filter { it.second >= minScore }
+            .sortedByDescending { it.second }
+            .take(topK)
+            .map { (e, score) ->
+                RawResult(
+                    chunkId = e.chunkId,
+                    documentTitle = e.documentTitle,
+                    docSlug = e.docSlug,
+                    content = e.content,
+                    sourcePage = e.sourcePage,
+                    sourceSection = e.sourceSection,
+                    sourceDocument = e.sourceDocument,
+                    sourceUrl = e.sourceUrl,
+                    verbatimExcerpt = e.verbatimExcerpt,
+                    expiryDate = e.expiryDate,
+                    vertical = e.vertical,
+                    score = score,
+                )
+            }
+    }
+
+    /**
+     * Search with result filtering by multiple criteria.
+     */
+    fun searchFiltered(
+        queryEmbedding: FloatArray,
+        topK: Int,
+        filterByVertical: String? = null,
+        filterByDocSlug: String? = null,
+        minScore: Float = 0f,
+        excludeChunkIds: Set<String> = emptySet(),
+    ): List<RawResult> {
+        if (entries.isEmpty()) return emptyList()
+
+        val filtered = entries.filter { e ->
+            (filterByVertical == null || e.vertical == filterByVertical) &&
+            (filterByDocSlug == null || e.docSlug == filterByDocSlug) &&
+            !excludeChunkIds.contains(e.chunkId)
+        }
+
+        return filtered.map { e ->
+            val score = dotProduct(queryEmbedding, e.embedding)
+            e to score
+        }
+            .filter { it.second >= minScore }
+            .sortedByDescending { it.second }
+            .take(topK)
+            .map { (e, score) ->
+                RawResult(
+                    chunkId = e.chunkId,
+                    documentTitle = e.documentTitle,
+                    docSlug = e.docSlug,
+                    content = e.content,
+                    sourcePage = e.sourcePage,
+                    sourceSection = e.sourceSection,
+                    sourceDocument = e.sourceDocument,
+                    sourceUrl = e.sourceUrl,
+                    verbatimExcerpt = e.verbatimExcerpt,
+                    expiryDate = e.expiryDate,
+                    vertical = e.vertical,
+                    score = score,
+                )
+            }
+    }
+
+    /**
+     * Get statistics about loaded embeddings.
+     */
+    fun getStatistics(): SearchStatistics {
+        return SearchStatistics(
+            totalChunks = entries.size,
+            totalDocuments = entries.map { it.docSlug }.toSet().size,
+            totalVerticals = entries.map { it.vertical }.toSet().size,
+            memoryUsedBytes = (entries.size * (384 * 4 + 256)) // rough estimate
+        )
+    }
+
+    data class SearchStatistics(
+        val totalChunks: Int,
+        val totalDocuments: Int,
+        val totalVerticals: Int,
+        val memoryUsedBytes: Long,
+    )
+
     fun size(): Int = entries.size
 }

@@ -1,0 +1,23 @@
+{
+  "sourceDocument": "WHO PCPNC 2023",
+  "sourceTitle": "Pregnancy, Childbirth, Postpartum and Newborn Care: A guide for essential practice",
+  "sourceEdition": "3rd edition, 2023",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+  "publisher": "World Health Organization",
+  "publicationYear": 2023,
+  "redistributionOk": true,
+  "redistributionNotes": "WHO guidelines are in the public domain and may be reproduced, distributed, and adapted for health purposes without permission.",
+  "vertical": "CLINICAL",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "clinicalStatus": "UNVERIFIED",
+  "expiryDate": "2028-12-31",
+  "contentType": "Clinical guidelines for maternal care, labour management, and complications",
+  "chapters": [
+    "Chapter 3: Active Management of Third Stage of Labour",
+    "Chapter 4: Prevention and Management of Postpartum Haemorrhage",
+    "Chapter 5: Management of Severe Complications",
+    "Chapter 6: Antenatal Care",
+    "Chapter 7: Detection and Management of Labour Complications"
+  ]
+}

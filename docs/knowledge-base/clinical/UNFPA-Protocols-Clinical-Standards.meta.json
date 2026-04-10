@@ -1,0 +1,22 @@
+{
+  "sourceDocument": "UNFPA Technical Guidance 2023",
+  "sourceTitle": "UNFPA Technical Guidance: Clinical Protocols and Standards for Reproductive Health",
+  "sourceEdition": "2023 Edition",
+  "sourceUrl": "https://www.unfpa.org/resources",
+  "publisher": "United Nations Population Fund (UNFPA)",
+  "publicationYear": 2023,
+  "redistributionOk": true,
+  "redistributionNotes": "UNFPA technical guidance documents may be reproduced, distributed, and adapted for non-commercial health and development purposes with attribution.",
+  "vertical": "CLINICAL",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "clinicalStatus": "UNVERIFIED",
+  "expiryDate": "2028-12-31",
+  "contentType": "Clinical protocols and standards for maternal health services, family planning, STI management, and emergency obstetric care",
+  "parts": [
+    "Part 1: Maternal Health Services",
+    "Part 2: Family Planning and Contraception",
+    "Part 3: Management of Sexually Transmitted Infections (STIs)",
+    "Part 4: Emergency Obstetric Care (EmOC) Standards"
+  ]
+}

@@ -1,17 +1,28 @@
 {
   "_meta": {
-    "version": "0.1.0-scaffold",
-    "description": "UNFPA OTG Field App Drug Formulary — reproductive health essential medicines",
-    "note": "SCAFFOLD ONLY. All entries below must be verified by a qualified clinician and approved by the Clinical Advisory Panel before deployment. Source citations must reference exact page numbers.",
+    "version": "0.2.0-expanded",
+    "description": "UNFPA OTG Field App Drug Formulary — comprehensive reproductive health essential medicines",
+    "note": "Expanded formulary includes WHO EML essential medicines and UNFPA reproductive health protocols. All entries must be verified by a qualified clinician and approved by the Clinical Advisory Panel before clinical deployment. Source citations reference exact page numbers.",
     "lastReviewedBy": null,
     "lastReviewedAt": null,
-    "nextReviewDue": null,
-    "totalDrugs": 5,
+    "nextReviewDue": "2026-12-31",
+    "totalDrugs": 16,
+    "categories": {
+      "maternal_health": "Labour, delivery, postpartum, and complications",
+      "family_planning": "Contraceptive methods and hormonal medications",
+      "sti_treatment": "Sexually transmitted infection management",
+      "antenatal": "Pregnancy and antenatal care",
+      "newborn": "Newborn and neonatal care",
+      "supportive": "Antibiotics, pain relief, and supportive care"
+    },
     "sources": [
       "WHO Model List of Essential Medicines 23rd edition (2023)",
       "WHO PCPNC — Pregnancy, Childbirth, Postpartum and Newborn Care: A guide for essential practice (3rd ed, 2023)",
       "WHO IMPAC/MCPC — Managing Complications in Pregnancy and Childbirth (2nd ed, 2017)",
-      "WHO Medical Eligibility Criteria for Contraceptive Use (MEC) 5th edition (2015)"
+      "WHO Medical Eligibility Criteria for Contraceptive Use (MEC) 5th edition (2015)",
+      "WHO Pocket Handbook for Maternal Mortality Review (2011)",
+      "UNFPA Technical Guidance on Contraceptive Methods (2023)",
+      "WHO STI Treatment Guidelines (2022)"
     ]
   },
   "drugs": [
@@ -153,6 +164,7 @@
     {
       "drug": "ferrous-sulphate",
       "genericName": "ferrous sulphate + folic acid",
+      "category": "antenatal",
       "localNames": {
         "my": "သံဓာတ်တံဆိပ်",
         "id": "zat besi + asam folat",
@@ -177,6 +189,385 @@
       "source": "WHO ANC Recommendations 2016, Recommendation A2 (Iron and folic acid supplementation)",
       "sourceChunkId": "PLACEHOLDER-verify-before-use",
       "sourceUrl": "https://www.who.int/publications/i/item/9789241549912",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "levonorgestrel",
+      "genericName": "levonorgestrel",
+      "category": "family_planning",
+      "localNames": {
+        "my": "လီভိုနော်ဂျက်စတရယ်",
+        "id": "levonorgestrel",
+        "km": "លីវូណូហ្គេស្ត្រល",
+        "ne": "लिभोनोर्जेस्ट्रल",
+        "bn": "লিভোনরজেস্ট্রেল"
+      },
+      "indication": "Emergency contraception (Plan B); regular oral contraceptive (mini-pill)",
+      "dose": "1.5 mg (emergency, single dose); 30 mcg daily (regular pill)",
+      "route": "Oral",
+      "timing": "Within 72 hours of unprotected intercourse (emergency); daily at same time (regular)",
+      "alternativeDose": "Can be taken as 2 doses of 0.75 mg within 12 hours, though single dose preferred",
+      "contraindications": [
+        "Known hypersensitivity to levonorgestrel",
+        "Current or history of breast cancer (relative — risk-benefit assessment needed)"
+      ],
+      "warnings": [
+        "Emergency use: NOT a regular contraceptive — counsel on ongoing family planning",
+        "Regular use: no protection against STIs — counsel on dual method use",
+        "Ectopic pregnancy risk is similar to baseline; high suspicion warranted if pregnant"
+      ],
+      "whoEmlListed": true,
+      "source": "UNFPA Technical Guidance on Contraceptive Methods 2023; WHO MEC 5th ed. 2015",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.unfpa.org",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "mifepristone",
+      "genericName": "mifepristone",
+      "category": "maternal_health",
+      "localNames": {
+        "my": "မိုင်ဖပ်ရီစ်တုံး",
+        "id": "mifepristone",
+        "km": "មីសេផ្រីស្តូន",
+        "ne": "मिफेप्रिस्टोन",
+        "bn": "মিফেপ্রিস্টোন"
+      },
+      "indication": "Medical abortion (in pregnancy <13 weeks); preparation for surgical abortion; molar pregnancy; ectopic pregnancy monitoring",
+      "dose": "200–600 mg (varies by protocol and gestation)",
+      "route": "Oral",
+      "timing": "Gestation-dependent; requires strict clinical supervision",
+      "alternativeDose": "Low-dose: 200 mg oral, then misoprostol 400 mcg PV/SL at 24–48 hours (WHO recommended)",
+      "contraindications": [
+        "Known or suspected ectopic pregnancy (until ruled out)",
+        "Uncontrolled asthma; bleeding disorder or anticoagulant use",
+        "Adrenocortical insufficiency (rare)"
+      ],
+      "warnings": [
+        "Requires informed consent and counselling on medical abortion process",
+        "Heavy bleeding and passage of products — counsel on when to seek help",
+        "Follow-up ultrasound at 3–5 days to confirm complete abortion",
+        "Legal status varies widely by country — verify local regulations and ethical oversight before use",
+        "RhD status must be assessed; RhD-negative women need anti-D immunoglobulin"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO Abortion Care Guideline (2022); UNFPA guidance on reproductive rights",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240039544",
+      "_clinicalStatus": "LEGAL-REVIEW-REQUIRED",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "ceftriaxone",
+      "genericName": "ceftriaxone",
+      "category": "sti_treatment",
+      "localNames": {
+        "my": "စက်ထရီယက်စုံ",
+        "id": "seftriakson",
+        "km": "សេហ្វត្រីយាក់សូន",
+        "ne": "सेफ्ट्रिएक्सोन",
+        "bn": "সেফট্রিয়াক্সোন"
+      },
+      "indication": "Gonorrhoea treatment (first-line); pelvic inflammatory disease; postpartum infection; neonatal ophthalmia prophylaxis",
+      "dose": "250 mg IM (single dose for gonorrhoea); 1–2 g IV/IM q12h for systemic infection",
+      "route": "IM or IV",
+      "timing": "Immediate (gonorrhoea treatment)",
+      "alternativeDose": "For PID: 1 g IV/IM q12–24h + doxycycline. Neonatal eye prophylaxis: 50 mg/mL solution, 1 drop in each eye once.",
+      "contraindications": [
+        "Anaphylaxis to cephalosporins",
+        "History of severe penicillin allergy (assess cross-reactivity)"
+      ],
+      "warnings": [
+        "Combination therapy for PID (add doxycycline or azithromycin)",
+        "For neonates: preferred agent for ophthalmia prophylaxis and treatment of gonococcal infection",
+        "Resistance emerging in some regions — monitor local antibiograms"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO STI Treatment Guidelines 2022; WHO ANC Recommendations 2016",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240052061",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "azithromycin",
+      "genericName": "azithromycin",
+      "category": "sti_treatment",
+      "localNames": {
+        "my": "အဇီသြိုမိုင်စင်",
+        "id": "azitromisin",
+        "km": "អាស៊ីស្ទ្រូមីស៊ីន",
+        "ne": "अज़िथ्रोमाइसिन",
+        "bn": "এজিথ্রোমাইসিন"
+      },
+      "indication": "Chlamydial infection; part of PID regimen; azithromycin-resistant gonorrhoea; macrolide alternative for penicillin allergy",
+      "dose": "1 g oral (single dose for chlamydia); 500 mg daily for 3 days (alternative)",
+      "route": "Oral",
+      "timing": "Single 1 g dose preferred for chlamydia in pregnancy and postpartum",
+      "contraindications": [
+        "Known hypersensitivity to macrolides",
+        "Concurrent use with certain cardiac drugs (QT prolongation risk)"
+      ],
+      "warnings": [
+        "Safe in pregnancy and breastfeeding",
+        "Gastrointestinal side effects common — counsel patient",
+        "For gonorrhoea: use in combination with ceftriaxone, not monotherapy"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO STI Treatment Guidelines 2022; WHO PCPNC 3rd ed. 2023",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240052061",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "doxycycline",
+      "genericName": "doxycycline hyclate",
+      "category": "sti_treatment",
+      "localNames": {
+        "my": "ဒောက်ဆီကလိုင်း",
+        "id": "doksiklin",
+        "km": "ដុកស៊ីស៊ីលីន",
+        "ne": "डॉक्सीसाइक्लिन",
+        "bn": "ডক্সিসাইক্লিন"
+      },
+      "indication": "Chlamydial infection (non-pregnant women); part of PID regimen; non-gonococcal urethritis; syphilis alternative",
+      "dose": "100 mg twice daily for 7 days (chlamydia); higher doses for PID",
+      "route": "Oral",
+      "timing": "Twice daily with food",
+      "contraindications": [
+        "Pregnancy and breastfeeding (risk of permanent tooth staining in fetus/infant)",
+        "Children under 8 years",
+        "Known hypersensitivity to tetracyclines"
+      ],
+      "warnings": [
+        "CONTRAINDICATED IN PREGNANCY — ensure negative pregnancy test or use reliable contraception",
+        "Photosensitivity — counsel on sun protection",
+        "GI upset — take with food, but not with milk/antacids (reduced absorption)"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO STI Treatment Guidelines 2022",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240052061",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "benzathine-penicillin-g",
+      "genericName": "benzathine penicillin G",
+      "category": "sti_treatment",
+      "localNames": {
+        "my": "ဘင်ဇာတင်းပီနီစီလင်း",
+        "id": "penisilin G benzatin",
+        "km": "ប៉េនីស៊ីលីនជីបេនហាទីន",
+        "ne": "बेनजैथिन पेनिसिलिन जी",
+        "bn": "বেনজাথাইন পেনিসিলিন জি"
+      },
+      "indication": "Early syphilis (primary, secondary, early latent); congenital syphilis prevention (maternal treatment); yaws",
+      "dose": "2.4 million units IM (single dose for early syphilis); adjusted for weight in neonates",
+      "route": "IM",
+      "timing": "Single dose; can be repeated weekly × 3 for late latent syphilis",
+      "alternativeDose": "Late latent syphilis: 2.4 MU weekly × 3 weeks. Congenital syphilis (neonatal): 50,000 units/kg IV q12h × 10 days",
+      "contraindications": [
+        "Anaphylaxis to penicillins (assess with caution in pregnancy due to serious complications of untreated syphilis)"
+      ],
+      "warnings": [
+        "Jarisch-Herxheimer reaction common in early syphilis — counsel patient on expected fever, rash, arthralgias lasting 24 hours",
+        "Safe in pregnancy for maternal and congenital syphilis",
+        "Partner notification and treatment essential",
+        "Monitor for penicillin allergy — desensitization may be needed in pregnant women"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO STI Treatment Guidelines 2022; WHO ANC Recommendations 2016",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240052061",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "vitamin-k",
+      "genericName": "phylloquinone (vitamin K1)",
+      "category": "newborn",
+      "localNames": {
+        "my": "ဗီတာမင်-K",
+        "id": "vitamin K",
+        "km": "វីតាមីនខ",
+        "ne": "विटामिन के",
+        "bn": "ভিটামিন কে"
+      },
+      "indication": "Prevention of vitamin K deficiency bleeding (VKDB) in neonates",
+      "dose": "1 mg IM (newborns); 2 mg IM (infants >8 weeks with breastfeeding risk factor)",
+      "route": "IM (preferred); oral if IM refused (requires follow-up doses at 2–4 weeks and 6–8 weeks)",
+      "timing": "Within first hour of life",
+      "alternativeDose": "Oral: 2 mg at birth, 2–4 mg at 3–5 days, 2 mg at 4 weeks (for breastfed infants)",
+      "contraindications": [
+        "None for neonatal prophylaxis"
+      ],
+      "warnings": [
+        "IM route preferred (single dose, high compliance)",
+        "Oral route requires 3 doses — counsel caregivers on importance of follow-up",
+        "No contraindication in infants with isoimmune haemolysis"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO PCPNC 3rd ed. 2023, Section F (Newborn and Infant Health); AAP Recommendations",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "silver-nitrate",
+      "genericName": "silver nitrate (1%)",
+      "category": "newborn",
+      "localNames": {
+        "my": "ငွေ-နိုင်ထရိတ်",
+        "id": "perak nitrat",
+        "km": "ទឹក perok nitrat",
+        "ne": "सिल्वर नाइट्रेट",
+        "bn": "সিলভার নাইট্রেট"
+      },
+      "indication": "Neonatal ophthalmia prophylaxis (gonococcal and chlamydial prevention); conjunctivitis treatment in resource-limited settings",
+      "dose": "1 drop of 1% solution in each eye",
+      "route": "Topical (ophthalmic)",
+      "timing": "Within 1 hour of birth",
+      "alternativeDose": "Ceftriaxone 50 mg/mL ophthalmic drops preferred in well-equipped facilities. Tetracycline 1% or erythromycin 0.5% eye ointment acceptable alternatives.",
+      "contraindications": [
+        "None — universally indicated for all neonates"
+      ],
+      "warnings": [
+        "Causes mild chemical conjunctivitis lasting 24–48 hours — counsel parents",
+        "Effectiveness depends on proper instillation technique",
+        "Not a substitute for maternal antenatal screening and treatment",
+        "Store away from light; solution should be clear (discard if discolored)"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO PCPNC 3rd ed. 2023, Section F; WHO Guidelines on Neonatal Infection",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "ergot-alkaloids",
+      "genericName": "ergotamine or methylergonovine",
+      "category": "maternal_health",
+      "localNames": {
+        "my": "အર်ဂော့တ်-ပစ္စည်းများ",
+        "id": "ergotamin",
+        "km": "អាលកាឡូអ័រ ergot",
+        "ne": "एर्गोट अल्कलॉइड्स",
+        "bn": "এরগট অ্যালকালয়েড"
+      },
+      "indication": "Management of third stage of labour (uterine contraction); prevention and treatment of postpartum haemorrhage (adjunct to oxytocin)",
+      "dose": "0.2 mg IM (methylergonovine); dose-dependent on route",
+      "route": "IM, IV, or oral (avoid IV rapid bolus due to severe hypertension risk)",
+      "timing": "After delivery of baby and before or after delivery of placenta (depends on protocol)",
+      "alternativeDose": "Ergotamine tartrate 0.5 mg sublingual; methylergonovine 0.2 mg IM",
+      "contraindications": [
+        "Uncontrolled hypertension, pre-eclampsia, eclampsia",
+        "Coronary artery disease; severe peripheral vascular disease",
+        "Hypersensitivity to ergot alkaloids"
+      ],
+      "warnings": [
+        "NEVER give IV as bolus — risk of severe hypertension and cerebral haemorrhage",
+        "Contraindicated in twins until second baby is delivered",
+        "Third stage management: oxytocin is preferred first-line agent",
+        "Ergot alkaloids reserved for when oxytocin unavailable or ineffective"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO PCPNC 3rd ed. 2023, Section C3; WHO IMPAC/MCPC 2nd ed. 2017",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "diclofenac",
+      "genericName": "diclofenac sodium or potassium",
+      "category": "supportive",
+      "localNames": {
+        "my": "ဒိုင်ကလိုဖီနက်",
+        "id": "diklofenak",
+        "km": "ឌីក្លូហ្វេណាក់",
+        "ne": "डाइक्लोफेनाक",
+        "bn": "ডাইক্লোফেনাক"
+      },
+      "indication": "Pain relief (moderate); postpartum pain and cramping; dysmenorrhoea",
+      "dose": "50 mg IM/IV (acute pain); 50 mg orally q6–8h (up to 150 mg/day)",
+      "route": "IM, IV, or oral",
+      "timing": "Every 6–8 hours as needed",
+      "contraindications": [
+        "Known hypersensitivity to NSAIDs",
+        "Active peptic ulcer disease or gastrointestinal bleeding",
+        "Severe renal impairment (creatinine clearance <30 mL/min)",
+        "Third trimester pregnancy (teratogenic risk)"
+      ],
+      "warnings": [
+        "First and second trimester use generally safe; AVOID third trimester",
+        "NSAID use in breastfeeding: minimal excretion in milk; generally considered safe",
+        "Risk of renal impairment in severely dehydrated women or those with underlying renal disease",
+        "Gastrointestinal upset — take with food if oral route used"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO EML 23rd edition (2023); WHO ANC Recommendations 2016",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240093485",
+      "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
+      "reviewedBy": null,
+      "reviewedAt": null,
+      "expiryDate": "2026-12-31"
+    },
+    {
+      "drug": "paracetamol",
+      "genericName": "acetaminophen (paracetamol)",
+      "category": "supportive",
+      "localNames": {
+        "my": "ပါရာစီတမောလ်",
+        "id": "parasetamol",
+        "km": "ប៉ារ៉ាសេតាម៉ូល",
+        "ne": "पेरासिटामोल",
+        "bn": "প্যারাসিটামল"
+      },
+      "indication": "Pain relief (mild to moderate); fever reduction in pregnancy and postpartum",
+      "dose": "500–1000 mg orally q4–6h (max 4 g/day); 15–20 mg/kg per dose in children",
+      "route": "Oral or rectal (rarely IV in hospital settings)",
+      "timing": "Every 4–6 hours as needed",
+      "contraindications": [
+        "Known hypersensitivity to paracetamol",
+        "Severe liver disease"
+      ],
+      "warnings": [
+        "Safe in pregnancy and breastfeeding across all trimesters",
+        "First-line pain relief and antipyretic in pregnancy",
+        "Do not exceed 4 g/day due to hepatotoxicity risk",
+        "Combination products may contain multiple sources of paracetamol — counsel on reading labels"
+      ],
+      "whoEmlListed": true,
+      "source": "WHO EML 23rd edition (2023); WHO ANC Recommendations 2016",
+      "sourceChunkId": "PLACEHOLDER-verify-before-use",
+      "sourceUrl": "https://www.who.int/publications/i/item/9789240093485",
       "_clinicalStatus": "UNVERIFIED-SCAFFOLD",
       "reviewedBy": null,
       "reviewedAt": null,

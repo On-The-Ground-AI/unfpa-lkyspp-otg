@@ -162,6 +162,59 @@ class EmbeddingEngine(private val context: Context) {
         }
     }
 
+    /**
+     * Compute cosine similarity between two embeddings (both L2-normalized).
+     * For normalized vectors, cosine similarity = dot product.
+     */
+    fun cosineSimilarity(a: FloatArray, b: FloatArray): Float {
+        require(a.size == EMBEDDING_DIM && b.size == EMBEDDING_DIM) {
+            "Both embeddings must be ${EMBEDDING_DIM} dimensions"
+        }
+        var sum = 0f
+        for (i in a.indices) sum += a[i] * b[i]
+        return sum
+    }
+
+    /**
+     * Perform vector similarity search in embeddings.
+     * Returns top-K most similar embeddings with scores.
+     *
+     * @param queryEmbedding L2-normalized query embedding
+     * @param candidates List of candidate embeddings to search
+     * @param k Number of results to return
+     * @return List of (index, score) pairs sorted by score descending
+     */
+    fun vectorSearch(
+        queryEmbedding: FloatArray,
+        candidates: List<FloatArray>,
+        k: Int,
+    ): List<Pair<Int, Float>> {
+        require(queryEmbedding.size == EMBEDDING_DIM) {
+            "Query embedding must be ${EMBEDDING_DIM} dimensions"
+        }
+
+        return candidates
+            .mapIndexed { idx, candidate ->
+                idx to cosineSimilarity(queryEmbedding, candidate)
+            }
+            .sortedByDescending { it.second }
+            .take(k)
+    }
+
+    /**
+     * Batch embed multiple texts. Useful for re-computing embeddings in bulk.
+     * Returns list of embeddings in same order as input.
+     */
+    suspend fun embedBatch(texts: List<String>): List<FloatArray> =
+        withContext(Dispatchers.Default) {
+            texts.map { embed(it) }
+        }
+
+    /**
+     * Get embedding dimension (384 for MiniLM).
+     */
+    fun getEmbeddingDimension(): Int = EMBEDDING_DIM
+
     fun close() {
         session?.close()
         env?.close()

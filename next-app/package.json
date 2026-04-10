@@ -13,7 +13,13 @@
     "ingest-clinical:all": "npx tsx scripts/ingest-clinical.ts --all",
     "ingest-clinical:formulary": "npx tsx scripts/ingest-clinical.ts --formulary",
     "precompute-android-assets": "npx tsx ../scripts/precompute-android-assets.ts",
-    "precompute-android-assets:dry": "npx tsx ../scripts/precompute-android-assets.ts --dry-run"
+    "precompute-android-assets:dry": "npx tsx ../scripts/precompute-android-assets.ts --dry-run",
+    "build-mobile-bundle": "npx tsx scripts/build-mobile-bundle.ts",
+    "build-mobile-bundle:dry": "npx tsx scripts/build-mobile-bundle.ts --dry-run",
+    "build-mobile-bundle:version": "npx tsx scripts/build-mobile-bundle.ts --version",
+    "validate-bundle": "npx tsx scripts/validate-bundle.ts",
+    "validate-bundle:all": "npx tsx scripts/validate-bundle.ts --all",
+    "validate-bundle:verbose": "npx tsx scripts/validate-bundle.ts latest --verbose"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.5.0",
