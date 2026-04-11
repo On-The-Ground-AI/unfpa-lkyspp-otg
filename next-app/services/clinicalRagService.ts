@@ -190,7 +190,7 @@ export async function searchFormulary(
     orderBy: { reviewedAt: 'desc' },
   });
 
-  return entries.map((e) => ({
+  return entries.map((e: any) => ({
     id: e.id,
     drug: e.drug,
     dose: e.dose,

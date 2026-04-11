@@ -256,11 +256,11 @@ function getPublicKeyForVerification(): Buffer {
     key: privateKeyBuffer,
     format: 'raw',
     type: 'ed25519',
-  });
+  } as any);
 
   // Extract public key from private key
   const publicKeyObj = crypto.createPublicKey(privateKey);
-  return publicKeyObj.export({ format: 'raw' });
+  return Buffer.from(publicKeyObj.export({ format: 'raw' } as any));
 }
 
 /**
@@ -285,7 +285,7 @@ export function verifyBundleSignature(
       key: publicKey,
       format: 'raw',
       type: 'ed25519',
-    });
+    } as any);
 
     const isValid = verify.verify(publicKeyObj, signatureBuffer);
 
