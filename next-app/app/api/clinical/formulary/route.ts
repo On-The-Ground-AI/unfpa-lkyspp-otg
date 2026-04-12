@@ -20,11 +20,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { searchFormulary, getFormularyEntry } from '@/services/clinicalRagService';
+import { logDrugLookup } from '@/lib/auditLog';
+import { v4 as uuidv4 } from 'uuid';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const sessionId = request.headers.get('x-session-id') || uuidv4();
+  const userId = request.headers.get('x-user-id');
+  const country = request.headers.get('x-country') || 'unknown';
+  const language = request.headers.get('x-language') || 'en';
+
   try {
     const body = await request.json();
     const { drugs, searchTerm, limit = 10 } = body;
@@ -49,6 +56,17 @@ export async function POST(request: NextRequest) {
     const boundLimit = Math.min(Math.max(1, limit), 100);
     const entries = await searchFormulary(drugNames, { limit: boundLimit });
 
+    // Log drug lookups for audit trail
+    for (const drugName of drugNames) {
+      await logDrugLookup(sessionId, drugName, {
+        userId: userId || undefined,
+        country,
+        language,
+        resultFound: entries.length > 0,
+        resultCount: entries.length,
+      });
+    }
+
     return NextResponse.json({
       entries,
       totalResults: entries.length,
@@ -68,6 +86,11 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   // Allow GET with query parameters for simple drug lookups
+  const sessionId = request.headers.get('x-session-id') || uuidv4();
+  const userId = request.headers.get('x-user-id');
+  const country = request.headers.get('x-country') || 'unknown';
+  const language = request.headers.get('x-language') || 'en';
+
   const searchParams = request.nextUrl.searchParams;
   const drug = searchParams.get('drug');
 
@@ -80,6 +103,16 @@ export async function GET(request: NextRequest) {
 
   try {
     const entry = await getFormularyEntry(drug);
+
+    // Log drug lookup for audit trail
+    await logDrugLookup(sessionId, drug, {
+      userId: userId || undefined,
+      country,
+      language,
+      resultFound: entry !== null,
+      resultCount: entry ? 1 : 0,
+    });
+
     if (!entry) {
       return NextResponse.json(
         { entry: null, warning: 'Drug not found in formulary' },

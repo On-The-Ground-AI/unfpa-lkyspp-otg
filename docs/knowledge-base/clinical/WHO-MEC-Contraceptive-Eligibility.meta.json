@@ -1,0 +1,22 @@
+{
+  "title": "WHO Medical Eligibility Criteria for Contraceptive Use (5th edition)",
+  "shortName": "WHO MEC 2015",
+  "sourceDocument": "WHO Medical Eligibility Criteria",
+  "sourceTitle": "WHO Medical Eligibility Criteria for Contraceptive Use (5th edition, 2015)",
+  "publisher": "World Health Organization",
+  "edition": "5th edition",
+  "publicationYear": 2015,
+  "sourceUrl": "https://www.who.int/publications/i/item/9789241549158",
+  "redistributionOk": true,
+  "clinicalReviewStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "reviewChecklist": {
+    "accuracyVerified": false,
+    "currentAsOfYear": false,
+    "applicableToTarget": false,
+    "completeAndClear": false,
+    "safeForOfflineUse": false
+  }
+}

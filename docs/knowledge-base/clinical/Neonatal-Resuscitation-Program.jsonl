@@ -1,0 +1,35 @@
+{"type":"heading","level":1,"text":"Neonatal Resuscitation Program (NRP) 8th Edition Protocols","page":1}
+{"type":"heading","level":2,"text":"Preparation and Initial Assessment","page":1}
+{"type":"paragraph","text":"Neonatal resuscitation begins before birth. Every delivery should have personnel trained in neonatal resuscitation. Equipment must be checked and functional. Initial assessment determines if resuscitation is needed based on three questions: Is the baby term? Is the baby breathing or crying? Does the baby have good muscle tone?","page":1}
+{"type":"heading","level":3,"text":"Apgar Score Interpretation","page":1}
+{"type":"table","caption":"Apgar Score Components and Interpretation","header":["Sign","0 Points","1 Point","2 Points"],"rows":[["Appearance (Skin Color)","Blue or pale","Body pink, extremities blue","Completely pink"],["Pulse (Heart Rate)","Absent","<100 bpm",">100 bpm"],["Grimace (Reflex Irritability)","No response","Grimace/weak cry","Vigorous cry"],["Activity (Muscle Tone)","Limp","Some flexion","Active movement"],["Respiration","Absent","Weak/irregular","Good/crying"]],"page":1}
+{"type":"paragraph","text":"Apgar score is assessed at 1 minute and 5 minutes of life. Score 7-10 = reassuring; 4-6 = moderately abnormal; 0-3 = severely abnormal. If 5-minute score <7, continue assessment at 10 minutes.","page":2}
+{"type":"heading","level":2,"text":"Resuscitation Decision Tree","page":2}
+{"type":"paragraph","text":"At birth: Assess if baby is term, breathing/crying, and has good muscle tone. If YES to all three, routine care only (dry, warm, maintain airway, tactile stimulation). If NO to any, proceed to resuscitation algorithm.","page":2}
+{"type":"heading","level":3,"text":"Initial Steps (First 30 seconds)","page":2}
+{"type":"list","ordered":true,"items":["Provide warmth: dry baby, remove wet linens, use radiant warmer or skin-to-skin contact","Position: place on back, head in neutral position to open airway","Clear airway: use suction only if meconium present with non-vigorous baby; do NOT routinely suction vigorous meconium-stained babies","Stimulate: dry infant thoroughly or rub chest/back; assess breathing response"],"page":2}
+{"type":"heading","level":3,"text":"Ventilation Assessment and Management (at 15 seconds)","page":3}
+{"type":"paragraph","text":"If baby is apneic or has gasping respirations: Initiate positive pressure ventilation (PPV). Assess heart rate every 15 seconds. Target rate is 40-60 breaths/min. Check chest rise with each ventilation. If heart rate remains <100 bpm after 15 seconds of PPV, proceed to chest compressions.","page":3}
+{"type":"paragraph","text":"Devices for PPV: Bag-mask ventilation (self-inflating bag, flow-inflating bag, or T-piece resuscitator) or delayed cord clamping (30-60 seconds) if baby has intact cord and vigorous. Positive pressure can be applied through endotracheal tube, laryngeal mask airway, or face mask.","page":3}
+{"type":"heading","level":2,"text":"Medications in Neonatal Resuscitation","page":3}
+{"type":"heading","level":3,"text":"Epinephrine (Adrenaline)","page":3}
+{"type":"paragraph","text":"Epinephrine is indicated if heart rate remains <60 bpm despite 15 seconds of effective PPV and chest compressions. IV dose: 0.01-0.03 mg/kg (0.1-0.3 mL/kg of 1:10,000 solution). ET tube dose: 0.1 mg/kg (1 mL/kg of 1:1,000 solution). IV route is preferred; repeat every 3-5 minutes if asystole persists.","page":4}
+{"type":"heading","level":3,"text":"Naloxone (Narcan)","page":4}
+{"type":"paragraph","text":"Naloxone is used for opioid-induced respiratory depression. Only give if maternal opioid exposure documented. Dose: 0.1 mg/kg IV, IO, or IM (0.4 mg single dose preparation). Does NOT reverse bradycardia from opioid exposure. Not recommended as first-line agent; PPV is primary treatment.","page":4}
+{"type":"heading","level":3,"text":"Sodium Bicarbonate","page":4}
+{"type":"paragraph","text":"Sodium bicarbonate is rarely used in acute resuscitation. Consider only if metabolic acidosis is documented. Dose: 1-2 mEq/kg IV over 2 minutes. NOT recommended for routine use; may worsen intracranial hemorrhage.","page":4}
+{"type":"heading","level":2,"text":"Chest Compressions","page":5}
+{"type":"paragraph","text":"Indications: Heart rate <60 bpm after 15 seconds of effective PPV. Use two-thumb encircling technique (preferred) or two-finger technique. Compress lower third of sternum at rate 100-120 compressions/min. Compression depth: at least 1/3 of anterior-posterior chest diameter. Ventilation-to-compression ratio: 3:1 (3 breaths, 1 compression in a 2-second cycle).","page":5}
+{"type":"heading","level":2,"text":"Special Situations","page":5}
+{"type":"heading","level":3,"text":"Meconium Aspiration Syndrome (MAS)","page":5}
+{"type":"paragraph","text":"If baby is vigorous (strong respiratory effort, good muscle tone, heart rate >100 bpm) with meconium-stained amniotic fluid: routine care only; do NOT suction airway. If non-vigorous: clear mouth/nose with suction; if available, visualize vocal cords with laryngoscope and remove meconium with endotracheal tube; then begin PPV if needed.","page":5}
+{"type":"heading","level":3,"text":"Preterm Infant (<35 weeks)","page":6}
+{"type":"paragraph","text":"Preterm infants require special care: keep under warmer, use plastic wrap to prevent heat loss, avoid excessive handling. Avoid hyperoxia (target SpO2 gradual increase: 60-65% at 1 min, 80-85% by 5 min, 85-95% by 10 min). Use gentle ventilation to prevent barotrauma. Consider surfactant if respiratory distress develops.","page":6}
+{"type":"heading","level":3,"text":"Persistent Pulmonary Hypertension of the Newborn (PPHN)","page":6}
+{"type":"paragraph","text":"Signs: cyanosis, severe respiratory distress, hypotension unresponsive to fluids. Management: 100% oxygen, gentle ventilation, avoid hypocapnia. Medications: inhaled nitric oxide (iNO), sildenafil (Viagra), milrinone. Refer for ECMO support if available.","page":6}
+{"type":"heading","level":3,"text":"Hydrops Fetalis","page":6}
+{"type":"paragraph","text":"Severely anemic babies may need urgent intravascular transfusion. Prepare for emergency umbilical vein catheterization. Have O-negative blood available. Continue resuscitation while preparing for transfusion.","page":7}
+{"type":"heading","level":2,"text":"Post-Resuscitation Care","page":7}
+{"type":"paragraph","text":"After successful resuscitation: monitor vital signs continuously, maintain normothermia (36.5-37.5°C), check blood glucose, maintain IV access, monitor urine output. If term infant with significant hypoxia: consider therapeutic hypothermia (33-34°C for 72 hours) within 6 hours if available.","page":7}
+{"type":"heading","level":2,"text":"When to Stop Resuscitation","page":7}
+{"type":"paragraph","text":"Discontinue resuscitation efforts if heart rate remains 0 (asystole) for >10 minutes despite adequate intervention and no reversible cause identified. If uncertain, continue resuscitation. Discuss with parents; consider transport to higher facility if available.","page":7}

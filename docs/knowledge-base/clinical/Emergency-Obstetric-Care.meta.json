@@ -1,0 +1,22 @@
+{
+  "title": "Essential Emergency Obstetric Care Guidelines",
+  "shortName": "EmOC 2023",
+  "sourceDocument": "WHO Emergency Obstetric Care Guidelines",
+  "sourceTitle": "Essential Emergency Obstetric Care (EmOC) Guidelines",
+  "publisher": "World Health Organization",
+  "edition": "WHO Guidelines on Maternal and Newborn Health",
+  "publicationYear": 2023,
+  "sourceUrl": "https://www.who.int/publications/guidelines/maternal-newborn-health",
+  "redistributionOk": true,
+  "clinicalReviewStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "reviewChecklist": {
+    "accuracyVerified": false,
+    "currentAsOfYear": false,
+    "applicableToTarget": false,
+    "completeAndClear": false,
+    "safeForOfflineUse": false
+  }
+}

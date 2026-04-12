@@ -20,11 +20,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { searchClinicalGuidelines } from '@/services/clinicalRagService';
+import { logProtocolAccess } from '@/lib/auditLog';
+import { v4 as uuidv4 } from 'uuid';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const sessionId = request.headers.get('x-session-id') || uuidv4();
+  const userId = request.headers.get('x-user-id');
+  const country = request.headers.get('x-country') || 'unknown';
+  const language = request.headers.get('x-language') || 'en';
+
   try {
     const body = await request.json();
     const { condition, limit = 3, threshold = 0.65 } = body;
@@ -44,6 +51,19 @@ export async function POST(request: NextRequest) {
       threshold: boundThreshold,
     });
 
+    // Log protocol access for audit trail
+    await logProtocolAccess(
+      sessionId,
+      condition.trim(),
+      'guidelines-api',
+      {
+        userId: userId || undefined,
+        country,
+        language,
+        protocolType: 'clinical-guideline',
+      }
+    );
+
     return NextResponse.json({
       guidelines,
       condition: condition.trim(),
@@ -59,6 +79,11 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  const sessionId = request.headers.get('x-session-id') || uuidv4();
+  const userId = request.headers.get('x-user-id');
+  const country = request.headers.get('x-country') || 'unknown';
+  const language = request.headers.get('x-language') || 'en';
+
   const searchParams = request.nextUrl.searchParams;
   const condition = searchParams.get('condition');
   const limit = parseInt(searchParams.get('limit') || '3', 10);
@@ -76,6 +101,19 @@ export async function GET(request: NextRequest) {
       limit,
       threshold,
     });
+
+    // Log protocol access for audit trail
+    await logProtocolAccess(
+      sessionId,
+      condition,
+      'guidelines-get-api',
+      {
+        userId: userId || undefined,
+        country,
+        language,
+        protocolType: 'clinical-guideline',
+      }
+    );
 
     return NextResponse.json({
       guidelines,

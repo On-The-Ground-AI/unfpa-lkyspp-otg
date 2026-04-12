@@ -117,7 +117,9 @@ export default function DrugLookup({ drugs, onDrugSelect, mode = 'inline' }: Dru
                 </div>
                 <div className="flex items-center gap-2">
                   {drug.whoEmlListed && (
-                    <CheckCircle2 size={18} className="text-green-600" title="WHO Essential Medicines List" />
+                    <div title="WHO Essential Medicines List" className="cursor-help">
+                      <CheckCircle2 size={18} className="text-green-600" />
+                    </div>
                   )}
                   <span className={`transform transition ${expandedDrug === drug.drug ? 'rotate-180' : ''}`}>
                     ▼
