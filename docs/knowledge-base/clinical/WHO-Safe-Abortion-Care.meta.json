@@ -1,0 +1,22 @@
+{
+  "title": "WHO Safe Abortion Care Guidelines",
+  "shortName": "WHO Safe Abortion 2022",
+  "sourceDocument": "WHO Safe Abortion Care Guidelines",
+  "sourceTitle": "WHO Safe Abortion Care and Post-Abortion Care Guidance",
+  "publisher": "World Health Organization",
+  "edition": "2022",
+  "publicationYear": 2022,
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240016941",
+  "redistributionOk": true,
+  "clinicalReviewStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "reviewChecklist": {
+    "accuracyVerified": false,
+    "currentAsOfYear": false,
+    "applicableToTarget": false,
+    "completeAndClear": false,
+    "safeForOfflineUse": false
+  }
+}

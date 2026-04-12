@@ -1,0 +1,22 @@
+{
+  "title": "WHO Syndromic Management of Sexually Transmitted Infections",
+  "shortName": "WHO STI Syndromic 2022",
+  "sourceDocument": "WHO Syndromic STI Management",
+  "sourceTitle": "WHO Syndromic Management of Sexually Transmitted Infections (STIs)",
+  "publisher": "World Health Organization",
+  "edition": "2022",
+  "publicationYear": 2022,
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240039094",
+  "redistributionOk": true,
+  "clinicalReviewStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "reviewChecklist": {
+    "accuracyVerified": false,
+    "currentAsOfYear": false,
+    "applicableToTarget": false,
+    "completeAndClear": false,
+    "safeForOfflineUse": false
+  }
+}
