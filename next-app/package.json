@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "ingest-pdfs": "npx tsx scripts/ingest-pdfs.ts",
     "ingest-pdfs-status": "npx tsx scripts/ingest-pdfs.ts --status",
     "ingest-all": "npx tsx scripts/ingest-knowledge.ts --all && npx tsx scripts/ingest-pdfs.ts --all",
@@ -48,7 +51,11 @@
     "@types/pg": "^8.18.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/ui": "^4.1.4",
+    "happy-dom": "^20.8.9",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.4"
   }
 }
