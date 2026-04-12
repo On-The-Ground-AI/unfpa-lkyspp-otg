@@ -1,0 +1,140 @@
+{
+  "interactions": [
+    {
+      "drug1": "misoprostol",
+      "drug2": "oxytocin",
+      "severity": "CONTRAINDICATED",
+      "mechanism": "Excessive uterine contractions, tetanic uterus, uterine rupture risk",
+      "recommendation": "Use one agent only; avoid concurrent use. Choose oxytocin for AMTSL if misoprostol already given.",
+      "notes": "Both are uterotonic agents. Using together increases risk of uterine hyperstimulation."
+    },
+    {
+      "drug1": "magnesium_sulfate",
+      "drug2": "calcium_channel_blockers",
+      "severity": "CAUTION",
+      "mechanism": "Additive vasodilation; potential for severe hypotension",
+      "recommendation": "Monitor blood pressure closely. Use nifedipine cautiously if magnesium already given (e.g., eclampsia tx then hypertension).",
+      "notes": "Nifedipine is commonly used for hypertension in preeclampsia, but magnesium sulfate is for seizure prophylaxis."
+    },
+    {
+      "drug1": "ergot",
+      "drug2": "oxytocin",
+      "severity": "CAUTION",
+      "mechanism": "Both are potent uterotonics; risk of tetanic uterus",
+      "recommendation": "Ergot should not be given until after placental delivery. Space oxytocin and ergot by at least 2-3 minutes.",
+      "notes": "Ergot is reserved for third-stage labor; if already used, avoid oxytocin."
+    },
+    {
+      "drug1": "mifepristone",
+      "drug2": "misoprostol",
+      "severity": "SYNERGISTIC",
+      "mechanism": "Intentional combination for medical abortion; superior efficacy",
+      "recommendation": "This is the standard regimen for medical abortion. Give mifepristone first, then misoprostol 36-48 hours later.",
+      "notes": "Combination is evidence-based and safe; dosing is crucial."
+    },
+    {
+      "drug1": "antibiotics_fluoroquinolones",
+      "drug2": "combined_oral_contraceptives",
+      "severity": "MINOR",
+      "mechanism": "Fluoroquinolones may reduce gut flora, potentially reducing COC efficacy",
+      "recommendation": "Use backup contraception (condoms) during fluoroquinolone course and 7 days after.",
+      "notes": "Evidence is weak; backup method is conservative approach."
+    },
+    {
+      "drug1": "rifampicin",
+      "drug2": "combined_oral_contraceptives",
+      "severity": "SIGNIFICANT",
+      "mechanism": "Rifampicin induces CYP3A4, dramatically reducing COC hormone levels",
+      "recommendation": "Avoid COCs during rifampicin. Use DMPA, IUD, or barrier methods instead.",
+      "notes": "Rifampicin dramatically reduces COC efficacy; contraceptive failure risk is high."
+    },
+    {
+      "drug1": "metronidazole",
+      "drug2": "alcohol",
+      "severity": "CAUTION",
+      "mechanism": "Disulfiram-like reaction (flushing, nausea, vomiting, chest pain)",
+      "recommendation": "Advise patient to avoid alcohol during metronidazole treatment and for 48 hours after.",
+      "notes": "Not common in obstetrics but important in general gynecology."
+    },
+    {
+      "drug1": "ibuprofen",
+      "drug2": "aspirin",
+      "severity": "MINOR",
+      "mechanism": "NSAIDs compete for COX inhibition; reduced antiplatelet effect of aspirin",
+      "recommendation": "Do not combine ibuprofen with low-dose aspirin for cardioprotection. Use acetaminophen instead.",
+      "notes": "Relevant if patient on aspirin for cardiovascular prevention."
+    },
+    {
+      "drug1": "hydralazine",
+      "drug2": "dihydralazine",
+      "severity": "REDUNDANT",
+      "mechanism": "Both are hydrazine vasodilators; no added benefit",
+      "recommendation": "Use one agent. Hydralazine is more commonly used in obstetrics.",
+      "notes": "These drugs have similar mechanisms and risk profiles."
+    },
+    {
+      "drug1": "labetalol",
+      "drug2": "beta_blockers",
+      "severity": "CAUTION",
+      "mechanism": "Labetalol has alpha and beta-blocking activity; combined beta-blockade could worsen asthma/COPD",
+      "recommendation": "Avoid combining with other beta-blockers unless specifically indicated.",
+      "notes": "Labetalol is a combined alpha-beta blocker; do not combine with selective beta-blockers."
+    },
+    {
+      "drug1": "dexamethasone",
+      "drug2": "azathioprine",
+      "severity": "MONITOR",
+      "mechanism": "Corticosteroids may mask signs of infection in immunosuppressed patients",
+      "recommendation": "Monitor for infections. Use lowest effective corticosteroid dose.",
+      "notes": "Relevant in patients with lupus or other autoimmune conditions receiving azathioprine."
+    },
+    {
+      "drug1": "ciprofloxacin",
+      "drug2": "theophylline",
+      "severity": "CAUTION",
+      "mechanism": "Fluoroquinolones inhibit theophylline metabolism; increased theophylline levels",
+      "recommendation": "Monitor theophylline levels. May need dose reduction.",
+      "notes": "Rare in reproductive health but important if patient on theophylline."
+    },
+    {
+      "drug1": "antiretrovirals_protease_inhibitors",
+      "drug2": "combined_oral_contraceptives",
+      "severity": "VARIABLE",
+      "mechanism": "PIs may decrease COC hormone levels; mechanism not fully understood",
+      "recommendation": "Use backup contraception or alternative method (DMPA, IUD). Consult HIV specialist.",
+      "notes": "Interaction varies by specific PI. IUD or DMPA are safer for HIV+ women."
+    },
+    {
+      "drug1": "antiretrovirals_nonnucleoside",
+      "drug2": "combined_oral_contraceptives",
+      "severity": "SIGNIFICANT",
+      "mechanism": "Efavirenz induces CYP3A4, reducing COC hormone levels",
+      "recommendation": "Use backup contraception or alternative method. Efavirenz-based regimens reduce COC efficacy.",
+      "notes": "Efavirenz has significant interaction; other NNRTIs have less effect."
+    },
+    {
+      "drug1": "warfarin",
+      "drug2": "nsaids",
+      "severity": "SIGNIFICANT",
+      "mechanism": "NSAIDs increase bleeding risk when combined with anticoagulant; also reduce renal blood flow",
+      "recommendation": "Avoid NSAIDs in patients on warfarin. Use acetaminophen for pain.",
+      "notes": "Not common in reproductive health but critical if patient anticoagulated."
+    },
+    {
+      "drug1": "ergotamine",
+      "drug2": "vasoconstrictors",
+      "severity": "CONTRAINDICATED",
+      "mechanism": "Additive vasoconstriction; risk of severe hypertension and coronary vasospasm",
+      "recommendation": "Avoid combining ergotamine with other vasoconstrictors (e.g., decongestants).",
+      "notes": "Ergotamine should not be combined with any vasopressor agent."
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "createdAt": "2026-04-12",
+    "updatedAt": "2026-04-12",
+    "source": "WHO, clinical guidelines, peer-reviewed literature",
+    "clinicalReviewStatus": "PENDING_REVIEW",
+    "interactionCount": 16
+  }
+}

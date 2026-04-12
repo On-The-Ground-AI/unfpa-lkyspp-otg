@@ -21,11 +21,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { searchClinicalKnowledge } from '@/services/clinicalRagService';
+import { logClinicalQuery } from '@/lib/auditLog';
+import { v4 as uuidv4 } from 'uuid';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const sessionId = request.headers.get('x-session-id') || uuidv4();
+  const userId = request.headers.get('x-user-id');
+  const country = request.headers.get('x-country') || 'unknown';
+  const language = request.headers.get('x-language') || 'en';
+
   try {
     const body = await request.json();
     const { query, limit = 5, threshold = 0.6, includeFormulary = true } = body;
@@ -45,6 +52,26 @@ export async function POST(request: NextRequest) {
       threshold: boundThreshold,
       includeFormulary,
     });
+
+    // Log the query for audit trail
+    const answerText = results.chunks
+      .map((c) => c.chunkContent)
+      .join('\n---\n');
+    const citationIds = results.chunks.map((c) => c.id);
+
+    await logClinicalQuery(
+      sessionId,
+      query,
+      answerText,
+      citationIds,
+      {
+        userId: userId || undefined,
+        country,
+        language,
+        hasDoseCard: results.formularyEntries.length > 0,
+        validatorPassed: true,
+      }
+    );
 
     return NextResponse.json(results);
   } catch (error) {
