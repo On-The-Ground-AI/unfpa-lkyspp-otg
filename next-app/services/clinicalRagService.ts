@@ -22,6 +22,7 @@ export interface ClinicalSearchOptions {
 }
 
 export interface ClinicalChunkResult extends KnowledgeSearchResult {
+  id?: string; // Chunk ID from database
   sourceDocument?: string;
   sourceSection?: string;
   sourcePage?: number;
@@ -137,6 +138,7 @@ export async function searchClinicalKnowledge(
     const clinicalRelevanceScore = hasCitationMetadata ? r.similarity * 1.1 : r.similarity;
 
     return {
+      id: r.id,
       documentSlug: r.document_slug,
       documentTitle: r.document_title,
       chunkIndex: r.chunk_index,

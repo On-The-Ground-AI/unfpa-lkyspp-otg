@@ -110,7 +110,7 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   methyldopa: {
     category: 'A',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Safe in pregnancy; central-acting vasodilator; used for chronic hypertension management',
   },
   amlodipine: {
@@ -144,24 +144,24 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   prednisone: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Safe for autoimmune conditions in pregnancy; limited transplacental passage; long history of use',
   },
 
   // Antibiotics
   amoxicillin: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Penicillin derivative; safe in pregnancy; widely used for UTI, GBS prophylaxis',
   },
   ampicillin: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Penicillin derivative; safe in pregnancy; used for GBS prophylaxis in labor',
   },
   cephalosporin: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Beta-lactam; generally safe in pregnancy; cross-reactivity with penicillin is rare; safe for breastfeeding',
   },
@@ -178,7 +178,7 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   azithromycin: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Macrolide; safe in pregnancy; used for chlamydia, gonorrhea treatment',
   },
   ciprofloxacin: {
@@ -189,12 +189,12 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   cefixime: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Cephalosporin; safe for gonorrhea and other infections in pregnancy',
   },
   clotrimazole: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Topical antifungal; minimal systemic absorption; safe for vulvovaginal candidiasis',
   },
   fluconazole: {
@@ -232,12 +232,12 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   // Analgesics
   acetaminophen: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Safe throughout pregnancy; first-line for pain and fever; extensive safety data',
   },
   ibuprofen: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'NSAID; safe in first/second trimester for pain; avoid in third trimester (risk of PDA closure)',
     trimesterSpecific: {
       first: 'B',
@@ -247,13 +247,13 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   aspirin: {
     category: 'C',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Safe at low-dose for cardiovascular protection; high-dose avoid; risk of Reye syndrome if maternal use near delivery',
   },
   naproxen: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'NSAID; safe in early pregnancy; avoid in third trimester like ibuprofen (PDA closure risk)',
     trimesterSpecific: {
@@ -299,7 +299,7 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   progestin_only_pill: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Safe in pregnancy (unlikely, as contraceptive); safe while breastfeeding (no impact on milk)',
   },
   dmpa_injection: {
@@ -310,18 +310,18 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   copper_iud: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Non-hormonal LARC; contraindicated if pregnancy present (mechanical risk); safe after delivery',
   },
   levonorgestrel_iud: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Hormonal LARC; contraindicated if pregnancy present; safe after delivery and breastfeeding',
   },
   emergency_contraception_levonorgestrel: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Safe for emergency use if unprotected intercourse occurs; minimal teratogenic risk; safe while breastfeeding',
   },
@@ -340,19 +340,19 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   metoclopramide: {
     category: 'B',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Dopamine antagonist; safe throughout pregnancy; used for nausea and gastroesophageal reflux',
   },
   omeprazole: {
     category: 'C',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Proton pump inhibitor; safe in pregnancy for GERD; minimal transplacental passage',
   },
   simethicone: {
     category: 'A',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale: 'Inert silicone; not absorbed; safe throughout pregnancy and breastfeeding',
   },
 
@@ -365,7 +365,7 @@ export const DRUG_CATEGORIES: Record<string, DrugCategory> = {
   },
   methimazole: {
     category: 'D',
-    lactationRisk: 'L1',
+    lactationRisk: 'S',
     rationale:
       'Antithyroid; avoid in first trimester (methimazole embryopathy); PTU preferred early; methimazole safe after first trimester',
   },

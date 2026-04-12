@@ -272,7 +272,7 @@ export async function getAuditStats(
       };
     }
 
-    const drugLookups = logs.filter((l) => l.question.includes('Drug lookup:')).length;
+    const drugLookups = logs.filter((l: typeof logs[number]) => l.question?.includes('Drug lookup:')).length;
     const clinicalQueries = logs.length - drugLookups;
 
     const countryCounts: Record<string, number> = {};
@@ -346,7 +346,7 @@ export async function exportAuditLogsCsv(
     ];
 
     // CSV rows
-    const rows = logs.map((log) => [
+    const rows = logs.map((log: typeof logs[number]) => [
       log.createdAt.toISOString(),
       log.sessionId,
       log.userId || '',
@@ -360,7 +360,7 @@ export async function exportAuditLogsCsv(
       log.hasDoseCard ? 'Yes' : 'No',
     ]);
 
-    const csv = [headers, ...rows.map((r) => r.join(','))].join('\n');
+    const csv = [headers, ...rows.map((r: (string | number)[]) => r.join(','))].join('\n');
     return csv;
   } catch (error) {
     console.error('[AuditLog] Failed to export audit logs:', error);

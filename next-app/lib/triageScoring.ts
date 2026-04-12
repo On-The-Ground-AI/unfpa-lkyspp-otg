@@ -127,7 +127,7 @@ export function triageMaternalDangerSigns(
   }
 
   // Infection Signs (0-3 points)
-  if (signs.vaginalDischarge === 'foul-smelling' && signs.temperature && signs.temperature >= 38) {
+  if (signs.vaginalDischarge === 'foul-smelling' && vitals.temperature && vitals.temperature >= 38) {
     score += 3;
     dangerSigns.push('Signs of infection: fever + foul-smelling discharge');
     recommendations.push(

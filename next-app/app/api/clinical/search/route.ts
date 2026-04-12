@@ -57,7 +57,9 @@ export async function POST(request: NextRequest) {
     const answerText = results.chunks
       .map((c) => c.chunkContent)
       .join('\n---\n');
-    const citationIds = results.chunks.map((c) => c.id);
+    const citationIds = results.chunks
+      .map((c) => c.id)
+      .filter((id): id is string => id !== undefined);
 
     await logClinicalQuery(
       sessionId,
