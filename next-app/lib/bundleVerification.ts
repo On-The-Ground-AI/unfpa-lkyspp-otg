@@ -69,8 +69,8 @@ export function verifySignature(
     const signature = Buffer.from(signatureB64, 'base64');
     const publicKey = crypto.createPublicKey({
       key: Buffer.from(publicKeyB64, 'base64'),
-      format: 'raw',
-      type: 'ed25519',
+      format: 'raw' as crypto.KeyFormat,
+      type: 'ed25519' as any,
     });
 
     const verify = crypto.createVerify('Ed25519');
