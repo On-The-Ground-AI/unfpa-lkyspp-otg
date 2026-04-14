@@ -50,4 +50,5 @@ docs/**/*.pdf
 # Catch any already-staged PDFs (belt and braces)
 *.pdf
 !docs/deliverables/*.pdf
+!handoff-documents-pdf/*.pdf
 .bundle/
