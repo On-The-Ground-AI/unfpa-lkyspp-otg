@@ -17,7 +17,7 @@ export default function RootLayout({
       <body className="antialiased bg-slate-50 text-slate-900">
         {/* Site header */}
         <header className="border-b border-slate-200 bg-white sticky top-0 z-10">
-          <div className="max-w-5xl mx-auto px-4 flex items-center justify-between h-14">
+          <div className="max-w-5xl mx-auto px-4 flex items-center justify-between gap-2 h-14">
             {/* Logo / wordmark */}
             <Link href="/" className="flex items-center gap-2.5 group">
               <div
@@ -32,7 +32,7 @@ export default function RootLayout({
             </Link>
 
             {/* Nav links */}
-            <nav className="flex items-center gap-1">
+            <nav className="flex items-center gap-0.5 sm:gap-1">
               <Link
                 href="/"
                 className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
@@ -41,11 +41,11 @@ export default function RootLayout({
               </Link>
               <Link
                 href="/knowledge"
-                className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+                className="px-2 sm:px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
               >
                 Knowledge Base
               </Link>
-              <span className="ml-2 px-3 py-1.5 text-xs text-slate-400">
+              <span className="hidden sm:inline-block ml-2 px-3 py-1.5 text-xs text-slate-400">
                 UNFPA Asia-Pacific
               </span>
             </nav>
