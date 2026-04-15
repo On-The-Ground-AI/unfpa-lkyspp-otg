@@ -25,7 +25,7 @@ import {
   Header,
   ImageRun,
 } from 'docx';
-import PDFDocument from 'pdfkit';
+import { jsPDF } from 'jspdf';
 import PptxGenJS from 'pptxgenjs';
 
 // ── Types ────────────────────────────────────────────────────────────────
@@ -539,261 +539,328 @@ export async function generateDocx(messages: ExportMessage[], title?: string): P
 
 // ── PDF generation ───────────────────────────────────────────────────────
 
+/**
+ * PDF generation uses jsPDF (pure JS, embedded standard fonts) instead of
+ * pdfkit. pdfkit reads AFM font files via fs at runtime, which the Next.js
+ * serverless file tracer misses on Vercel — causing silent failures and
+ * truncated output that tripped the API's %%EOF integrity check. jsPDF has
+ * no filesystem dependencies and a simpler explicit-cursor model that
+ * eliminates the misuse of pdfkit's `continued` text flows.
+ */
 export async function generatePdf(messages: ExportMessage[], title?: string): Promise<Buffer> {
   const reportTitle = title || 'GRACE AI — Report';
 
-  return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margins: { top: 72, bottom: 72, left: 72, right: 72 },
-      bufferPages: true,
-      info: {
-        Title: reportTitle,
-        Author: 'GRACE AI',
-        Creator: 'GRACE AI',
-      },
-    });
-
-    const chunks: Buffer[] = [];
-    doc.on('data', (chunk: Buffer) => chunks.push(chunk));
-    doc.on('end', () => resolve(Buffer.concat(chunks)));
-    doc.on('error', reject);
-
-    const PAGE_WIDTH = 595.28 - 144; // A4 minus margins
-
-    // Helper: write inline segments respecting bold/italic
-    function writeSegments(segments: TextSegment[], fontSize = 11, color = '#333333') {
-      for (const seg of segments) {
-        let font = 'Helvetica';
-        if (seg.bold && seg.italic) font = 'Helvetica-BoldOblique';
-        else if (seg.bold) font = 'Helvetica-Bold';
-        else if (seg.italic) font = 'Helvetica-Oblique';
-
-        doc.font(font).fontSize(fontSize).fillColor(color).text(seg.text, {
-          continued: true,
-        });
-      }
-      // End continuation
-      doc.text('', { continued: false });
-    }
-
-    // Title page elements
-    doc
-      .font('Helvetica-Bold')
-      .fontSize(22)
-      .fillColor('#' + UNFPA_BLUE)
-      .text(reportTitle, { align: 'left' });
-
-    doc
-      .font('Helvetica-Oblique')
-      .fontSize(10)
-      .fillColor('#666666')
-      .text(
-        `Generated on ${new Date().toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })}`,
-        { align: 'left' }
-      );
-
-    doc.moveDown(0.5);
-    doc
-      .moveTo(72, doc.y)
-      .lineTo(72 + PAGE_WIDTH, doc.y)
-      .strokeColor('#' + UNFPA_ACCENT)
-      .lineWidth(2)
-      .stroke();
-    doc.moveDown(1);
-
-    // Render messages
-    for (const msg of messages) {
-      // Check if we need a new page
-      if (doc.y > 700) doc.addPage();
-
-      if (msg.role === 'user') {
-        // User query box
-        const boxY = doc.y;
-        doc
-          .rect(72, boxY, PAGE_WIDTH, 0.1)
-          .fill('#' + UNFPA_LIGHT_BLUE);
-
-        // Measure text height for background
-        doc
-          .font('Helvetica-Bold')
-          .fontSize(11)
-          .fillColor('#' + UNFPA_BLUE)
-          .text('Query: ', { continued: true });
-        doc
-          .font('Helvetica-Oblique')
-          .fontSize(11)
-          .fillColor('#333333')
-          .text(msg.content);
-        doc.moveDown(0.8);
-      } else {
-        const blocks = parseMarkdown(msg.content);
-
-        for (const block of blocks) {
-          if (doc.y > 720) doc.addPage();
-
-          switch (block.type) {
-            case 'heading': {
-              const sizes: Record<number, number> = { 1: 18, 2: 15, 3: 13, 4: 12 };
-              doc.moveDown(0.4);
-              doc
-                .font('Helvetica-Bold')
-                .fontSize(sizes[block.level] || 12)
-                .fillColor('#' + UNFPA_BLUE);
-              writeSegments(block.segments, sizes[block.level] || 12, '#' + UNFPA_BLUE);
-              doc.moveDown(0.3);
-              break;
-            }
-
-            case 'paragraph':
-              doc.font('Helvetica').fontSize(11).fillColor('#333333');
-              writeSegments(block.segments);
-              doc.moveDown(0.3);
-              break;
-
-            case 'bullet': {
-              const indent = 20 + block.indent * 15;
-              const bulletChar = block.indent === 0 ? '•' : '◦';
-              doc
-                .font('Helvetica')
-                .fontSize(11)
-                .fillColor('#333333')
-                .text(`${bulletChar} `, 72 + indent, doc.y, { continued: true });
-              writeSegments(block.segments);
-              doc.moveDown(0.15);
-              // Reset x position
-              doc.text('', 72, doc.y, { continued: false });
-              break;
-            }
-
-            case 'table': {
-              if (block.headers.length === 0) break;
-              const colCount = block.headers.length;
-              const colWidth = PAGE_WIDTH / colCount;
-              const cellPadding = 6;
-              const rowHeight = 22;
-
-              let tableY = doc.y + 4;
-
-              // Check if table fits — if not, new page
-              const tableHeight = (block.rows.length + 1) * rowHeight + 10;
-              if (tableY + tableHeight > 720) {
-                doc.addPage();
-                tableY = doc.y;
-              }
-
-              // Header row
-              doc
-                .rect(72, tableY, PAGE_WIDTH, rowHeight)
-                .fill('#' + UNFPA_BLUE);
-              for (let c = 0; c < colCount; c++) {
-                doc
-                  .font('Helvetica-Bold')
-                  .fontSize(9)
-                  .fillColor('#FFFFFF')
-                  .text(block.headers[c], 72 + c * colWidth + cellPadding, tableY + 6, {
-                    width: colWidth - cellPadding * 2,
-                    height: rowHeight,
-                    lineBreak: false,
-                  });
-              }
-              tableY += rowHeight;
-
-              // Data rows
-              for (let r = 0; r < block.rows.length; r++) {
-                if (r % 2 === 1) {
-                  doc
-                    .rect(72, tableY, PAGE_WIDTH, rowHeight)
-                    .fill('#' + UNFPA_LIGHT_BLUE);
-                }
-                for (let c = 0; c < block.rows[r].length; c++) {
-                  doc
-                    .font('Helvetica')
-                    .fontSize(9)
-                    .fillColor('#333333')
-                    .text(block.rows[r][c] || '', 72 + c * colWidth + cellPadding, tableY + 6, {
-                      width: colWidth - cellPadding * 2,
-                      height: rowHeight,
-                      lineBreak: false,
-                    });
-                }
-                tableY += rowHeight;
-              }
-
-              // Table border
-              doc
-                .rect(72, doc.y + 4, PAGE_WIDTH, tableY - doc.y - 4)
-                .strokeColor('#CCCCCC')
-                .lineWidth(0.5)
-                .stroke();
-
-              doc.y = tableY + 8;
-              break;
-            }
-          }
-        }
-
-        // Sources
-        if (msg.sources?.length) {
-          doc.moveDown(0.3);
-          doc
-            .font('Helvetica-Bold')
-            .fontSize(9)
-            .fillColor('#888888')
-            .text('Sources:');
-          for (const src of msg.sources) {
-            doc
-              .font('Helvetica-Oblique')
-              .fontSize(9)
-              .fillColor('#888888')
-              .text(`• ${src.title}`);
-          }
-          doc.moveDown(0.5);
-        }
-      }
-    }
-
-    // Credits / attribution
-    if (doc.y > 680) doc.addPage();
-    doc.moveDown(1);
-    doc
-      .moveTo(72, doc.y)
-      .lineTo(72 + PAGE_WIDTH, doc.y)
-      .strokeColor('#CCCCCC')
-      .lineWidth(0.5)
-      .stroke();
-    doc.moveDown(0.4);
-    doc
-      .font('Helvetica')
-      .fontSize(9)
-      .fillColor('#888888')
-      .text('Generated by GRACE AI  ·  https://unfpa-lkyspp-otg.vercel.app');
-    doc
-      .font('Helvetica-Oblique')
-      .fontSize(9)
-      .fillColor('#888888')
-      .text('Questions about this output? Contact Haojun at haojun@ontheground.agency');
-
-    // Add page numbers
-    const totalPages = doc.bufferedPageRange().count;
-    for (let i = 0; i < totalPages; i++) {
-      doc.switchToPage(i);
-      doc
-        .font('Helvetica')
-        .fontSize(8)
-        .fillColor('#999999')
-        .text(`Page ${i + 1} of ${totalPages}`, 72, 780, {
-          width: PAGE_WIDTH,
-          align: 'center',
-        });
-    }
-
-    doc.end();
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  doc.setProperties({
+    title: reportTitle,
+    author: 'GRACE AI',
+    creator: 'GRACE AI',
   });
+
+  // Page geometry (A4 in points: 595.28 x 841.89)
+  const LEFT = 72;
+  const RIGHT = 595.28 - 72;
+  const PAGE_WIDTH = RIGHT - LEFT; // 451.28
+  const TOP = 72;
+  const BOTTOM = 769.89; // 841.89 - 72
+  const PAGE_CENTER = 595.28 / 2;
+
+  let y = TOP;
+
+  // ── Colour helpers (hex strings without '#') ───────────────────────────
+  function hexToRgb(hex: string): [number, number, number] {
+    const h = hex.replace('#', '');
+    return [
+      parseInt(h.slice(0, 2), 16),
+      parseInt(h.slice(2, 4), 16),
+      parseInt(h.slice(4, 6), 16),
+    ];
+  }
+  function setFill(hex: string) {
+    const [r, g, b] = hexToRgb(hex);
+    doc.setFillColor(r, g, b);
+  }
+  function setDraw(hex: string) {
+    const [r, g, b] = hexToRgb(hex);
+    doc.setDrawColor(r, g, b);
+  }
+  function setText(hex: string) {
+    const [r, g, b] = hexToRgb(hex);
+    doc.setTextColor(r, g, b);
+  }
+
+  function setFont(bold: boolean, italic: boolean) {
+    const style = bold && italic ? 'bolditalic' : bold ? 'bold' : italic ? 'italic' : 'normal';
+    doc.setFont('helvetica', style);
+  }
+
+  function ensureSpace(h: number) {
+    if (y + h > BOTTOM) {
+      doc.addPage();
+      y = TOP;
+    }
+  }
+
+  /**
+   * Render a flowing paragraph made of bold/italic segments, wrapping to
+   * `maxWidth`. Breaks on whitespace; advances `y` line-by-line. Returns
+   * nothing — mutates the cursor.
+   */
+  function renderSegments(
+    segments: TextSegment[],
+    fontSize: number,
+    colorHex: string,
+    x0: number = LEFT,
+    maxWidth: number = PAGE_WIDTH
+  ) {
+    doc.setFontSize(fontSize);
+    setText(colorHex);
+
+    const lineHeight = fontSize * 1.3;
+
+    // Flatten segments into word-level tokens that carry their own style.
+    // Keep whitespace runs as their own tokens so we preserve spacing on wrap.
+    type Tok = { text: string; bold: boolean; italic: boolean; space: boolean };
+    const tokens: Tok[] = [];
+    for (const seg of segments) {
+      const parts = seg.text.split(/(\s+)/);
+      for (const p of parts) {
+        if (p.length === 0) continue;
+        tokens.push({
+          text: p,
+          bold: !!seg.bold,
+          italic: !!seg.italic,
+          space: /^\s+$/.test(p),
+        });
+      }
+    }
+
+    // Greedy wrap.
+    let line: Tok[] = [];
+    let lineWidth = 0;
+
+    const flushLine = () => {
+      if (line.length === 0) return;
+      ensureSpace(lineHeight);
+      // Strip trailing whitespace token from the visual line.
+      while (line.length > 0 && line[line.length - 1].space) line.pop();
+      let x = x0;
+      for (const tok of line) {
+        setFont(tok.bold, tok.italic);
+        const w = doc.getTextWidth(tok.text);
+        doc.text(tok.text, x, y + fontSize);
+        x += w;
+      }
+      y += lineHeight;
+      line = [];
+      lineWidth = 0;
+    };
+
+    for (const tok of tokens) {
+      setFont(tok.bold, tok.italic);
+      const w = doc.getTextWidth(tok.text);
+
+      // Skip leading whitespace at start of a line.
+      if (tok.space && line.length === 0) continue;
+
+      if (lineWidth + w > maxWidth && line.length > 0) {
+        flushLine();
+        if (tok.space) continue; // don't start the new line with a space
+      }
+      line.push(tok);
+      lineWidth += w;
+    }
+    flushLine();
+  }
+
+  // ── Title block ────────────────────────────────────────────────────────
+  setFont(true, false);
+  doc.setFontSize(22);
+  setText(UNFPA_BLUE);
+  doc.text(reportTitle, LEFT, y + 22);
+  y += 28;
+
+  setFont(false, true);
+  doc.setFontSize(10);
+  setText('666666');
+  const dateStr = `Generated on ${new Date().toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })}`;
+  doc.text(dateStr, LEFT, y + 10);
+  y += 18;
+
+  // Accent rule
+  setDraw(UNFPA_ACCENT);
+  doc.setLineWidth(2);
+  doc.line(LEFT, y, RIGHT, y);
+  y += 14;
+
+  // ── Messages ───────────────────────────────────────────────────────────
+  for (const msg of messages) {
+    ensureSpace(40);
+
+    if (msg.role === 'user') {
+      // "Query: " label + body as a single flowing paragraph
+      renderSegments(
+        [
+          { text: 'Query: ', bold: true },
+          { text: msg.content, italic: true },
+        ],
+        11,
+        UNFPA_BLUE
+      );
+      y += 8;
+    } else {
+      const blocks = parseMarkdown(msg.content);
+
+      for (const block of blocks) {
+        switch (block.type) {
+          case 'heading': {
+            const sizes: Record<number, number> = { 1: 18, 2: 15, 3: 13, 4: 12 };
+            const size = sizes[block.level] || 12;
+            y += 4;
+            ensureSpace(size * 1.4);
+            // Render as bold segments with heading colour
+            const boldSegs: TextSegment[] = block.segments.map((s) => ({
+              ...s,
+              bold: true,
+            }));
+            renderSegments(boldSegs, size, UNFPA_BLUE);
+            y += 2;
+            break;
+          }
+
+          case 'paragraph':
+            renderSegments(block.segments, 11, '333333');
+            y += 3;
+            break;
+
+          case 'bullet': {
+            const indentX = LEFT + 20 + block.indent * 15;
+            const bulletChar = block.indent === 0 ? '\u2022' : '\u25E6';
+            ensureSpace(14);
+            setFont(false, false);
+            doc.setFontSize(11);
+            setText('333333');
+            doc.text(bulletChar, indentX, y + 11);
+            // Render text to the right of the bullet
+            const textX = indentX + 10;
+            renderSegments(block.segments, 11, '333333', textX, RIGHT - textX);
+            y += 2;
+            break;
+          }
+
+          case 'table': {
+            if (block.headers.length === 0) break;
+            const colCount = block.headers.length;
+            const colWidth = PAGE_WIDTH / colCount;
+            const rowHeight = 22;
+            const cellPadding = 6;
+
+            // Page-break if header + 1 row won't fit
+            ensureSpace(rowHeight * 2);
+
+            y += 4;
+
+            // Header row
+            setFill(UNFPA_BLUE);
+            doc.rect(LEFT, y, PAGE_WIDTH, rowHeight, 'F');
+            setFont(true, false);
+            doc.setFontSize(9);
+            setText('FFFFFF');
+            for (let c = 0; c < colCount; c++) {
+              doc.text(block.headers[c] || '', LEFT + c * colWidth + cellPadding, y + 14, {
+                maxWidth: colWidth - cellPadding * 2,
+              });
+            }
+            y += rowHeight;
+
+            // Data rows
+            setFont(false, false);
+            doc.setFontSize(9);
+            setText('333333');
+            for (let r = 0; r < block.rows.length; r++) {
+              ensureSpace(rowHeight);
+              if (r % 2 === 1) {
+                setFill(UNFPA_LIGHT_BLUE);
+                doc.rect(LEFT, y, PAGE_WIDTH, rowHeight, 'F');
+                setText('333333'); // rect('F') doesn't touch text colour but be safe
+              }
+              for (let c = 0; c < block.rows[r].length; c++) {
+                doc.text(block.rows[r][c] || '', LEFT + c * colWidth + cellPadding, y + 14, {
+                  maxWidth: colWidth - cellPadding * 2,
+                });
+              }
+              y += rowHeight;
+            }
+
+            // Outer border
+            setDraw('CCCCCC');
+            doc.setLineWidth(0.5);
+            const tableTop = y - (block.rows.length + 1) * rowHeight;
+            doc.rect(LEFT, tableTop, PAGE_WIDTH, y - tableTop, 'S');
+
+            y += 8;
+            break;
+          }
+        }
+      }
+
+      // Sources
+      if (msg.sources?.length) {
+        ensureSpace(18);
+        y += 4;
+        setFont(true, false);
+        doc.setFontSize(9);
+        setText('888888');
+        doc.text('Sources:', LEFT, y + 9);
+        y += 12;
+
+        setFont(false, true);
+        for (const src of msg.sources) {
+          ensureSpace(12);
+          doc.text(`\u2022 ${src.title}`, LEFT, y + 9);
+          y += 12;
+        }
+        y += 4;
+      }
+    }
+  }
+
+  // ── Footer attribution ─────────────────────────────────────────────────
+  ensureSpace(40);
+  y += 10;
+  setDraw('CCCCCC');
+  doc.setLineWidth(0.5);
+  doc.line(LEFT, y, RIGHT, y);
+  y += 12;
+
+  setFont(false, false);
+  doc.setFontSize(9);
+  setText('888888');
+  doc.text('Generated by GRACE AI  \u00B7  https://unfpa-lkyspp-otg.vercel.app', LEFT, y + 9);
+  y += 12;
+  setFont(false, true);
+  doc.text(
+    'Questions about this output? Contact Haojun at haojun@ontheground.agency',
+    LEFT,
+    y + 9
+  );
+
+  // ── Page numbers (stamped after all content so the total is known) ─────
+  const totalPages = doc.getNumberOfPages();
+  for (let i = 1; i <= totalPages; i++) {
+    doc.setPage(i);
+    setFont(false, false);
+    doc.setFontSize(8);
+    setText('999999');
+    doc.text(`Page ${i} of ${totalPages}`, PAGE_CENTER, 815, { align: 'center' });
+  }
+
+  const arrayBuffer = doc.output('arraybuffer');
+  return Buffer.from(arrayBuffer);
 }
 
 // ── PPTX generation ──────────────────────────────────────────────────────
