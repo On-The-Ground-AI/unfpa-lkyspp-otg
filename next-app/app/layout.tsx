@@ -3,7 +3,7 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "UNFPA Partnership Catalyst — Asia-Pacific",
+  title: "GRACE AI — Asia-Pacific",
   description: "AI-powered tool helping UNFPA Asia-Pacific prepare for funding conversations and partnership development.",
 };
 
@@ -27,7 +27,7 @@ export default function RootLayout({
                 UN
               </div>
               <span className="font-semibold text-slate-900 text-sm leading-tight">
-                UNFPA Partnership Catalyst
+                GRACE AI
               </span>
             </Link>
 

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { getAllDocs, BLOCK_LABELS, type DocSummary } from '@/lib/docs';
 
 export const metadata = {
-  title: 'Knowledge Base — UNFPA Partnership Catalyst',
+  title: 'Knowledge Base — GRACE AI',
   description: 'Reference documents for UNFPA partnership development. Covers UNFPA\'s mandate, programmes, partnership models, climate-SRHR evidence, and Singapore\'s finance ecosystem.',
 };
 
