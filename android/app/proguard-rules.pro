@@ -39,10 +39,19 @@
 -dontwarn org.apache.fontbox.**
 -dontwarn org.apache.batik.**
 
-# ── Apache POI / log4j annotations ───────────────────────────────────────────
+# ── Apache POI / log4j / XML signing (desktop-only, not on Android) ───────────
 -dontwarn aQute.bnd.**
 -dontwarn org.apache.logging.log4j.**
 -dontwarn org.slf4j.**
+-dontwarn javax.xml.crypto.**
+-dontwarn javax.xml.dsig.**
+-dontwarn org.apache.jcp.**
+-dontwarn org.apache.xmlbeans.**
+-dontwarn org.openxmlformats.**
+-dontwarn com.microsoft.schemas.**
+-dontwarn schemaorg_apache_xmlbeans.**
+-dontwarn org.etsi.**
+-dontwarn org.w3.**
 -keep class org.apache.poi.** { *; }
 -keep class org.openxmlformats.** { *; }
 
