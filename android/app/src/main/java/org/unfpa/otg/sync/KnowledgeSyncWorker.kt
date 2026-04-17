@@ -14,10 +14,29 @@ import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.unfpa.otg.db.AppDatabase
-import org.unfpa.otg.db.KnowledgeChunk
 import org.unfpa.otg.db.KnowledgeDoc
 import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
+
+// Top-level so kotlinx.serialization compiler plugin can generate serializers
+@Serializable
+data class SyncBundleRow(val manifest: SyncManifestJson, val signature: String)
+
+@Serializable
+data class SyncManifestJson(
+    val version: String,
+    val docs: List<SyncDocEntry>,
+    val embeddingsSha256: String,
+)
+
+@Serializable
+data class SyncDocEntry(
+    val slug: String,
+    val sha256: String,
+    val url: String,
+    val vertical: String,
+    val title: String,
+)
 
 /**
  * KnowledgeSyncWorker — WorkManager task that checks Supabase for new
@@ -38,14 +57,13 @@ class KnowledgeSyncWorker(
 
     companion object {
         private const val TAG = "KnowledgeSyncWorker"
-        // Supabase REST endpoint — injected at build time via BuildConfig
         private const val MANIFEST_URL =
             "https://\${BuildConfig.SUPABASE_URL}/rest/v1/mobile_content_bundles" +
             "?select=manifest,signature&order=published_at.desc&limit=1"
 
         fun schedule(context: Context) {
             val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.UNMETERED) // Wi-Fi only
+                .setRequiredNetworkType(NetworkType.UNMETERED)
                 .build()
             val request = PeriodicWorkRequestBuilder<KnowledgeSyncWorker>(12, TimeUnit.HOURS)
                 .setConstraints(constraints)
@@ -69,25 +87,6 @@ class KnowledgeSyncWorker(
         }
     }
 
-    @Serializable
-    data class BundleRow(val manifest: ManifestJson, val signature: String)
-
-    @Serializable
-    data class ManifestJson(
-        val version: String,
-        val docs: List<DocEntry>,
-        val embeddingsSha256: String,
-    )
-
-    @Serializable
-    data class DocEntry(
-        val slug: String,
-        val sha256: String,
-        val url: String,
-        val vertical: String,
-        val title: String,
-    )
-
     private val json = Json { ignoreUnknownKeys = true }
     private val httpClient = OkHttpClient()
     private val verifier = ManifestVerifier(context)
@@ -97,7 +96,7 @@ class KnowledgeSyncWorker(
         return try {
             val (manifest, signature) = fetchLatestBundle() ?: return Result.success()
 
-            val manifestStr = json.encodeToString(ManifestJson.serializer(), manifest)
+            val manifestStr = json.encodeToString(SyncManifestJson.serializer(), manifest)
             if (!verifier.verify(manifestStr, signature)) {
                 Log.e(TAG, "OTA manifest signature invalid — aborting sync")
                 return Result.failure()
@@ -112,21 +111,21 @@ class KnowledgeSyncWorker(
         }
     }
 
-    private fun fetchLatestBundle(): Pair<ManifestJson, String>? {
+    private fun fetchLatestBundle(): Pair<SyncManifestJson, String>? {
         val request = Request.Builder()
             .url(MANIFEST_URL)
-            .addHeader("apikey", android.os.Build.BRAND) // placeholder — injected at build
+            .addHeader("apikey", android.os.Build.BRAND)
             .build()
         val body = httpClient.newCall(request).execute().use { it.body?.string() } ?: return null
-        val rows = json.decodeFromString<List<BundleRow>>(body)
+        val rows = json.decodeFromString<List<SyncBundleRow>>(body)
         val row = rows.firstOrNull() ?: return null
         return row.manifest to row.signature
     }
 
-    private suspend fun applyBundle(manifest: ManifestJson) {
+    private suspend fun applyBundle(manifest: SyncManifestJson) {
         for (docEntry in manifest.docs) {
             val existing = db.knowledgeDocDao().getBySlug(docEntry.slug)
-            if (existing?.contentHash == docEntry.sha256) continue // unchanged
+            if (existing?.contentHash == docEntry.sha256) continue
 
             val content = downloadFile(docEntry.url)
             val hash = sha256Hex(content.toByteArray())
@@ -135,9 +134,6 @@ class KnowledgeSyncWorker(
                 continue
             }
 
-            // Re-chunk and re-embed the updated document
-            // (full pipeline deferred to a dedicated processor; here we update the doc record
-            //  and mark it dirty for incremental re-embedding)
             db.knowledgeDocDao().upsert(
                 KnowledgeDoc(
                     slug = docEntry.slug,

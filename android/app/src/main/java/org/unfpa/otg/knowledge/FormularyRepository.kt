@@ -9,10 +9,38 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import org.unfpa.otg.db.AppDatabase
 import org.unfpa.otg.db.FormularyEntry
+
+// Top-level so kotlinx.serialization compiler plugin can generate serializers
+@Serializable
+data class FormularyJsonEntry(
+    val drug: String,
+    val genericName: String,
+    val localNames: Map<String, String> = emptyMap(),
+    val indication: String,
+    val dose: String,
+    val route: String,
+    val timing: String,
+    val alternativeDose: String? = null,
+    val contraindications: List<String> = emptyList(),
+    val warnings: List<String> = emptyList(),
+    val source: String,
+    val sourceChunkId: String,
+    val sourceUrl: String,
+    val whoEmlListed: Boolean = false,
+    @SerialName("_clinicalStatus") val clinicalStatus: String = "UNVERIFIED-SCAFFOLD",
+    val reviewedBy: String? = null,
+    val reviewedAt: String? = null,
+    val expiryDate: String? = null,
+)
+
+@Serializable
+data class FormularyFile(
+    val drugs: List<FormularyJsonEntry>,
+)
 
 /**
  * FormularyRepository — loads formulary.json from assets and exposes
@@ -26,33 +54,6 @@ class FormularyRepository(private val context: Context) {
 
     private val db = AppDatabase.getInstance(context)
     private val json = Json { ignoreUnknownKeys = true }
-
-    @Serializable
-    data class FormularyJsonEntry(
-        val drug: String,
-        val genericName: String,
-        val localNames: Map<String, String> = emptyMap(),
-        val indication: String,
-        val dose: String,
-        val route: String,
-        val timing: String,
-        val alternativeDose: String? = null,
-        val contraindications: List<String> = emptyList(),
-        val warnings: List<String> = emptyList(),
-        val source: String,
-        val sourceChunkId: String,
-        val sourceUrl: String,
-        val whoEmlListed: Boolean = false,
-        @SerialName("_clinicalStatus") val clinicalStatus: String = "UNVERIFIED-SCAFFOLD",
-        val reviewedBy: String? = null,
-        val reviewedAt: String? = null,
-        val expiryDate: String? = null,
-    )
-
-    @Serializable
-    data class FormularyFile(
-        val drugs: List<FormularyJsonEntry>,
-    )
 
     data class DrugCard(
         val drug: String,
@@ -81,11 +82,8 @@ class FormularyRepository(private val context: Context) {
         val raw = context.assets.open("formulary/formulary.json")
             .bufferedReader().readText()
 
-        // The formulary.json has a top-level object with a "drugs" array
-        // and a "_meta" object — parse with a forgiving approach
-        val jsonObj = json.parseToJsonElement(raw) as? kotlinx.serialization.json.JsonObject
-        val drugsArray = jsonObj?.get("drugs") as? kotlinx.serialization.json.JsonArray
-            ?: return
+        val jsonObj = json.parseToJsonElement(raw) as? JsonObject
+        val drugsArray = jsonObj?.get("drugs") as? JsonArray ?: return
 
         val entries = drugsArray.mapNotNull { element ->
             try {
