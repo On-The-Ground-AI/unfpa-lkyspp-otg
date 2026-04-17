@@ -47,6 +47,15 @@ docs/**/*.pdf
 # Claude Code internal settings
 .claude/
 
+# Android — keystore and signing secrets MUST NOT be committed
+*.jks
+*.keystore
+android/keystore.properties
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+
 # Catch any already-staged PDFs (belt and braces)
 *.pdf
 !docs/deliverables/*.pdf

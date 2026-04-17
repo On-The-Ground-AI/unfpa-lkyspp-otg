@@ -40,6 +40,12 @@ export default function RootLayout({
                 Chat
               </Link>
               <Link
+                href="/clinical-chat"
+                className="px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+              >
+                Clinical Reference
+              </Link>
+              <Link
                 href="/knowledge"
                 className="px-2 sm:px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
               >

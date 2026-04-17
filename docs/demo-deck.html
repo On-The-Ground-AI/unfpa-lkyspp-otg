@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTG Clinical AI — Demo Deck</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f172a; color: #1e293b; }
+
+  /* Slide container */
+  .slides { width: 100%; }
+  .slide {
+    width: 100%; min-height: 100vh;
+    display: flex; flex-direction: column;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  /* ─── SLIDE 1: Cover ─── */
+  .slide-1 {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0c4a6e 100%);
+    color: white;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .slide-1::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(0,158,219,0.15) 0%, transparent 60%);
+  }
+  .unfpa-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px; padding: 8px 20px; margin-bottom: 48px;
+    font-size: 13px; letter-spacing: 0.05em; color: rgba(255,255,255,0.8);
+  }
+  .unfpa-dot { width: 8px; height: 8px; border-radius: 50%; background: #009EDB; }
+  .slide-1 h1 {
+    font-size: clamp(36px, 5vw, 64px); font-weight: 800; line-height: 1.1;
+    letter-spacing: -0.02em; margin-bottom: 24px; position: relative; z-index: 1;
+  }
+  .slide-1 h1 span { color: #38bdf8; }
+  .slide-1 .subtitle {
+    font-size: clamp(16px, 2vw, 22px); color: rgba(255,255,255,0.65);
+    max-width: 600px; line-height: 1.5; margin: 0 auto 60px; position: relative; z-index: 1;
+  }
+  .pill-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; margin-bottom: 80px; }
+  .pill {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 100px; padding: 8px 20px; font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8);
+  }
+  .pill.highlight { background: rgba(0,158,219,0.2); border-color: rgba(0,158,219,0.4); color: #7dd3fc; }
+  .footer-logos {
+    display: flex; align-items: center; justify-content: center; gap: 32px;
+    position: relative; z-index: 1; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .logo-item { text-align: center; }
+  .logo-item .name { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 4px; letter-spacing: 0.04em; }
+  .logo-box {
+    width: 48px; height: 48px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: white;
+  }
+
+  /* ─── SLIDE 2: How It Works ─── */
+  .slide-2 {
+    background: #f8fafc;
+    padding: 60px 60px 40px;
+    justify-content: space-between;
+  }
+  .slide-header { margin-bottom: 48px; }
+  .slide-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: #009EDB; text-transform: uppercase; margin-bottom: 12px; }
+  .slide-title { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; color: #0f172a; line-height: 1.1; letter-spacing: -0.02em; }
+
+  .modes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; flex: 1; margin-bottom: 40px; }
+  .mode-card {
+    border-radius: 16px; padding: 28px; position: relative; overflow: hidden;
+  }
+  .mode-card.android { background: #0f172a; color: white; }
+  .mode-card.web { background: white; border: 2px solid #e2e8f0; }
+  .mode-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 12px; border-radius: 100px; margin-bottom: 20px;
+  }
+  .mode-badge.offline { background: rgba(56,189,248,0.15); color: #38bdf8; }
+  .mode-badge.online { background: #eff6ff; color: #3b82f6; }
+  .mode-badge.clinical-b { background: #fef2f2; color: #dc2626; }
+  .mode-badge.community-b { background: #f0fdf4; color: #16a34a; }
+  .mode-badge.partnership-b { background: #f5f3ff; color: #7c3aed; }
+
+  .mode-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+  .mode-card .mode-desc { font-size: 13px; line-height: 1.5; margin-bottom: 20px; opacity: 0.7; }
+  .feature-list { list-style: none; }
+  .feature-list li { font-size: 13px; padding: 4px 0; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; }
+  .feature-list li::before { content: '→'; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .mode-card.android .feature-list li::before { color: #38bdf8; }
+  .mode-card.web .feature-list li::before { color: #009EDB; }
+
+  .tech-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+  .tech-tag {
+    font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 6px;
+    background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+  }
+  .tech-tag.dark { background: #f1f5f9; color: #64748b; }
+
+  .flow-bar {
+    background: white; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 20px 28px; display: flex; align-items: center; gap: 0;
+  }
+  .flow-step { display: flex; align-items: center; gap: 12px; flex: 1; }
+  .flow-num {
+    width: 32px; height: 32px; border-radius: 50%; background: #009EDB; color: white;
+    font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .flow-text p { font-size: 13px; font-weight: 600; color: #0f172a; }
+  .flow-text span { font-size: 11px; color: #64748b; }
+  .flow-arrow { color: #cbd5e1; font-size: 20px; margin: 0 12px; }
+
+  /* ─── SLIDE 3: Android App ─── */
+  .slide-3 {
+    background: #0f172a;
+    padding: 60px 60px 40px;
+    color: white;
+  }
+  .slide-3 .slide-title { color: white; margin-bottom: 8px; }
+  .slide-3 .slide-label { margin-bottom: 8px; }
+  .slide-3 .sub { color: rgba(255,255,255,0.5); font-size: 15px; margin-bottom: 48px; }
+
+  .phones-row { display: flex; gap: 24px; align-items: flex-start; margin-bottom: 40px; }
+  .phone-wrap { flex: 1; }
+  .phone-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 12px; text-align: center; }
+  .phone {
+    background: #1e293b; border: 2px solid #334155; border-radius: 28px;
+    padding: 10px; box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+    position: relative;
+  }
+  .phone-notch {
+    width: 60px; height: 6px; background: #334155; border-radius: 3px;
+    margin: 0 auto 10px;
+  }
+  .phone-screen {
+    background: white; border-radius: 20px; overflow: hidden;
+    min-height: 420px;
+  }
+
+  /* Phone screen contents */
+  .ps-header { padding: 12px 14px 10px; border-bottom: 1px solid #f1f5f9; }
+  .ps-mode-bar { display: flex; align-items: center; gap-8px; }
+  .ps-mode-pill { font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 100px; }
+  .ps-mode-pill.red { background: #fef2f2; color: #dc2626; }
+  .ps-mode-pill.blue { background: #eff6ff; color: #2563eb; }
+  .ps-mode-pill.purple { background: #f5f3ff; color: #7c3aed; }
+  .ps-title { font-size: 13px; font-weight: 700; color: #0f172a; margin-top: 4px; }
+  .ps-subtitle { font-size: 9px; color: #94a3b8; margin-top: 2px; }
+
+  .ps-disclaimer { background: #fefce8; padding: 6px 10px; font-size: 8px; color: #854d0e; border-bottom: 1px solid #fef08a; line-height: 1.4; }
+
+  .ps-chat { padding: 10px 12px; }
+  .ps-bubble-user {
+    background: #2563eb; color: white; font-size: 9px; border-radius: 10px 10px 2px 10px;
+    padding: 6px 10px; margin-left: 30px; margin-bottom: 8px; line-height: 1.4;
+  }
+  .ps-bubble-ai {
+    background: #f8fafc; border: 1px solid #e2e8f0; font-size: 9px; color: #1e293b;
+    border-radius: 10px 10px 10px 2px; padding: 8px 10px; margin-bottom: 6px; line-height: 1.5;
+  }
+  .ps-src { display: inline; background: #dbeafe; color: #1d4ed8; font-size: 7px; padding: 1px 4px; border-radius: 3px; margin: 0 1px; font-family: monospace; }
+  .ps-sources { padding: 6px 12px; border-top: 1px solid #f1f5f9; }
+  .ps-source-item { font-size: 8px; color: #64748b; padding: 3px 0; display: flex; align-items: center; gap-4px; }
+  .ps-source-item::before { content: '↗'; color: #009EDB; margin-right: 4px; }
+
+  .ps-input-bar { padding: 8px 10px; border-top: 1px solid #f1f5f9; display: flex; gap: 6px; align-items: center; }
+  .ps-input { flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 5px 8px; font-size: 8px; color: #94a3b8; }
+  .ps-send { background: #2563eb; color: white; border-radius: 6px; padding: 5px 8px; font-size: 8px; font-weight: 700; }
+
+  /* Drug card screen */
+  .ps-drug-header { background: #0f172a; padding: 12px 14px; }
+  .ps-drug-title { font-size: 14px; font-weight: 800; color: white; }
+  .ps-drug-subtitle { font-size: 9px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .ps-drug-list { padding: 10px 12px; }
+  .ps-drug-item { border: 1px solid #f1f5f9; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
+  .ps-drug-name { font-size: 11px; font-weight: 700; color: #0f172a; }
+  .ps-drug-indication { font-size: 8px; color: #64748b; margin-top: 2px; }
+  .ps-drug-dose { font-size: 9px; color: #2563eb; margin-top: 4px; font-weight: 600; }
+  .ps-who-badge { display: inline-block; background: #f0fdf4; color: #16a34a; font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-top: 3px; }
+
+  /* Onboarding screen */
+  .ps-onboarding { padding: 20px 14px; text-align: center; }
+  .ps-onboarding-title { font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 6px; margin-top: 16px; }
+  .ps-onboarding-sub { font-size: 9px; color: #64748b; margin-bottom: 20px; line-height: 1.5; }
+  .ps-mode-option {
+    border: 1.5px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; text-align: left;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .ps-mode-option.selected { border-color: #dc2626; background: #fef2f2; }
+  .ps-mode-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+  .ps-mode-text { font-size: 9px; font-weight: 700; color: #0f172a; }
+  .ps-mode-desc-text { font-size: 8px; color: #64748b; }
+  .ps-btn { background: #0f172a; color: white; border-radius: 10px; padding: 10px; font-size: 10px; font-weight: 700; margin-top: 16px; display: block; text-align: center; }
+  .ps-offline-badge { background: #f0fdf4; color: #16a34a; font-size: 8px; font-weight: 600; padding: 4px 10px; border-radius: 100px; display: inline-block; margin-bottom: 16px; }
+
+  /* Capabilities row */
+  .caps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .cap-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px 16px; }
+  .cap-icon { font-size: 24px; margin-bottom: 10px; }
+  .cap-title { font-size: 13px; font-weight: 700; color: white; margin-bottom: 6px; }
+  .cap-desc { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.5; }
+
+  /* Screenshot placeholder */
+  .screenshot-placeholder {
+    background: #1e293b; border: 2px dashed #334155; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 20px; text-align: center; min-height: 200px;
+  }
+  .screenshot-placeholder p { font-size: 11px; color: rgba(255,255,255,0.3); margin-top: 8px; }
+  .screenshot-placeholder .icon { font-size: 28px; opacity: 0.3; }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    .slide { min-height: 100vh; page-break-after: always; break-after: page; }
+    .slide-1 { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .slide-3 { background: #0f172a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     SLIDE 1 — COVER
+════════════════════════════════════════════ -->
+<div class="slide slide-1">
+  <div class="unfpa-badge">
+    <div class="unfpa-dot"></div>
+    UNFPA × LKYSPP × On The Ground
+  </div>
+
+  <h1>Clinical AI<br><span>that works offline.</span></h1>
+
+  <p class="subtitle">
+    On-device decision support for frontline health workers in resource-limited settings — no internet required.
+  </p>
+
+  <div class="pill-row">
+    <div class="pill highlight">Gemma 4 on-device</div>
+    <div class="pill">59+ verified drugs</div>
+    <div class="pill">WHO clinical protocols</div>
+    <div class="pill">6 languages</div>
+    <div class="pill">Android + Web</div>
+  </div>
+
+  <div class="footer-logos">
+    <div class="logo-item">
+      <div class="logo-box" style="background:#009EDB;">UN</div>
+      <div class="name">UNFPA</div>
+    </div>
+    <div style="color:rgba(255,255,255,0.15);font-size:24px;">×</div>
+    <div class="logo-item">
+      <div class="logo-box" style="background:#003d82;">LKY</div>
+      <div class="name">LKYSPP / NUS</div>
+    </div>
+    <div style="color:rgba(255,255,255,0.15);font-size:24px;">×</div>
+    <div class="logo-item">
+      <div class="logo-box" style="background:#1e293b; border:1px solid rgba(255,255,255,0.15);">OTG</div>
+      <div class="name">On The Ground</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SLIDE 2 — HOW IT WORKS
+════════════════════════════════════════════ -->
+<div class="slide slide-2">
+  <div>
+    <div class="slide-header">
+      <div class="slide-label">How It Works</div>
+      <div class="slide-title">Two tools, one knowledge base,<br>built for the field.</div>
+    </div>
+
+    <div class="modes-grid">
+
+      <!-- Android offline -->
+      <div class="mode-card android" style="grid-column: span 1;">
+        <div class="mode-badge offline">● Fully Offline</div>
+        <h3>Android App</h3>
+        <p class="mode-desc">Gemma 4 AI runs entirely on-device. No internet needed after the initial bundle download.</p>
+        <ul class="feature-list" style="color:rgba(255,255,255,0.8);">
+          <li>Clinical chat with cited answers</li>
+          <li>Drug formulary — 59 medicines</li>
+          <li>Emergency protocols (PPH, eclampsia)</li>
+          <li>3 modes: Clinical · Community · Partnership</li>
+          <li>Export to PDF / Word</li>
+          <li>OTA bundle updates over Wi-Fi</li>
+        </ul>
+        <div class="tech-strip" style="margin-top:24px;">
+          <span class="tech-tag">Gemma 4 E2B Int4</span>
+          <span class="tech-tag">LiteRT-LM</span>
+          <span class="tech-tag">ONNX Runtime</span>
+          <span class="tech-tag">Room SQLite</span>
+        </div>
+      </div>
+
+      <!-- Web app -->
+      <div class="mode-card web" style="grid-column: span 2;">
+        <div style="display:flex; gap:10px; margin-bottom:20px; flex-wrap:wrap;">
+          <div class="mode-badge online">⚡ Online</div>
+          <div class="mode-badge partnership-b">Partnership</div>
+          <div class="mode-badge clinical-b">Clinical</div>
+          <div class="mode-badge community-b">Community</div>
+        </div>
+        <h3 style="color:#0f172a;">Web App — Partnership Catalyst</h3>
+        <p class="mode-desc" style="color:#64748b;">
+          Demo-ready browser tool for meetings and stakeholder sessions with live internet.
+          Same knowledge base as the Android app, powered by Claude AI.
+        </p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+          <ul class="feature-list" style="color:#475569;">
+            <li>Streaming AI chat (Claude)</li>
+            <li>Semantic knowledge search</li>
+            <li>Clinical citation drawer</li>
+            <li>Drug formulary lookup</li>
+          </ul>
+          <ul class="feature-list" style="color:#475569;">
+            <li>Funder pitch preparation</li>
+            <li>Live web search grounding</li>
+            <li>Export to DOCX / PDF / PPTX</li>
+            <li>32-document knowledge base</li>
+          </ul>
+        </div>
+        <div class="tech-strip" style="margin-top:20px;">
+          <span class="tech-tag dark">Next.js 16</span>
+          <span class="tech-tag dark">Claude API</span>
+          <span class="tech-tag dark">pgvector</span>
+          <span class="tech-tag dark">Vercel</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flow bar -->
+    <div class="flow-bar">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div class="flow-text">
+          <p>Knowledge ingested</p>
+          <span>WHO guidelines, formularies, protocols → chunked + embedded</span>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div class="flow-text">
+          <p>Bundle signed &amp; deployed</p>
+          <span>Ed25519-signed .tar.gz → Vercel + Android download</span>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div class="flow-text">
+          <p>On-device agentic loop</p>
+          <span>User query → KB search → Gemma synthesis → cited answer</span>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div class="flow-text">
+          <p>Audit &amp; sync</p>
+          <span>Clinical queries logged · bundles auto-updated every 12h on Wi-Fi</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     SLIDE 3 — THE ANDROID APP
+════════════════════════════════════════════ -->
+<div class="slide slide-3">
+  <div>
+    <div class="slide-label">The Android App</div>
+    <div class="slide-title">Built for the field.</div>
+    <p class="sub">Works without internet. Answers in seconds. Cites every claim.</p>
+
+    <div class="phones-row">
+
+      <!-- Phone 1: Onboarding / Mode Select -->
+      <div class="phone-wrap">
+        <div class="phone-label">Mode Selection</div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-onboarding">
+              <div class="ps-offline-badge">● Works Offline</div>
+              <div class="ps-onboarding-title">Choose your mode</div>
+              <div class="ps-onboarding-sub">Select how you'll use this app today</div>
+
+              <div class="ps-mode-option selected">
+                <div class="ps-mode-icon" style="background:#fef2f2;">🏥</div>
+                <div>
+                  <div class="ps-mode-text">Clinical</div>
+                  <div class="ps-mode-desc-text">Drug dosing, protocols, triage</div>
+                </div>
+              </div>
+              <div class="ps-mode-option">
+                <div class="ps-mode-icon" style="background:#eff6ff;">🤝</div>
+                <div>
+                  <div class="ps-mode-text">Community</div>
+                  <div class="ps-mode-desc-text">Health education, CHW support</div>
+                </div>
+              </div>
+              <div class="ps-mode-option">
+                <div class="ps-mode-icon" style="background:#f5f3ff;">📊</div>
+                <div>
+                  <div class="ps-mode-text">Partnership</div>
+                  <div class="ps-mode-desc-text">Donor briefings, funder prep</div>
+                </div>
+              </div>
+              <div class="ps-btn">Continue →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 2: Clinical Chat -->
+      <div class="phone-wrap" style="flex:1.4;">
+        <div class="phone-label">Clinical Chat (AI Answer)</div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-header">
+              <div style="display:flex; align-items:center; justify-content:space-between;">
+                <span class="ps-mode-pill red">● CLINICAL</span>
+                <span style="font-size:8px; color:#94a3b8;">Myanmar · Obstetrics</span>
+              </div>
+              <div class="ps-title">Clinical Chat</div>
+            </div>
+            <div class="ps-disclaimer">Clinical Reference Tool — Always apply professional judgment. Not a substitute for supervision.</div>
+            <div class="ps-chat">
+              <div class="ps-bubble-user">What is the dose of oxytocin for PPH?</div>
+              <div class="ps-bubble-ai">
+                For postpartum haemorrhage (PPH), oxytocin 40 IU should be added to 500 mL of crystalloid and infused at 125 mL/hr IV. <span class="ps-src">WHO-MH-01</span><br><br>
+                As prophylaxis during AMTSL, give 10 IU IM immediately after delivery of the baby. <span class="ps-src">UNFPA-W-03</span>
+              </div>
+            </div>
+            <div class="ps-sources">
+              <div class="ps-source-item">WHO Maternal Health Guidelines 2023, p.47</div>
+              <div class="ps-source-item">UNFPA Clinical Formulary — Oxytocin</div>
+            </div>
+            <div style="height:8px;"></div>
+            <div class="ps-input-bar">
+              <div class="ps-input">Ask a clinical question...</div>
+              <div class="ps-send">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phone 3: Drug Formulary -->
+      <div class="phone-wrap">
+        <div class="phone-label">Drug Formulary</div>
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="ps-drug-header">
+              <div class="ps-drug-title">Drug Formulary</div>
+              <div class="ps-drug-subtitle">59 verified medicines · WHO EML</div>
+            </div>
+            <div style="padding:8px 12px 4px;">
+              <div style="background:#1e293b; border-radius:8px; padding:5px 10px; font-size:9px; color:rgba(255,255,255,0.4); display:flex; align-items:center; gap:6px;">
+                <span>🔍</span> Search drugs...
+              </div>
+            </div>
+            <div class="ps-drug-list">
+              <div class="ps-drug-item">
+                <div class="ps-drug-name">Oxytocin</div>
+                <div class="ps-drug-indication">Uterotonic · PPH prevention &amp; treatment</div>
+                <div class="ps-drug-dose">10 IU IM · 40 IU IV infusion</div>
+                <div class="ps-who-badge">✓ WHO EML</div>
+              </div>
+              <div class="ps-drug-item">
+                <div class="ps-drug-name">Magnesium Sulphate</div>
+                <div class="ps-drug-indication">Anticonvulsant · Eclampsia &amp; pre-eclampsia</div>
+                <div class="ps-drug-dose">4g IV loading · 1g/hr maintenance</div>
+                <div class="ps-who-badge">✓ WHO EML</div>
+              </div>
+              <div class="ps-drug-item">
+                <div class="ps-drug-name">Misoprostol</div>
+                <div class="ps-drug-indication">Uterotonic · PPH when oxytocin unavailable</div>
+                <div class="ps-drug-dose">600 mcg sublingual</div>
+                <div class="ps-who-badge">✓ WHO EML</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Capabilities row -->
+    <div class="caps-grid">
+      <div class="cap-card">
+        <div class="cap-icon">🧠</div>
+        <div class="cap-title">On-Device AI</div>
+        <div class="cap-desc">Gemma 4 runs locally. No data leaves the device. Works in areas with no connectivity.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">💊</div>
+        <div class="cap-title">59 Verified Drugs</div>
+        <div class="cap-desc">WHO EML formulary with dosing, routes, contraindications. Manually reviewed by clinicians.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">📋</div>
+        <div class="cap-title">Emergency Protocols</div>
+        <div class="cap-desc">PPH, eclampsia, neonatal resuscitation — step-by-step algorithms with triage scoring.</div>
+      </div>
+      <div class="cap-card">
+        <div class="cap-icon">🌍</div>
+        <div class="cap-title">6 Languages</div>
+        <div class="cap-desc">English, Swahili, Amharic, French, Tigrinya, Somali. Multilingual embeddings for local-language search.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
