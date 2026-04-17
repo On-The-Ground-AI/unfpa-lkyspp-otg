@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OTG Clinical AI</string>
+    <string name="clinical_disclaimer">Clinical Reference Tool — Always apply professional judgment. Not a substitute for supervision.</string>
+    <string name="offline_badge">Works Offline</string>
+</resources>
