@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "org.unfpa.otg"
-        minSdk = 24          // Android 7.0 — LiteRT-LM minimum
+        minSdk = 26          // Android 8.0 — required by apache-poi MethodHandle.invoke
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
