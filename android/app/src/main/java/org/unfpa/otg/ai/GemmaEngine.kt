@@ -52,7 +52,6 @@ class GemmaEngine(private val context: Context) {
             .setModelPath(modelFile.absolutePath)
             .setMaxTokens(MAX_TOKENS)
             .setMaxTopK(TOP_K)
-            .setResultListener { _, _ -> /* handled via callback flow */ }
             .build()
 
         inference = LlmInference.createFromOptions(context, options)

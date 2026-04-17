@@ -3,6 +3,7 @@ package org.unfpa.otg.knowledge
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
@@ -42,7 +43,7 @@ class FormularyRepository(private val context: Context) {
         val sourceChunkId: String,
         val sourceUrl: String,
         val whoEmlListed: Boolean = false,
-        val `_clinicalStatus`: String = "UNVERIFIED-SCAFFOLD",
+        @SerialName("_clinicalStatus") val clinicalStatus: String = "UNVERIFIED-SCAFFOLD",
         val reviewedBy: String? = null,
         val reviewedAt: String? = null,
         val expiryDate: String? = null,
@@ -113,7 +114,7 @@ class FormularyRepository(private val context: Context) {
                     sourceChunkId = entry.sourceChunkId,
                     sourceUrl = entry.sourceUrl,
                     whoEmlListed = entry.whoEmlListed,
-                    clinicalStatus = entry.`_clinicalStatus`,
+                    clinicalStatus = entry.clinicalStatus,
                     reviewedBy = entry.reviewedBy,
                     reviewedAt = entry.reviewedAt,
                     expiryDate = entry.expiryDate,
