@@ -89,7 +89,7 @@ class FormularyRepository(private val context: Context) {
 
         val entries = drugsArray.mapNotNull { element ->
             try {
-                val entry = json.decodeFromJsonElement<FormularyJsonEntry>(element)
+                val entry = json.decodeFromJsonElement(FormularyJsonEntry.serializer(), element)
                 FormularyEntry(
                     drug = entry.drug,
                     genericName = entry.genericName,
