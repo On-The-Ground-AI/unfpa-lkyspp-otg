@@ -15,10 +15,29 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
+# ── Java AWT (not on Android — used by Apache POI desktop features) ───────────
+-dontwarn java.awt.**
+-dontwarn javax.swing.**
+-dontwarn javax.imageio.**
+-dontwarn sun.misc.**
+-dontwarn sun.awt.**
+
 # ── MediaPipe / LiteRT-LM ─────────────────────────────────────────────────────
 -dontwarn com.google.auto.value.**
+-dontwarn com.google.mediapipe.framework.image.**
+-dontwarn com.google.protobuf.Internal$ProtoMethodMayReturnNull
+-dontwarn com.google.protobuf.Internal$ProtoNonnullApi
+-dontwarn com.google.protobuf.ProtoField
+-dontwarn com.google.protobuf.ProtoPresenceBits
+-dontwarn com.google.protobuf.ProtoPresenceCheckedField
 -keep class com.google.mediapipe.** { *; }
 -keep class com.google.mlkit.** { *; }
+
+# ── PDFBox / rototor (Apache POI PDF helpers — desktop only) ──────────────────
+-dontwarn de.rototor.**
+-dontwarn org.apache.pdfbox.**
+-dontwarn org.apache.fontbox.**
+-dontwarn org.apache.batik.**
 
 # ── Apache POI / log4j annotations ───────────────────────────────────────────
 -dontwarn aQute.bnd.**
