@@ -97,7 +97,7 @@ class KnowledgeSyncWorker(
         return try {
             val (manifest, signature) = fetchLatestBundle() ?: return Result.success()
 
-            val manifestStr = json.encodeToString(manifest)
+            val manifestStr = json.encodeToString<ManifestJson>(manifest)
             if (!verifier.verify(manifestStr, signature)) {
                 Log.e(TAG, "OTA manifest signature invalid — aborting sync")
                 return Result.failure()

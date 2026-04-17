@@ -143,7 +143,3 @@ private fun SettingsButton(label: String, onClick: () -> Unit) {
         Text(label)
     }
 }
-
-@Composable
-private fun <T> kotlinx.coroutines.flow.StateFlow<T>.collectAsStateWithLifecycle(): State<T> =
-    androidx.lifecycle.compose.collectAsStateWithLifecycle()

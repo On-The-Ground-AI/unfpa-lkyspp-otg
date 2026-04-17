@@ -15,6 +15,7 @@ import org.unfpa.otg.export.ExportService
 import org.unfpa.otg.ui.chat.ChatMessage
 import org.unfpa.otg.ui.chat.ChatViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExportScreen(
     chatViewModel: ChatViewModel = viewModel(),
@@ -117,7 +118,3 @@ fun ExportScreen(
     }
 }
 
-// Need this for collectAsStateWithLifecycle in this file
-@Composable
-private fun <T> kotlinx.coroutines.flow.StateFlow<T>.collectAsStateWithLifecycle(): State<T> =
-    androidx.lifecycle.compose.collectAsStateWithLifecycle()

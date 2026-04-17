@@ -240,7 +240,7 @@ class VectorSearch {
             totalChunks = entries.size,
             totalDocuments = entries.map { it.docSlug }.toSet().size,
             totalVerticals = entries.map { it.vertical }.toSet().size,
-            memoryUsedBytes = (entries.size * (384 * 4 + 256)) // rough estimate
+            memoryUsedBytes = (entries.size * (384 * 4 + 256)).toLong() // rough estimate
         )
     }
 

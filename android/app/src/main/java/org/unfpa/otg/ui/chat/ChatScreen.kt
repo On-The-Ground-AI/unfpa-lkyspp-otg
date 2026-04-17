@@ -285,7 +285,7 @@ private fun SourcesRow(
 }
 
 @Composable
-private fun StatusIndicator(message: String) {
+internal fun StatusIndicator(message: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

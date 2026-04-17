@@ -23,9 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import org.unfpa.otg.knowledge.CitationRepository
 
 /**
  * ClinicalChatScreen — specialized chat interface for clinical queries.
@@ -46,6 +48,7 @@ fun ClinicalChatScreen(
     onNavigateToDrugs: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
     val listState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     var inputText by remember { mutableStateOf("") }
@@ -165,6 +168,7 @@ fun ClinicalChatScreen(
     if (selectedCitationChunkId != null) {
         CitationDrawer(
             chunkId = selectedCitationChunkId!!,
+            citationRepository = remember { CitationRepository(context) },
             onDismiss = { selectedCitationChunkId = null },
         )
     }
