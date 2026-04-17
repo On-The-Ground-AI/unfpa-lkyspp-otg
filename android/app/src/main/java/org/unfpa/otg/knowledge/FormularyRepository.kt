@@ -4,6 +4,9 @@ import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -90,10 +93,7 @@ class FormularyRepository(private val context: Context) {
                     drug = entry.drug,
                     genericName = entry.genericName,
                     localNamesJson = json.encodeToString(
-                        kotlinx.serialization.builtins.MapSerializer(
-                            kotlinx.serialization.builtins.serializer(),
-                            kotlinx.serialization.builtins.serializer()
-                        ),
+                        MapSerializer(String.serializer(), String.serializer()),
                         entry.localNames
                     ),
                     indication = entry.indication,
@@ -102,15 +102,11 @@ class FormularyRepository(private val context: Context) {
                     timing = entry.timing,
                     alternativeDose = entry.alternativeDose,
                     contraindicationsJson = json.encodeToString(
-                        kotlinx.serialization.builtins.ListSerializer(
-                            kotlinx.serialization.builtins.serializer()
-                        ),
+                        ListSerializer(String.serializer()),
                         entry.contraindications
                     ),
                     warningsJson = json.encodeToString(
-                        kotlinx.serialization.builtins.ListSerializer(
-                            kotlinx.serialization.builtins.serializer()
-                        ),
+                        ListSerializer(String.serializer()),
                         entry.warnings
                     ),
                     source = entry.source,

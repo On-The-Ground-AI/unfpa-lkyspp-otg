@@ -51,9 +51,7 @@ class GemmaEngine(private val context: Context) {
         val options = LlmInferenceOptions.builder()
             .setModelPath(modelFile.absolutePath)
             .setMaxTokens(MAX_TOKENS)
-            .setTopK(TOP_K)
-            .setTopP(TOP_P)
-            .setTemperature(TEMPERATURE)
+            .setMaxTopK(TOP_K)
             .setResultListener { _, _ -> /* handled via callback flow */ }
             .build()
 

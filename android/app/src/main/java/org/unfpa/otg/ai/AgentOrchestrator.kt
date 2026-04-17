@@ -3,7 +3,6 @@ package org.unfpa.otg.ai
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.unfpa.otg.knowledge.KnowledgeRepository
-import org.unfpa.otg.knowledge.SearchResult
 
 /**
  * AgentOrchestrator — port of next-app/app/api/chat/route.ts agentic loop.

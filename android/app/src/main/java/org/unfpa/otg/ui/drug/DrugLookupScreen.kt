@@ -14,8 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 
@@ -362,7 +364,7 @@ private fun DrugCard(drug: DrugLookupViewModel.DrugResult) {
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.outline,
                         maxLines = 1,
-                        overflow = androidx.compose.material3.TextOverflow.Ellipsis,
+                        overflow = TextOverflow.Ellipsis,
                     )
                     if (drug.isExpired) {
                         Text(

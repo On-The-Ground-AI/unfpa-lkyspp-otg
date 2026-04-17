@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import org.unfpa.otg.db.AppDatabase
+import org.unfpa.otg.db.FormularyEntry
 import org.unfpa.otg.db.KnowledgeChunk
 import org.unfpa.otg.db.KnowledgeDoc
 

@@ -2,7 +2,9 @@ package org.unfpa.otg.ui.chat
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -380,7 +382,7 @@ private fun ClinicalMessageInput(
                         modifier = Modifier.size(40.dp),
                     ) {
                         Icon(
-                            Icons.Default.Lightbulb,
+                            Icons.Default.Info,
                             contentDescription = "Quick Actions",
                             tint = if (enabled)
                                 MaterialTheme.colorScheme.primary
@@ -411,6 +413,3 @@ private fun QuickActionButton(label: String, onClick: () -> Unit) {
     }
 }
 
-@Composable
-private fun rememberScrollState() =
-    remember { androidx.compose.foundation.ScrollState(0) }
