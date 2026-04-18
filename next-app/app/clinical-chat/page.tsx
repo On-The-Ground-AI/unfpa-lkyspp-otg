@@ -361,7 +361,7 @@ function renderMessageWithCitations(
 
         const chunkId = match[1];
         const citation = citations.find(
-          (c) => c.chunkId === chunkId || c.chunkSlug === chunkId || c.id === chunkId
+          (c) => c.id === chunkId || c.documentSlug === chunkId
         );
 
         return (
