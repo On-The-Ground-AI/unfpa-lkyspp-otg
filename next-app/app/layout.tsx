@@ -51,6 +51,12 @@ export default function RootLayout({
               >
                 Knowledge Base
               </Link>
+              <Link
+                href="/mockup"
+                className="px-2 sm:px-3 py-1.5 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded transition-colors"
+              >
+                App Mockup
+              </Link>
               <span className="hidden sm:inline-block ml-2 px-3 py-1.5 text-xs text-slate-400">
                 UNFPA Asia-Pacific
               </span>
