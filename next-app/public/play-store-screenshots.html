@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNFPA OTG — Play Store Screenshots</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #E8EEF4; }
+
+  .page-header {
+    background: white; border-bottom: 1px solid #e2e8f0;
+    padding: 14px 32px; display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .page-header h1 { font-size: 15px; font-weight: 700; color: #0f172a; }
+  .page-header p { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+  .btn-pdf {
+    background: #009EDB; color: white; border: none; cursor: pointer;
+    padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px; transition: background 0.2s;
+  }
+  .btn-pdf:hover { background: #007DB8; }
+  .btn-pdf:disabled { background: #93c5fd; cursor: not-allowed; }
+
+  .gallery {
+    display: flex; flex-wrap: wrap; gap: 48px; padding: 48px;
+    justify-content: flex-start; max-width: 1800px; margin: 0 auto;
+  }
+  .screen-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .screen-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* ── Phone chrome ── */
+  .phone {
+    width: 390px; height: 844px; border-radius: 50px;
+    background: #1a1a1a; position: relative; overflow: hidden; flex-shrink: 0;
+    box-shadow: 0 0 0 10px #1a1a1a, 0 0 0 12px #2d2d2d, 0 32px 80px rgba(0,0,0,0.45);
+  }
+  .phone-camera {
+    position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+    width: 12px; height: 12px; background: #1a1a1a; border-radius: 50%; z-index: 20;
+  }
+  .phone-home {
+    position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 5px; background: rgba(255,255,255,0.25); border-radius: 3px; z-index: 20;
+  }
+  .phone-screen {
+    position: absolute; inset: 0; border-radius: 50px; overflow: hidden;
+  }
+  .status-bar {
+    position: absolute; top: 0; left: 0; right: 0; height: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 24px 0; z-index: 10; pointer-events: none;
+  }
+  .status-time { font-size: 11px; font-weight: 700; color: white; }
+  .status-icons { display: flex; align-items: center; gap: 6px; }
+  .battery {
+    width: 23px; height: 12px; border: 1.5px solid rgba(255,255,255,0.6);
+    border-radius: 3px; position: relative; display: flex; align-items: center; padding: 1.5px;
+  }
+  .battery::after {
+    content: ''; position: absolute; right: -5px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 5px; background: rgba(255,255,255,0.5); border-radius: 0 2px 2px 0;
+  }
+  .battery-fill { width: 72%; height: 100%; background: #4CAF50; border-radius: 1px; }
+
+  /* ── Shared components ── */
+  .btn-primary {
+    background: #009EDB; color: white; border: none; border-radius: 16px;
+    padding: 14px; width: 100%; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .btn-secondary {
+    background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: 16px; padding: 13px; width: 100%; font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 9px; font-weight: 600;
+  }
+  .search-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 10px 16px;
+    margin: 12px 16px;
+  }
+  .search-bar span { font-size: 12px; color: #94a3b8; }
+
+  @media print {
+    body { background: white; }
+    .page-header { display: none; }
+    .gallery { padding: 0; gap: 0; display: block; }
+    .screen-wrap { page-break-after: always; padding: 40px; align-items: center; }
+    .screen-label { font-size: 14px; margin-bottom: 16px; color: #374151; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <h1>UNFPA OTG — Android App · Play Store Screenshots</h1>
+    <p>7 screens · 390×844 px · Open in Chrome for best results</p>
+  </div>
+  <button class="btn-pdf" id="pdfBtn" onclick="generatePDF()">
+    <span>⬇</span> Download PDF
+  </button>
+</div>
+
+<div class="gallery" id="gallery">
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 1: WELCOME -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">1. Welcome</div>
+    <div class="phone" id="s1">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background: linear-gradient(160deg, #005F8E 0%, #009EDB 60%, #00BCD4 100%);">
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="white" opacity="0.4"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="white" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="white" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="white"/></svg>
+            <div class="battery"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 36px;text-align:center;color:white;gap:24px;margin-top:24px;">
+          <div style="width:96px;height:96px;border-radius:50%;background:rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);border:1.5px solid rgba(255,255,255,0.3);">
+            <span style="font-size:30px;font-weight:900;color:white;">UN</span>
+          </div>
+          <div>
+            <p style="font-size:10px;font-weight:700;letter-spacing:0.22em;color:rgba(255,255,255,0.65);margin-bottom:10px;">UNFPA ON-THE-GROUND</p>
+            <h1 style="font-size:26px;font-weight:800;line-height:1.2;margin-bottom:14px;">Clinical Knowledge<br>Assistant</h1>
+            <p style="font-size:13px;color:rgba(255,255,255,0.8);line-height:1.6;">Evidence-based clinical guidance for SRHR, safe motherhood, and essential medicines — available offline, anywhere.</p>
+          </div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+            <button class="btn-primary" style="background:white;color:#009EDB;">Get Started</button>
+            <button class="btn-secondary">I already have an account</button>
+          </div>
+          <p style="font-size:10px;color:rgba(255,255,255,0.45);margin-top:4px;">UNFPA Asia-Pacific · LKYSPP Policy Innovation</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 2: MODE SELECT -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">2. Mode Select</div>
+    <div class="phone" id="s2">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;">
+        <div class="status-bar" style="background:#F6F8FB;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="padding:56px 20px 20px;">
+          <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:0.18em;margin-bottom:6px;">STEP 1 OF 3</p>
+          <h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:6px;">How will you use<br>the app?</h2>
+          <p style="font-size:12px;color:#64748b;margin-bottom:20px;">Choose your primary role. You can change this in Settings.</p>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <!-- Clinical - selected -->
+            <div style="border:2px solid #009EDB;border-radius:18px;padding:16px;display:flex;gap:14px;align-items:flex-start;background:#E8F7FD;">
+              <span style="font-size:28px;line-height:1;">🩺</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Clinical Reference</p>
+                <p style="font-size:11px;color:#64748b;line-height:1.5;">Drug dosing, treatment protocols, SRHR guidelines, maternal health. For trained healthcare workers.</p>
+              </div>
+              <div style="width:20px;height:20px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:white;"></div>
+              </div>
+            </div>
+            <!-- Partnership -->
+            <div style="border:2px solid #e2e8f0;border-radius:18px;padding:16px;display:flex;gap:14px;align-items:flex-start;background:white;">
+              <span style="font-size:28px;line-height:1;">🤝</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Partnership & Funding</p>
+                <p style="font-size:11px;color:#64748b;line-height:1.5;">Prepare briefings, match programmes to partner interests, draft funding proposals.</p>
+              </div>
+              <div style="width:20px;height:20px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;margin-top:2px;"></div>
+            </div>
+            <!-- Knowledge -->
+            <div style="border:2px solid #e2e8f0;border-radius:18px;padding:16px;display:flex;gap:14px;align-items:flex-start;background:white;">
+              <span style="font-size:28px;line-height:1;">📚</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;font-weight:700;color:#0f172a;margin-bottom:4px;">Knowledge Explorer</p>
+                <p style="font-size:11px;color:#64748b;line-height:1.5;">Browse and search the full UNFPA knowledge base for research and policy work.</p>
+              </div>
+              <div style="width:20px;height:20px;border-radius:50%;border:2px solid #cbd5e1;flex-shrink:0;margin-top:2px;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:20px;right:20px;">
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 3: COUNTRY SELECT -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">3. Country Select</div>
+    <div class="phone" id="s3">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;">
+        <div class="status-bar" style="background:#F6F8FB;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="padding:56px 20px 0;">
+          <p style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:0.18em;margin-bottom:6px;">STEP 2 OF 3</p>
+          <h2 style="font-size:22px;font-weight:800;color:#0f172a;margin-bottom:6px;">Select your country</h2>
+          <p style="font-size:12px;color:#64748b;margin-bottom:18px;">Country-specific protocols and local clinical guidelines will be prioritised.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            ${[
+              { name: "Myanmar", flag: "🇲🇲", status: "Downloaded", bg: "#D1FAE5", col: "#065F46", sel: true },
+              { name: "Bangladesh", flag: "🇧🇩", status: "Downloaded", bg: "#D1FAE5", col: "#065F46", sel: false },
+              { name: "Cambodia", flag: "🇰🇭", status: "Available", bg: "#E0F2FE", col: "#0369A1", sel: false },
+              { name: "Pakistan", flag: "🇵🇰", status: "Available", bg: "#E0F2FE", col: "#0369A1", sel: false },
+              { name: "Nepal", flag: "🇳🇵", status: "Available", bg: "#E0F2FE", col: "#0369A1", sel: false },
+              { name: "Timor-Leste", flag: "🇹🇱", status: "Available", bg: "#E0F2FE", col: "#0369A1", sel: false },
+            ].map(c => `
+            <div style="border:2px solid ${c.sel ? "#009EDB" : "#e2e8f0"};border-radius:16px;padding:12px 16px;display:flex;align-items:center;gap:14px;background:white;">
+              <span style="font-size:24px;">${c.flag}</span>
+              <div style="flex:1;">
+                <p style="font-size:13px;font-weight:600;color:#0f172a;">${c.name}</p>
+                <span style="font-size:9px;font-weight:600;padding:2px 8px;border-radius:99px;background:${c.bg};color:${c.col};">${c.status}</span>
+              </div>
+              ${c.sel ? `<div style="width:20px;height:20px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;"><div style="width:6px;height:6px;border-radius:50%;background:white;"></div></div>` : `<div style="width:20px;height:20px;border-radius:50%;border:2px solid #cbd5e1;"></div>`}
+            </div>`).join("")}
+          </div>
+        </div>
+        <div style="position:absolute;bottom:28px;left:20px;right:20px;">
+          <button class="btn-primary">Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 4: CHAT -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">4. Clinical Chat</div>
+    <div class="phone" id="s4">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;display:flex;flex-direction:column;">
+        <div class="status-bar" style="background:white;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <!-- Top bar -->
+        <div style="padding:6px 16px 10px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;margin-top:44px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:34px;height:34px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:800;">OTG</div>
+            <div>
+              <p style="font-size:13px;font-weight:700;color:#0f172a;line-height:1.2;">Clinical Reference</p>
+              <p style="font-size:10px;color:#22c55e;font-weight:600;">● Offline · Myanmar</p>
+            </div>
+          </div>
+          <div style="width:32px;height:32px;border-radius:50%;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:14px;">⚙</div>
+        </div>
+        <!-- Messages -->
+        <div style="flex:1;padding:14px 14px 0;display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+          <!-- User message 1 -->
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="max-width:76%;background:#009EDB;border-radius:18px 18px 4px 18px;padding:10px 14px;">
+              <p style="font-size:11px;color:white;line-height:1.5;">What is the recommended oxytocin protocol for active management of third stage of labour?</p>
+            </div>
+          </div>
+          <!-- Assistant message 1 -->
+          <div style="display:flex;gap:8px;align-items:flex-start;">
+            <div style="width:26px;height:26px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;color:white;font-size:9px;font-weight:700;flex-shrink:0;">AI</div>
+            <div style="max-width:78%;">
+              <div style="background:white;border-radius:4px 18px 18px 18px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+                <p style="font-size:11px;font-weight:700;color:#0f172a;margin-bottom:6px;">Active Management of Third Stage (AMTSL)</p>
+                <p style="font-size:11px;color:#334155;line-height:1.5;margin-bottom:6px;"><strong>Preferred:</strong> Oxytocin 10 IU IM immediately after birth</p>
+                <p style="font-size:11px;color:#334155;line-height:1.5;margin-bottom:6px;"><strong>If unavailable:</strong> Misoprostol 600 mcg orally</p>
+                <p style="font-size:10px;color:#64748b;line-height:1.5;">Reduces PPH risk by 60% vs expectant management.</p>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+                <span style="font-size:9px;padding:2px 8px;border-radius:99px;border:1px solid #e2e8f0;background:white;color:#64748b;">📎 UNFPA Obstetric Emergencies Guide</span>
+                <span style="font-size:9px;padding:2px 8px;border-radius:99px;border:1px solid #e2e8f0;background:white;color:#64748b;">📎 WHO AMTSL Guidelines 2023</span>
+              </div>
+            </div>
+          </div>
+          <!-- User message 2 -->
+          <div style="display:flex;justify-content:flex-end;">
+            <div style="max-width:76%;background:#009EDB;border-radius:18px 18px 4px 18px;padding:10px 14px;">
+              <p style="font-size:11px;color:white;line-height:1.5;">What if the patient has hypertension?</p>
+            </div>
+          </div>
+          <!-- Assistant streaming -->
+          <div style="display:flex;gap:8px;align-items:flex-start;">
+            <div style="width:26px;height:26px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;color:white;font-size:9px;font-weight:700;flex-shrink:0;">AI</div>
+            <div style="max-width:78%;">
+              <div style="background:white;border-radius:4px 18px 18px 18px;padding:10px 14px;box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+                <p style="font-size:11px;color:#334155;line-height:1.5;">For <strong>hypertension / pre-eclampsia</strong>, avoid ergometrine — causes vasoconstriction.</p>
+                <p style="font-size:11px;color:#22c55e;font-weight:600;margin-top:6px;">✅ Safe: Oxytocin 10 IU IM (first-line)</p>
+                <p style="font-size:11px;color:#ef4444;margin-top:3px;">⚠ Avoid: Ergometrine / Syntometrine</p>
+              </div>
+              <div style="display:flex;gap:6px;margin-top:6px;">
+                <span style="font-size:9px;padding:2px 8px;border-radius:99px;border:1px solid #e2e8f0;background:white;color:#64748b;">📎 UNFPA Clinical Protocols v4.2</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Input -->
+        <div style="background:white;border-top:1px solid #f1f5f9;padding:10px 14px 40px;">
+          <div style="display:flex;align-items:center;gap:10px;background:#F8FAFC;border:1px solid #e2e8f0;border-radius:18px;padding:10px 16px;">
+            <span style="flex:1;font-size:12px;color:#94a3b8;">Ask a clinical question…</span>
+            <div style="width:30px;height:30px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;font-weight:700;">↑</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 5: DOSE CARD -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">5. Drug &amp; Dose Card</div>
+    <div class="phone" id="s5">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;display:flex;flex-direction:column;">
+        <div class="status-bar" style="background:white;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:44px;padding:10px 16px 8px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px;">
+          <span style="color:#94a3b8;font-size:20px;">←</span>
+          <div>
+            <p style="font-size:13px;font-weight:700;color:#0f172a;">Drug Reference</p>
+            <p style="font-size:10px;color:#94a3b8;">WHO Essential Medicines · UNFPA Formulary</p>
+          </div>
+        </div>
+        <div class="search-bar" style="margin:12px 16px 8px;">
+          <span>🔍</span><span style="font-size:12px;color:#94a3b8;">Search drugs…</span>
+        </div>
+        <div style="flex:1;padding:0 16px;display:flex;flex-direction:column;gap:10px;overflow:hidden;">
+          <!-- Oxytocin card -->
+          <div style="background:white;border-radius:18px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+            <div style="background:#E8F7FD;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <p style="font-size:15px;font-weight:800;color:#0f172a;">Oxytocin</p>
+                <p style="font-size:10px;color:#64748b;">Uterotonic · WHO EML 23rd Edition</p>
+              </div>
+              <span style="font-size:10px;padding:4px 10px;border-radius:99px;background:#009EDB;color:white;font-weight:700;">First-line</span>
+            </div>
+            <div style="padding:14px 16px;display:flex;flex-direction:column;gap:8px;">
+              ${[
+                { label: "PPH Prevention", dose: "10 IU IM · single dose", timing: "Within 1 min of birth" },
+                { label: "PPH Treatment", dose: "20–40 IU in 500 mL NS · IV", timing: "125 mL/hr; adjust to response" },
+                { label: "Labour Augmentation", dose: "0.5–2 mIU/min · IV, titrate", timing: "Increase 1–2 mIU/min q30min" },
+              ].map(d => `
+              <div style="background:#F8FAFC;border:1px solid #f1f5f9;border-radius:12px;padding:10px 12px;">
+                <p style="font-size:10px;font-weight:700;color:#475569;margin-bottom:4px;">${d.label}</p>
+                <p style="font-size:11px;font-family:monospace;color:#0f172a;">${d.dose}</p>
+                <p style="font-size:10px;color:#64748b;margin-top:2px;">⏱ ${d.timing}</p>
+              </div>`).join("")}
+              <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:10px 12px;">
+                <p style="font-size:10px;font-weight:700;color:#92400E;margin-bottom:4px;">⚠ Contraindications</p>
+                <p style="font-size:10px;color:#78350F;line-height:1.5;">Hypersensitivity · Cephalopelvic disproportion · Avoid ergometrine if hypertensive</p>
+              </div>
+              <p style="font-size:9px;color:#94a3b8;text-align:right;">Source: UNFPA Formulary v4.2 · WHO EML 23rd Ed.</p>
+            </div>
+          </div>
+          <!-- Misoprostol card (truncated) -->
+          <div style="background:white;border-radius:18px;border:1px solid #e2e8f0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+            <div style="background:#F0FDF4;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <p style="font-size:15px;font-weight:800;color:#0f172a;">Misoprostol</p>
+                <p style="font-size:10px;color:#64748b;">Prostaglandin · WHO EML</p>
+              </div>
+              <span style="font-size:10px;padding:4px 10px;border-radius:99px;background:#D1FAE5;color:#065F46;font-weight:700;">Alternative</span>
+            </div>
+          </div>
+        </div>
+        <div style="height:40px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 6: KNOWLEDGE BASE -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">6. Knowledge Base</div>
+    <div class="phone" id="s6">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;display:flex;flex-direction:column;">
+        <div class="status-bar" style="background:white;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:44px;padding:10px 16px 8px;background:white;border-bottom:1px solid #f1f5f9;">
+          <p style="font-size:13px;font-weight:700;color:#0f172a;">Knowledge Base</p>
+          <p style="font-size:10px;color:#94a3b8;">Downloaded · 6 collections · Last synced today</p>
+        </div>
+        <div class="search-bar">
+          <span>🔍</span><span style="font-size:12px;color:#94a3b8;">Search clinical documents…</span>
+        </div>
+        <div style="flex:1;padding:0 14px;display:flex;flex-direction:column;gap:8px;overflow:hidden;">
+          ${[
+            { title: "UNFPA Obstetric Emergencies Guidelines", tag: "Safe Motherhood", icon: "🏥", pages: 142, date: "Mar 2026", bg: "#FEE2E2" },
+            { title: "WHO SRHR Essential Package", tag: "SRHR", icon: "💊", pages: 89, date: "Jan 2026", bg: "#E0F2FE" },
+            { title: "Myanmar Country Clinical Protocols", tag: "Country", icon: "🇲🇲", pages: 54, date: "Feb 2026", bg: "#F0FDF4" },
+            { title: "Emergency Contraception Reference", tag: "Family Planning", icon: "📋", pages: 38, date: "Dec 2025", bg: "#FDF4FF" },
+            { title: "Adolescent Health & Development Guide", tag: "Adolescents", icon: "👩‍⚕️", pages: 76, date: "Nov 2025", bg: "#FFFBEB" },
+            { title: "Formulary — 32 Essential Medicines", tag: "Formulary", icon: "⚕️", pages: 96, date: "Mar 2026", bg: "#E8F7FD" },
+          ].map(d => `
+          <div style="background:white;border-radius:16px;border:1px solid #f1f5f9;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <div style="width:40px;height:40px;border-radius:12px;background:${d.bg};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${d.icon}</div>
+            <div style="flex:1;min-width:0;">
+              <p style="font-size:11px;font-weight:700;color:#0f172a;line-height:1.4;margin-bottom:4px;">${d.title}</p>
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span style="font-size:9px;font-weight:600;padding:1px 7px;border-radius:99px;background:${d.bg};color:#374151;">${d.tag}</span>
+                <span style="font-size:9px;color:#94a3b8;">${d.pages}p · ${d.date}</span>
+              </div>
+            </div>
+            <span style="color:#cbd5e1;font-size:16px;">›</span>
+          </div>`).join("")}
+        </div>
+        <div style="height:40px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- SCREEN 7: SETTINGS -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div class="screen-wrap">
+    <div class="screen-label">7. Settings</div>
+    <div class="phone" id="s7">
+      <div class="phone-camera"></div>
+      <div class="phone-home"></div>
+      <div class="phone-screen" style="background:#F6F8FB;display:flex;flex-direction:column;">
+        <div class="status-bar" style="background:white;">
+          <span class="status-time" style="color:#1e293b;">9:41</span>
+          <div class="status-icons">
+            <svg width="16" height="11" viewBox="0 0 16 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="#1e293b" opacity="0.35"/><rect x="4.5" y="1.5" width="3" height="9.5" rx="0.5" fill="#1e293b" opacity="0.6"/><rect x="9" y="0" width="3" height="11" rx="0.5" fill="#1e293b" opacity="0.85"/><rect x="13.5" y="0" width="2.5" height="11" rx="0.5" fill="#1e293b"/></svg>
+            <div class="battery" style="border-color:rgba(30,41,59,0.4);"><div class="battery-fill"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:44px;padding:10px 16px 10px;background:white;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:10px;">
+          <span style="color:#94a3b8;font-size:20px;">←</span>
+          <p style="font-size:13px;font-weight:700;color:#0f172a;">Settings</p>
+        </div>
+        <div style="flex:1;padding:14px 14px;display:flex;flex-direction:column;gap:10px;overflow:hidden;">
+          <!-- Profile -->
+          <div style="background:white;border-radius:18px;border:1px solid #f1f5f9;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <div style="width:48px;height:48px;border-radius:50%;background:#009EDB;display:flex;align-items:center;justify-content:center;color:white;font-size:15px;font-weight:800;flex-shrink:0;">HW</div>
+            <div>
+              <p style="font-size:13px;font-weight:700;color:#0f172a;">Healthcare Worker</p>
+              <p style="font-size:11px;color:#64748b;">Clinical Reference · Myanmar</p>
+            </div>
+          </div>
+          <!-- App Mode -->
+          ${[
+            { title: "App Mode", rows: [
+              { label: "Current mode", val: "Clinical Reference", action: "Change" },
+              { label: "Country", val: "Myanmar", action: "Change" },
+              { label: "Language", val: "English", action: "Change" },
+            ]},
+            { title: "Offline Model", rows: [
+              { label: "Gemma 4 E2B (int4)", val: "Downloaded · 1.4 GB", action: "Update" },
+              { label: "Knowledge bundle", val: "v2.3 · 54 MB · Today", action: "Sync" },
+            ]},
+            { title: "Privacy", rows: [
+              { label: "Session logging", val: "On-device only", action: null },
+              { label: "Export audit log", val: "", action: "Export" },
+            ]},
+          ].map(sec => `
+          <div style="background:white;border-radius:18px;border:1px solid #f1f5f9;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+            <p style="font-size:9px;font-weight:700;color:#94a3b8;padding:10px 16px 6px;letter-spacing:0.15em;text-transform:uppercase;">${sec.title}</p>
+            ${sec.rows.map((r, i) => `
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 16px;${i < sec.rows.length-1 ? "border-bottom:1px solid #f8fafc;" : ""}">
+              <div>
+                <p style="font-size:12px;font-weight:600;color:#0f172a;">${r.label}</p>
+                ${r.val ? `<p style="font-size:10px;color:#94a3b8;margin-top:1px;">${r.val}</p>` : ""}
+              </div>
+              ${r.action ? `<span style="font-size:12px;font-weight:700;color:#009EDB;">${r.action}</span>` : ""}
+            </div>`).join("")}
+          </div>`).join("")}
+          <p style="font-size:10px;text-align:center;color:#94a3b8;padding-bottom:8px;">UNFPA OTG v1.0.0 · Build 1<br>On The Ground / LKYSPP</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end gallery -->
+
+<script>
+async function generatePDF() {
+  const btn = document.getElementById('pdfBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span> Generating…';
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [430, 900] });
+
+  const screens = ['s1','s2','s3','s4','s5','s6','s7'];
+  const labels = ['Welcome','Mode Select','Country Select','Clinical Chat','Drug & Dose Card','Knowledge Base','Settings'];
+
+  for (let i = 0; i < screens.length; i++) {
+    const el = document.getElementById(screens[i]);
+    try {
+      const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: null });
+      const img = canvas.toDataURL('image/png');
+      if (i > 0) pdf.addPage();
+      // Centre the phone frame on the page
+      const pageW = 430, pageH = 900;
+      const phoneW = 390, phoneH = 844;
+      const x = (pageW - phoneW) / 2;
+      const y = (pageH - phoneH) / 2 - 10;
+      pdf.setFillColor(240, 244, 248);
+      pdf.rect(0, 0, pageW, pageH, 'F');
+      pdf.addImage(img, 'PNG', x, y, phoneW, phoneH);
+      pdf.setFontSize(9);
+      pdf.setTextColor(100, 116, 139);
+      pdf.text(`${i+1}. ${labels[i]}  —  UNFPA OTG Android App`, pageW/2, pageH - 14, { align: 'center' });
+    } catch(e) {
+      console.error('Screen', screens[i], e);
+    }
+  }
+
+  pdf.save('UNFPA-OTG-Android-Screenshots.pdf');
+  btn.disabled = false;
+  btn.innerHTML = '<span>⬇</span> Download PDF';
+}
+</script>
+</body>
+</html>
