@@ -438,7 +438,7 @@ export function KnowledgeChat() {
             <div className="min-w-0 flex-1">
               <h2 className="font-semibold text-white flex items-center gap-2">
                 <BookOpen className="h-4 w-4" />
-                GRACE AI
+                UNFPA Partnership Catalyst
               </h2>
               <p className="text-xs mt-0.5 hidden sm:block" style={{ color: "#a8c8e8" }}>
                 Prepare for funding conversations — pitch UNFPA programmes, draft briefings, and match projects to partners
