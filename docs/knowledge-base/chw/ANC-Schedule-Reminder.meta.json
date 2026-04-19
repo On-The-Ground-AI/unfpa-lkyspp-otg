@@ -1,0 +1,31 @@
+{
+  "title": "ANC Schedule and Checkpoint Reminders: CHW Job Aid",
+  "shortName": "ANC Schedule CHW",
+  "sourceDocument": "WHO ANC Guidelines 2016",
+  "sourceTitle": "Antenatal Care Schedule and Checkpoints — CHW Job Aid",
+  "sourceEdition": "Based on WHO Recommendations on ANC for a Positive Pregnancy Experience, 2016",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789241549912",
+  "publisher": "Adapted from WHO guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from WHO public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language job aid for community health workers: ANC visit schedule, what happens at each visit, and how to support women to attend",
+  "sections": [
+    "How Many ANC Visits?",
+    "First Visit (Before 12 Weeks)",
+    "Second Visit (20 Weeks)",
+    "Third Visit (26 Weeks)",
+    "Fourth Visit (30 Weeks)",
+    "Fifth Visit (34 Weeks)",
+    "Sixth Visit (36 Weeks)",
+    "Seventh Visit (38 Weeks)",
+    "Eighth Visit (40 Weeks)",
+    "How to Support Women to Attend ANC",
+    "Danger Signs — Go to the Health Centre Now"
+  ]
+}

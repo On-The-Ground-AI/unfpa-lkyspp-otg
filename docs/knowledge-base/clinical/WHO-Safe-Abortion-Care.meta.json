@@ -3,20 +3,24 @@
   "shortName": "WHO Safe Abortion 2022",
   "sourceDocument": "WHO Safe Abortion Care Guidelines",
   "sourceTitle": "WHO Safe Abortion Care and Post-Abortion Care Guidance",
-  "publisher": "World Health Organization",
-  "edition": "2022",
-  "publicationYear": 2022,
+  "sourceEdition": "2022",
   "sourceUrl": "https://www.who.int/publications/i/item/9789240016941",
+  "publisher": "World Health Organization",
+  "publicationYear": 2022,
   "redistributionOk": true,
-  "clinicalReviewStatus": "PENDING_REVIEW",
+  "redistributionNotes": "WHO guidelines are in the public domain and may be reproduced, distributed, and adapted for health purposes without permission.",
+  "vertical": "CLINICAL",
+  "clinicalStatus": "PENDING_REVIEW",
   "clinicalReviewer": null,
   "reviewedAt": null,
   "expiryDate": "2027-12-31",
-  "reviewChecklist": {
-    "accuracyVerified": false,
-    "currentAsOfYear": false,
-    "applicableToTarget": false,
-    "completeAndClear": false,
-    "safeForOfflineUse": false
-  }
+  "contentType": "Clinical guidelines for safe abortion care and post-abortion care",
+  "sections": [
+    "Introduction and Scope",
+    "Medical Abortion (Medication-Induced)",
+    "Surgical Abortion",
+    "Management of Abortion Complications",
+    "Post-Abortion Contraception",
+    "Counselling and Informed Consent"
+  ]
 }

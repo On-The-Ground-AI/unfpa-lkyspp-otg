@@ -13,7 +13,7 @@
   "clinicalStatus": "UNVERIFIED",
   "expiryDate": "2028-12-31",
   "contentType": "Clinical protocols and standards for maternal health services, family planning, STI management, and emergency obstetric care",
-  "parts": [
+  "sections": [
     "Part 1: Maternal Health Services",
     "Part 2: Family Planning and Contraception",
     "Part 3: Management of Sexually Transmitted Infections (STIs)",

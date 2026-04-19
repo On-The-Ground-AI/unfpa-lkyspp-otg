@@ -1,0 +1,30 @@
+{
+  "title": "Family Planning Methods Overview: CHW Reference Card",
+  "shortName": "FP Methods Overview CHW",
+  "sourceDocument": "WHO MEC 5th edition 2015 + WHO Family Planning Handbook 2018",
+  "sourceTitle": "Family Planning Methods Overview — CHW Reference Card",
+  "sourceEdition": "Based on WHO MEC 5th ed. 2015 and WHO Family Planning: A Global Handbook for Providers 2018",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789241549158",
+  "publisher": "Adapted from WHO guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from WHO public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language reference card for community health workers: overview of family planning methods, eligibility principles, and when to refer",
+  "sections": [
+    "Why Family Planning Matters",
+    "Your Role as a CHW",
+    "Condoms",
+    "Pills",
+    "Injections",
+    "IUD",
+    "Implants",
+    "Natural Methods",
+    "Emergency Contraception",
+    "When to Refer to a Health Centre"
+  ]
+}

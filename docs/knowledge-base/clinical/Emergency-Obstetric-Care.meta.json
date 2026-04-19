@@ -3,20 +3,24 @@
   "shortName": "EmOC 2023",
   "sourceDocument": "WHO Emergency Obstetric Care Guidelines",
   "sourceTitle": "Essential Emergency Obstetric Care (EmOC) Guidelines",
-  "publisher": "World Health Organization",
-  "edition": "WHO Guidelines on Maternal and Newborn Health",
-  "publicationYear": 2023,
+  "sourceEdition": "WHO Guidelines on Maternal and Newborn Health, 2023",
   "sourceUrl": "https://www.who.int/publications/guidelines/maternal-newborn-health",
+  "publisher": "World Health Organization",
+  "publicationYear": 2023,
   "redistributionOk": true,
-  "clinicalReviewStatus": "PENDING_REVIEW",
+  "redistributionNotes": "WHO guidelines are in the public domain and may be reproduced, distributed, and adapted for health purposes without permission.",
+  "vertical": "CLINICAL",
+  "clinicalStatus": "PENDING_REVIEW",
   "clinicalReviewer": null,
   "reviewedAt": null,
   "expiryDate": "2027-12-31",
-  "reviewChecklist": {
-    "accuracyVerified": false,
-    "currentAsOfYear": false,
-    "applicableToTarget": false,
-    "completeAndClear": false,
-    "safeForOfflineUse": false
-  }
+  "contentType": "Emergency obstetric care protocols for basic and comprehensive EmOC facilities",
+  "sections": [
+    "Overview: Basic vs. Comprehensive Emergency Obstetric Care",
+    "Core Triage and Stabilization Protocols",
+    "Major Obstetric Complications and Management",
+    "Anesthesia and Pain Management in EmOC",
+    "Equipment and Supplies Essential for EmOC",
+    "Referral and Transfer Protocols"
+  ]
 }

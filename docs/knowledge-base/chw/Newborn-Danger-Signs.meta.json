@@ -1,0 +1,28 @@
+{
+  "title": "Newborn Danger Signs: CHW Job Aid",
+  "shortName": "Newborn Danger Signs",
+  "sourceDocument": "WHO PCPNC 3rd edition 2023 + WHO EENC Guidelines",
+  "sourceTitle": "Newborn Danger Signs — Community Health Worker Job Aid",
+  "sourceEdition": "Based on WHO PCPNC 2023 and WHO Essential Newborn Care guidelines",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+  "publisher": "Adapted from WHO/UNFPA guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from WHO public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language job aid for community health workers: recognising newborn danger signs in the first 7 days of life",
+  "sections": [
+    "The First Hours After Birth",
+    "Signs of a Baby in Danger",
+    "Breathing Problems",
+    "Not Feeding",
+    "Colour Changes",
+    "Temperature Problems",
+    "Cord Care",
+    "When to Go to the Health Centre Right Away"
+  ]
+}

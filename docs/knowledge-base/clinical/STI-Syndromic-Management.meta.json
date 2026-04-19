@@ -3,20 +3,24 @@
   "shortName": "WHO STI Syndromic 2022",
   "sourceDocument": "WHO Syndromic STI Management",
   "sourceTitle": "WHO Syndromic Management of Sexually Transmitted Infections (STIs)",
-  "publisher": "World Health Organization",
-  "edition": "2022",
-  "publicationYear": 2022,
+  "sourceEdition": "2022",
   "sourceUrl": "https://www.who.int/publications/i/item/9789240039094",
+  "publisher": "World Health Organization",
+  "publicationYear": 2022,
   "redistributionOk": true,
-  "clinicalReviewStatus": "PENDING_REVIEW",
+  "redistributionNotes": "WHO guidelines are in the public domain and may be reproduced, distributed, and adapted for health purposes without permission.",
+  "vertical": "CLINICAL",
+  "clinicalStatus": "PENDING_REVIEW",
   "clinicalReviewer": null,
   "reviewedAt": null,
   "expiryDate": "2027-12-31",
-  "reviewChecklist": {
-    "accuracyVerified": false,
-    "currentAsOfYear": false,
-    "applicableToTarget": false,
-    "completeAndClear": false,
-    "safeForOfflineUse": false
-  }
+  "contentType": "Syndromic management protocols for sexually transmitted infections",
+  "sections": [
+    "Introduction to Syndromic Approach",
+    "Syndrome 1: Vaginal Discharge",
+    "Syndrome 2: Urethritis and Cervicitis",
+    "Syndrome 3: Pelvic Inflammatory Disease (PID)",
+    "Syndrome 4: Genital Ulcer Disease (GUD)",
+    "Syndrome 5: Inguinal Lymphadenopathy (Buboes)"
+  ]
 }

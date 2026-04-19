@@ -1,0 +1,27 @@
+{
+  "title": "MISP for Reproductive Health in Crisis Situations: A Distance Learning Module",
+  "shortName": "IAWG MISP 2018",
+  "sourceDocument": "MISP for Reproductive Health in Crisis Situations",
+  "sourceTitle": "Minimum Initial Service Package (MISP) for Reproductive Health in Crisis Situations: A Distance Learning Module",
+  "sourceEdition": "2018 revision",
+  "sourceUrl": "https://iawg.net/resources/minimum-initial-service-package-misp-for-reproductive-health-in-crisis-situations",
+  "publisher": "Inter-Agency Working Group on Reproductive Health in Crises (IAWG)",
+  "publicationYear": 2018,
+  "redistributionOk": true,
+  "redistributionNotes": "IAWG resources are available for free use and adaptation for humanitarian reproductive health programming with attribution.",
+  "vertical": "MISP",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2028-12-31",
+  "contentType": "Operational field manual for implementing the Minimum Initial Service Package for reproductive health in humanitarian emergencies",
+  "sections": [
+    "What is the MISP",
+    "When to Implement the MISP",
+    "Component 1: Coordination",
+    "Component 2: Prevent and Respond to Sexual Violence",
+    "Component 3: Prevent HIV and STI Transmission",
+    "Component 4: Prevent Excess Maternal and Newborn Morbidity and Mortality",
+    "Component 5: Plan for Comprehensive RH Services"
+  ]
+}

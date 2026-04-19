@@ -1,0 +1,30 @@
+{
+  "title": "Minimum Standards for Prevention and Response to Gender-Based Violence in Emergencies",
+  "shortName": "GBViE Minimum Standards",
+  "sourceDocument": "UNFPA GBViE Minimum Standards",
+  "sourceTitle": "Minimum Standards for Prevention and Response to Gender-Based Violence in Emergencies",
+  "sourceEdition": "2015",
+  "sourceUrl": "https://www.unfpa.org/resources/minimum-standards-prevention-and-response-gender-based-violence-emergencies",
+  "publisher": "United Nations Population Fund (UNFPA)",
+  "publicationYear": 2015,
+  "redistributionOk": true,
+  "redistributionNotes": "UNFPA technical guidance documents may be reproduced, distributed, and adapted for non-commercial health and development purposes with attribution.",
+  "vertical": "MISP",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2028-12-31",
+  "contentType": "Minimum standards for GBV prevention, risk mitigation, and response programming in humanitarian emergencies",
+  "sections": [
+    "Standard 1: Coordination",
+    "Standard 2: Human Resources",
+    "Standard 3: Prevention",
+    "Standard 4: Risk Mitigation",
+    "Standard 5: Health",
+    "Standard 6: Psychosocial",
+    "Standard 7: Legal and Justice",
+    "Standard 8: Safety and Security",
+    "Standard 9: Case Management",
+    "Standard 10: Information Management"
+  ]
+}
