@@ -3,20 +3,24 @@
   "shortName": "WHO MEC 2015",
   "sourceDocument": "WHO Medical Eligibility Criteria",
   "sourceTitle": "WHO Medical Eligibility Criteria for Contraceptive Use (5th edition, 2015)",
-  "publisher": "World Health Organization",
-  "edition": "5th edition",
-  "publicationYear": 2015,
+  "sourceEdition": "5th edition, 2015",
   "sourceUrl": "https://www.who.int/publications/i/item/9789241549158",
+  "publisher": "World Health Organization",
+  "publicationYear": 2015,
   "redistributionOk": true,
-  "clinicalReviewStatus": "PENDING_REVIEW",
+  "redistributionNotes": "WHO guidelines are in the public domain and may be reproduced, distributed, and adapted for health purposes without permission.",
+  "vertical": "CLINICAL",
+  "clinicalStatus": "PENDING_REVIEW",
   "clinicalReviewer": null,
   "reviewedAt": null,
   "expiryDate": "2027-12-31",
-  "reviewChecklist": {
-    "accuracyVerified": false,
-    "currentAsOfYear": false,
-    "applicableToTarget": false,
-    "completeAndClear": false,
-    "safeForOfflineUse": false
-  }
+  "contentType": "Medical eligibility criteria for contraceptive use by women with specific health conditions",
+  "sections": [
+    "Overview: Categorization System",
+    "Combined Oral Contraceptives (COCs)",
+    "Progestin-Only Pills (POPs)",
+    "Depot Medroxyprogesterone Acetate (DMPA)",
+    "Intrauterine Devices (IUDs)",
+    "Barrier Methods (Condoms, Diaphragm)"
+  ]
 }

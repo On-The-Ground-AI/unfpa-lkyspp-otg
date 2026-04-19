@@ -1,15 +1,18 @@
 /**
  * Clinical docs library — reads metadata sidecars for the clinical knowledge
  * base. Each source is a paired .jsonl + .meta.json file under
- * docs/knowledge-base/clinical/.
+ * docs/knowledge-base/{clinical,misp,chw}/.
  */
 
 import * as fs from 'fs';
 import * as path from 'path';
 
-const CLINICAL_DIR = path.join(process.cwd(), '..', 'docs', 'knowledge-base', 'clinical');
+const KB_BASE = path.join(process.cwd(), '..', 'docs', 'knowledge-base');
+const CLINICAL_VERTICALS = ['clinical', 'misp', 'chw'];
 
 export interface ClinicalDocMeta {
+  title?: string;
+  shortName?: string;
   sourceDocument: string;
   sourceTitle: string;
   sourceEdition?: string;
@@ -21,10 +24,10 @@ export interface ClinicalDocMeta {
   vertical: string;
   clinicalReviewer: string | null;
   reviewedAt: string | null;
-  clinicalStatus: 'VERIFIED' | 'UNVERIFIED' | 'DRAFT' | string;
+  clinicalStatus: 'VERIFIED' | 'UNVERIFIED' | 'PENDING_REVIEW' | 'DRAFT' | string;
   expiryDate?: string;
-  contentType: string;
-  sections: string[];
+  contentType?: string;
+  sections?: string[];
 }
 
 export interface ClinicalDocSummary {
@@ -38,22 +41,26 @@ function deriveSlug(filename: string): string {
 }
 
 export function getAllClinicalDocs(): ClinicalDocSummary[] {
-  if (!fs.existsSync(CLINICAL_DIR)) return [];
-
-  const jsonlFiles = fs.readdirSync(CLINICAL_DIR)
-    .filter(f => f.endsWith('.jsonl'))
-    .sort();
-
   const docs: ClinicalDocSummary[] = [];
-  for (const file of jsonlFiles) {
-    const metaPath = path.join(CLINICAL_DIR, file.replace(/\.jsonl$/, '.meta.json'));
-    if (!fs.existsSync(metaPath)) continue;
 
-    const meta: ClinicalDocMeta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
-    const raw = fs.readFileSync(path.join(CLINICAL_DIR, file), 'utf-8');
-    const chunkCount = raw.split('\n').filter(l => l.trim().length > 0).length;
+  for (const vertical of CLINICAL_VERTICALS) {
+    const dir = path.join(KB_BASE, vertical);
+    if (!fs.existsSync(dir)) continue;
 
-    docs.push({ slug: deriveSlug(file), meta, chunkCount });
+    const jsonlFiles = fs.readdirSync(dir)
+      .filter(f => f.endsWith('.jsonl'))
+      .sort();
+
+    for (const file of jsonlFiles) {
+      const metaPath = path.join(dir, file.replace(/\.jsonl$/, '.meta.json'));
+      if (!fs.existsSync(metaPath)) continue;
+
+      const meta: ClinicalDocMeta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+      const raw = fs.readFileSync(path.join(dir, file), 'utf-8');
+      const chunkCount = raw.split('\n').filter(l => l.trim().length > 0).length;
+
+      docs.push({ slug: deriveSlug(file), meta, chunkCount });
+    }
   }
 
   return docs;

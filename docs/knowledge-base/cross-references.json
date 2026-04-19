@@ -1,0 +1,5 @@
+{
+  "_docs": "Links partnership documents (by frontmatter code) to clinical KB sources (by JSONL filename stem). Add entries to entries[] to surface 'Related clinical context' on partnership detail pages.",
+  "_schema": "{ partnershipCode: string, clinicalSlug: string, label: string }",
+  "entries": []
+}

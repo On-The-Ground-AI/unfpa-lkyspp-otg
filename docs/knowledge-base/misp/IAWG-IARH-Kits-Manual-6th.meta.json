@@ -1,0 +1,32 @@
+{
+  "title": "Inter-Agency Reproductive Health Kits for Crisis Situations (6th edition)",
+  "shortName": "IARH Kits Manual 6th ed.",
+  "sourceDocument": "IARH Kits Manual 6th Edition",
+  "sourceTitle": "Inter-Agency Reproductive Health Kits for Crisis Situations: Specifications and Guidelines (6th edition)",
+  "sourceEdition": "6th edition",
+  "sourceUrl": "https://www.unfpa.org/resources/inter-agency-reproductive-health-kits-crisis-situations",
+  "publisher": "UNFPA / Inter-Agency Working Group on Reproductive Health in Crises (IAWG)",
+  "publicationYear": 2019,
+  "redistributionOk": true,
+  "redistributionNotes": "UNFPA and IAWG publications may be reproduced and adapted for humanitarian health programming with attribution.",
+  "vertical": "MISP",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2028-12-31",
+  "contentType": "Specifications and usage guidelines for the 12 pre-packaged inter-agency reproductive health supply kits",
+  "sections": [
+    "Overview and Kit Selection Guidance",
+    "Kit 0: Clean Delivery Kit (Individual)",
+    "Kit 1: Safe Delivery Kit (Health Post)",
+    "Kit 2: Condom Supply Kit",
+    "Kit 3: STI/RTI Syndromic Treatment Kit",
+    "Kit 4: Post-Rape Treatment Kit",
+    "Kit 5: Oral Contraceptive Kit",
+    "Kit 6: Injectable Contraceptive Kit",
+    "Kit 7: IUD Kit",
+    "Kit 8: Safe Abortion Kit",
+    "Kit 9: Antenatal Care Supplement Kit",
+    "Kit 10: Newborn Care Kit"
+  ]
+}

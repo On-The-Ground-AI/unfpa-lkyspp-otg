@@ -1,0 +1,27 @@
+{
+  "title": "GBV Referral Pathway: CHW Job Aid",
+  "shortName": "GBV Referral Pathway CHW",
+  "sourceDocument": "UNFPA GBViE Minimum Standards 2015 + IAWG MISP Field Manual 2018",
+  "sourceTitle": "Gender-Based Violence Referral Pathway — Community Health Worker Job Aid",
+  "sourceEdition": "Based on UNFPA GBViE Minimum Standards 2015 and IAWG MISP 2018",
+  "sourceUrl": "https://www.unfpa.org/resources/minimum-standards-prevention-and-response-gender-based-violence-emergencies",
+  "publisher": "Adapted from UNFPA/IAWG guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from UNFPA public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language decision aid for community health workers: supporting GBV survivors to access care safely",
+  "sections": [
+    "What Is GBV?",
+    "How to Listen and Help",
+    "What Not to Do or Say",
+    "Safety First",
+    "Where to Refer",
+    "Time-Sensitive Care (Act Fast)",
+    "Following Up"
+  ]
+}

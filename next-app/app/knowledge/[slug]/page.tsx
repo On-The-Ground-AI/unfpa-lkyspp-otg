@@ -1,5 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import * as fs from 'fs';
+import * as path from 'path';
 import { marked } from 'marked';
 import { getAllSlugs, getDoc, BLOCK_LABELS } from '@/lib/docs';
 
@@ -36,6 +38,16 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
 
   // Render markdown to HTML server-side
   const htmlContent = await marked(doc.content, { async: false });
+
+  // Cross-references: link partnership doc → related clinical KB sources
+  const crossRefsPath = path.join(process.cwd(), '..', 'docs', 'knowledge-base', 'cross-references.json');
+  const crossRefsData = fs.existsSync(crossRefsPath)
+    ? JSON.parse(fs.readFileSync(crossRefsPath, 'utf-8'))
+    : { entries: [] };
+  const relatedClinical: Array<{ partnershipCode: string; clinicalSlug: string; label: string }> =
+    (crossRefsData.entries ?? []).filter(
+      (r: { partnershipCode: string }) => r.partnershipCode === doc.frontmatter.code
+    );
 
   const feedbackSubject = encodeURIComponent(`Feedback: ${doc.frontmatter.code} — ${doc.frontmatter.title}`);
   const feedbackBody = encodeURIComponent(
@@ -99,6 +111,25 @@ export default async function DocPage({ params }: { params: Promise<{ slug: stri
         className="prose prose-slate max-w-none"
         dangerouslySetInnerHTML={{ __html: htmlContent as string }}
       />
+
+      {/* Related clinical context */}
+      {relatedClinical.length > 0 && (
+        <div className="mt-10 p-4 bg-sky-50 border border-sky-200 rounded-lg">
+          <h3 className="text-sm font-semibold text-sky-800 mb-2">Related clinical context</h3>
+          <ul className="flex flex-wrap gap-2">
+            {relatedClinical.map(ref => (
+              <li key={ref.clinicalSlug}>
+                <Link
+                  href={`/knowledge?view=clinical#${ref.clinicalSlug}`}
+                  className="text-sm text-sky-700 hover:underline"
+                >
+                  {ref.label} →
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Feedback section */}
       <div className="mt-12 pt-6 border-t border-slate-200">

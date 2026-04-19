@@ -3,20 +3,24 @@
   "shortName": "NRP 2021",
   "sourceDocument": "NRP 8th Edition Protocols",
   "sourceTitle": "Neonatal Resuscitation Program (NRP) 8th Edition Protocols",
-  "publisher": "American Academy of Pediatrics & American Heart Association",
-  "edition": "8th edition",
-  "publicationYear": 2021,
+  "sourceEdition": "8th edition, 2021",
   "sourceUrl": "https://www.aap.org/en/professional-resources/neonatal-resuscitation/",
+  "publisher": "American Academy of Pediatrics & American Heart Association",
+  "publicationYear": 2021,
   "redistributionOk": true,
-  "clinicalReviewStatus": "PENDING_REVIEW",
+  "redistributionNotes": "AAP NRP guidelines may be reproduced for educational and clinical training purposes with attribution.",
+  "vertical": "CLINICAL",
+  "clinicalStatus": "PENDING_REVIEW",
   "clinicalReviewer": null,
   "reviewedAt": null,
   "expiryDate": "2027-12-31",
-  "reviewChecklist": {
-    "accuracyVerified": false,
-    "currentAsOfYear": false,
-    "applicableToTarget": false,
-    "completeAndClear": false,
-    "safeForOfflineUse": false
-  }
+  "contentType": "Neonatal resuscitation protocols and decision algorithms",
+  "sections": [
+    "Preparation and Initial Assessment",
+    "Resuscitation Decision Tree",
+    "Medications in Neonatal Resuscitation",
+    "Chest Compressions",
+    "Special Situations",
+    "Post-Resuscitation Care"
+  ]
 }

@@ -1,0 +1,25 @@
+{
+  "title": "PPH Recognition and First Response: CHW Emergency Card",
+  "shortName": "PPH First Response CHW",
+  "sourceDocument": "WHO PCPNC 3rd edition 2023",
+  "sourceTitle": "Postpartum Haemorrhage Recognition and First Response — CHW Emergency Card",
+  "sourceEdition": "Based on WHO PCPNC Chapter 4, 2023",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+  "publisher": "Adapted from WHO guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from WHO public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language emergency card for community health workers: recognising heavy bleeding after birth and taking first action before facility transfer",
+  "sections": [
+    "What Is Heavy Bleeding After Birth?",
+    "Signs of Dangerous Bleeding",
+    "First Actions",
+    "Do Not Wait — Call for Help Now",
+    "What to Tell the Health Worker"
+  ]
+}

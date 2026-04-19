@@ -1,0 +1,29 @@
+{
+  "title": "Danger Signs in Pregnancy: CHW Job Aid",
+  "shortName": "Danger Signs Pregnancy",
+  "sourceDocument": "WHO PCPNC 3rd edition 2023 + WHO ANC Guidelines 2016",
+  "sourceTitle": "Danger Signs in Pregnancy — Community Health Worker Job Aid",
+  "sourceEdition": "Based on WHO PCPNC 2023 and WHO ANC Guidelines 2016",
+  "sourceUrl": "https://www.who.int/publications/i/item/9789240091672",
+  "publisher": "Adapted from WHO/UNFPA guidelines for CHW use",
+  "publicationYear": 2024,
+  "redistributionOk": true,
+  "redistributionNotes": "Adapted from WHO public domain materials for community health worker training. May be freely reproduced with attribution.",
+  "vertical": "CHW",
+  "clinicalStatus": "PENDING_REVIEW",
+  "clinicalReviewer": null,
+  "reviewedAt": null,
+  "expiryDate": "2027-12-31",
+  "contentType": "Plain-language job aid for community health workers: recognising pregnancy danger signs and referring to facility",
+  "sections": [
+    "What Are Danger Signs?",
+    "Bleeding from the Vagina",
+    "Severe Headache or Blurred Vision",
+    "Fits or Seizures",
+    "Fever",
+    "Severe Swelling",
+    "Baby Not Moving",
+    "When to Call for Help Right Away",
+    "What to Tell the Health Centre"
+  ]
+}
